@@ -5,7 +5,15 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        KhmerMoul: 'Moul',
+        NotoSansKhmer: 'Noto Sans Khmer',
+      }
+      
+    },
   },
-  plugins: [],
+  plugins: [
+
+  ],
 }

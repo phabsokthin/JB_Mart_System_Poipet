@@ -7,6 +7,7 @@ import Signup from './views/Signup'
 import Test from './views/Test'
 import Dashboard from './views/Dashboard'
 import PageNotFound from './views/PageNotFound'
+import Product from './views/Product'
 
 function App() {
 
@@ -19,6 +20,7 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="test" element={<Test />} />
           <Route path='dashboard' element={<Dashboard/>}/>
+          <Route path='product' element={<Product/>}/>
           <Route path='*' element={<PageNotFound/>}/>
         </Routes>
       </BrowserRouter>

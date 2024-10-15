@@ -8,7 +8,7 @@ function Dashboard() {
             <div className="p-4 sm:ml-[17rem] select-none">
                 <Navbar />
                 <div className="mt-5">
-                    <div className="grid grid-cols-3 lg:grid-cols-4 gap-4 mb-4">
+                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
                         <div className="flex items-center h-24   bg-white border-t-2 border-blue-500">
                             <div className='flex items-center gap-4 mx-5'>
                                 <div className='bg-blue-500/20 p-3 rounded-full'>

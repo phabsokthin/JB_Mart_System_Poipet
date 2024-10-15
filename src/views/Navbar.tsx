@@ -46,6 +46,9 @@ function Navbar() {
                   <p className="font-bold font-NotoSansKhmer">
                     {location.pathname === "/test" ? "សាកល្បង" : ""}
                   </p>
+                  <p className="font-bold font-NotoSansKhmer">
+                    {location.pathname === "/product" ? "ផលិតផល​/បញ្ជីផលិតផល" : ""}
+                  </p>
                 </div>
               </div>
             </div>

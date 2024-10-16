@@ -53,12 +53,12 @@ function Sidebar() {
             setIsContactClose(false)
         }
 
-        else if(isProductsActive){
+        else if (isProductsActive) {
             setIsProductDropdown(true)
             setIsProductClose(false)
         }
 
-        else if(isPuchaseActive){
+        else if (isPuchaseActive) {
             setIsPurchasedropdown(true)
             setIsPuchaseClose(false)
         }
@@ -102,34 +102,34 @@ function Sidebar() {
         }
     }
 
-    const handleProductDropdown = () =>{
-        if(isProductsActive){
-            if(!isProductClose){
+    const handleProductDropdown = () => {
+        if (isProductsActive) {
+            if (!isProductClose) {
                 setIsProductDropdown(false)
                 setIsProductClose(true)
             }
-            else{
+            else {
                 setIsProductDropdown(true)
                 setIsProductClose(false)
             }
         }
-        else{
+        else {
             setIsProductDropdown(!isProductDropdown)
         }
     }
 
     const handlePurchaseDropdown = () => {
-        if(isPuchaseActive){
-            if(!isPuchaseClose){
+        if (isPuchaseActive) {
+            if (!isPuchaseClose) {
                 setIsPurchasedropdown(false)
                 setIsPuchaseClose(true)
             }
-            else{
+            else {
                 setIsPurchasedropdown(true)
                 setIsPuchaseClose(false)
             }
         }
-        else{
+        else {
             setIsPurchasedropdown(!isPurchaseDropdown)
         }
     }
@@ -139,9 +139,41 @@ function Sidebar() {
     const isDropDownContactVisible = (isContactActive && !isContactClosed) || isContactDropdown;
 
     const isProductDropdownVisible = (isProductsActive && !isProductClose) || isProductDropdown
-    
-    const isPurcahseDropdownVisible = (isPuchaseActive && !isPuchaseClose) || isPurchaseDropdown
 
+    const isPurcahseDropdownVisible = (isPuchaseActive && !isPuchaseClose) || isPurchaseDropdown
+    ////////////////
+    //dropdown phome
+    const [isDropDownPhoneDropdown, setDropDownPhoneDropdown] = useState(false); 
+    const handleDropdownPhone = () => {
+        setDropDownPhoneDropdown(!isDropDownPhoneDropdown);
+    };
+    //dropdown cost
+    const [isDropDownCostDropdown, setDropDownCostDropdown] = useState(false); 
+    const handleDropdownCost = () => {
+        setDropDownCostDropdown(!isDropDownCostDropdown);
+    };
+    //dropdown Account
+    const [isDropDownAcocountDropdown, setDropDownAcountDropdown] = useState(false); 
+    const handleDropdownAccount = () => {
+        setDropDownAcountDropdown(!isDropDownAcocountDropdown);
+    };
+
+     //dropdown ExSpent
+     const [isDropDownExSpentDropdown, setDropDownExSpentDropdown] = useState(false);
+     const handleDropdownExSpent = () => {
+        setDropDownExSpentDropdown(!isDropDownExSpentDropdown);
+     };
+       //dropdown UserACC
+       const [isDropDownUserACCDropdown, setDropDownUserACCDropdown] = useState(false); 
+       const handleDropdownUserACcc = () => {
+        setDropDownUserACCDropdown(!isDropDownUserACCDropdown);
+       };
+
+         //dropdown Invoice
+         const [isDropDownInvoiceDropdown, setDropDownIncoiceDropdown] = useState(false); // State for contact dropdown
+         const handleDropdownInvoice = () => {
+            setDropDownIncoiceDropdown(!isDropDownInvoiceDropdown);
+         };
 
     return (
         <aside
@@ -263,8 +295,8 @@ function Sidebar() {
                             <div className="flex items-center">
 
                                 <div className="flex items-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-package-open"><path d="M12 22v-9" /><path d="M15.17 2.21a1.67 1.67 0 0 1 1.63 0L21 4.57a1.93 1.93 0 0 1 0 3.36L8.82 14.79a1.655 1.655 0 0 1-1.64 0L3 12.43a1.93 1.93 0 0 1 0-3.36z" /><path d="M20 13v3.87a2.06 2.06 0 0 1-1.11 1.83l-6 3.08a1.93 1.93 0 0 1-1.78 0l-6-3.08A2.06 2.06 0 0 1 4 16.87V13" /><path d="M21 12.43a1.93 1.93 0 0 0 0-3.36L8.83 2.2a1.64 1.64 0 0 0-1.63 0L3 4.57a1.93 1.93 0 0 0 0 3.36l12.18 6.86a1.636 1.636 0 0 0 1.63 0z" /></svg>
-                                <span className="flex-1 ms-3 whitespace-nowrap font-NotoSansKhmer font-bold">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-package-open"><path d="M12 22v-9" /><path d="M15.17 2.21a1.67 1.67 0 0 1 1.63 0L21 4.57a1.93 1.93 0 0 1 0 3.36L8.82 14.79a1.655 1.655 0 0 1-1.64 0L3 12.43a1.93 1.93 0 0 1 0-3.36z" /><path d="M20 13v3.87a2.06 2.06 0 0 1-1.11 1.83l-6 3.08a1.93 1.93 0 0 1-1.78 0l-6-3.08A2.06 2.06 0 0 1 4 16.87V13" /><path d="M21 12.43a1.93 1.93 0 0 0 0-3.36L8.83 2.2a1.64 1.64 0 0 0-1.63 0L3 4.57a1.93 1.93 0 0 0 0 3.36l12.18 6.86a1.636 1.636 0 0 0 1.63 0z" /></svg>
+                                    <span className="flex-1 ms-3 whitespace-nowrap font-NotoSansKhmer font-bold">
                                         ផលិតផល
                                     </span>
                                 </div>
@@ -324,7 +356,7 @@ function Sidebar() {
                         </div>
                     </li>
 
-                    
+
                     <li className="space-y-2">
                         <button
                             onClick={handlePurchaseDropdown}
@@ -416,11 +448,11 @@ function Sidebar() {
                         </NavLink>
                     </li>
 
-                    
+
                     <li className="space-y-2">
                         <button
-                            onClick={handleDropdown}
-                            className={`flex items-center p-3 w-full text-left justify-between ${isDropdownVisible
+                            onClick={handleDropdownPhone}
+                            className={`flex items-center p-3 w-full text-left justify-between ${isDropDownPhoneDropdown
                                 ? "bg-blue-600 dark:bg-blue-500 text-white"
                                 : "text-gray-900 dark:text-white"
                                 }`}
@@ -428,14 +460,14 @@ function Sidebar() {
                             <div className="flex items-center">
                                 {/* SVG Icon */}
                                 <div className="flex items-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-receipt-text"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"/><path d="M14 8H8"/><path d="M16 12H8"/><path d="M13 16H8"/></svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-receipt-text"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z" /><path d="M14 8H8" /><path d="M16 12H8" /><path d="M13 16H8" /></svg>
                                     <span className="flex-1 ms-3 whitespace-nowrap font-NotoSansKhmer font-bold">
                                         កាតទូរស័ព្ទ
                                     </span>
                                 </div>
                             </div>
                             <svg
-                                className={`w-4 h-4 transition-transform duration-300 ${isDropdownVisible ? "transform rotate-90" : ""
+                                className={`w-4 h-4 transition-transform duration-300 ${isDropDownPhoneDropdown ? "transform rotate-90" : ""
                                     }`}
                                 xmlns="http://www.w3.org/2000/svg"
                                 fill="none"
@@ -453,7 +485,7 @@ function Sidebar() {
 
                         <div
                             id="product-dropdown"
-                            className={`overflow-hidden transition-all duration-500 space-y-2 ${isDropdownVisible
+                            className={`overflow-hidden transition-all duration-500 space-y-2 ${isDropDownPhoneDropdown
                                 ? "max-h-40 opacity-100"
                                 : "max-h-0"
                                 }`}
@@ -492,8 +524,8 @@ function Sidebar() {
 
                     <li className="space-y-2">
                         <button
-                            onClick={handleDropdown}
-                            className={`flex items-center p-3 w-full text-left justify-between ${isDropdownVisible
+                            onClick={handleDropdownCost}
+                            className={`flex items-center p-3 w-full text-left justify-between ${isDropDownCostDropdown
                                 ? "bg-blue-600 dark:bg-blue-500 text-white"
                                 : "text-gray-900 dark:text-white"
                                 }`}
@@ -510,7 +542,7 @@ function Sidebar() {
                                 </div>
                             </div>
                             <svg
-                                className={`w-4 h-4 transition-transform duration-300 ${isDropdownVisible ? "transform rotate-90" : ""
+                                className={`w-4 h-4 transition-transform duration-300 ${isDropDownCostDropdown ? "transform rotate-90" : ""
                                     }`}
                                 xmlns="http://www.w3.org/2000/svg"
                                 fill="none"
@@ -528,7 +560,7 @@ function Sidebar() {
 
                         <div
                             id="product-dropdown"
-                            className={`overflow-hidden transition-all duration-500 space-y-2 ${isDropdownVisible
+                            className={`overflow-hidden transition-all duration-500 space-y-2 ${isDropDownCostDropdown
                                 ? "max-h-40 opacity-100"
                                 : "max-h-0 "
                                 }`}
@@ -566,8 +598,8 @@ function Sidebar() {
 
                     <li className="space-y-2">
                         <button
-                            onClick={handleDropdown}
-                            className={`flex items-center p-3 w-full text-left justify-between ${isDropdownVisible
+                            onClick={handleDropdownAccount}
+                            className={`flex items-center p-3 w-full text-left justify-between ${isDropDownAcocountDropdown
                                 ? "bg-blue-600 dark:bg-blue-500 text-white"
                                 : "text-gray-900 dark:text-white"
                                 }`}
@@ -582,7 +614,7 @@ function Sidebar() {
                                 </div>
                             </div>
                             <svg
-                                className={`w-4 h-4 transition-transform duration-300 ${isDropdownVisible ? "transform rotate-90" : ""
+                                className={`w-4 h-4 transition-transform duration-300 ${isDropDownAcocountDropdown ? "transform rotate-90" : ""
                                     }`}
                                 xmlns="http://www.w3.org/2000/svg"
                                 fill="none"
@@ -600,7 +632,7 @@ function Sidebar() {
 
                         <div
                             id="product-dropdown"
-                            className={`overflow-hidden transition-all duration-500 space-y-2 ${isDropdownVisible
+                            className={`overflow-hidden transition-all duration-500 space-y-2 ${isDropDownAcocountDropdown
                                 ? "max-h-40 opacity-100"
                                 : "max-h-0 "
                                 }`}
@@ -638,8 +670,8 @@ function Sidebar() {
 
                     <li className="space-y-2">
                         <button
-                            onClick={handleDropdown}
-                            className={`flex items-center p-3 w-full text-left justify-between ${isDropdownVisible
+                            onClick={handleDropdownExSpent}
+                            className={`flex items-center p-3 w-full text-left justify-between ${isDropDownExSpentDropdown
                                 ? "bg-blue-600 dark:bg-blue-500 text-white"
                                 : "text-gray-900 dark:text-white"
                                 }`}
@@ -653,7 +685,7 @@ function Sidebar() {
                                 </div>
                             </div>
                             <svg
-                                className={`w-4 h-4 transition-transform duration-300 ${isDropdownVisible ? "transform rotate-90" : ""
+                                className={`w-4 h-4 transition-transform duration-300 ${isDropDownExSpentDropdown ? "transform rotate-90" : ""
                                     }`}
                                 xmlns="http://www.w3.org/2000/svg"
                                 fill="none"
@@ -671,7 +703,7 @@ function Sidebar() {
 
                         <div
                             id="product-dropdown"
-                            className={`overflow-hidden transition-all duration-500 space-y-2 ${isDropdownVisible
+                            className={`overflow-hidden transition-all duration-500 space-y-2 ${isDropDownExSpentDropdown
                                 ? "max-h-40 opacity-100"
                                 : "max-h-0"
                                 }`}
@@ -710,8 +742,8 @@ function Sidebar() {
 
                     <li className="space-y-2">
                         <button
-                            onClick={handleDropdown}
-                            className={`flex items-center p-3 w-full text-left justify-between ${isDropdownVisible
+                            onClick={handleDropdownUserACcc}
+                            className={`flex items-center p-3 w-full text-left justify-between ${isDropDownUserACCDropdown
                                 ? "bg-blue-600 dark:bg-blue-500 text-white"
                                 : "text-gray-900 dark:text-white"
                                 }`}
@@ -725,7 +757,7 @@ function Sidebar() {
                                 </div>
                             </div>
                             <svg
-                                className={`w-4 h-4 transition-transform duration-300 ${isDropdownVisible ? "transform rotate-90" : ""
+                                className={`w-4 h-4 transition-transform duration-300 ${isDropDownUserACCDropdown ? "transform rotate-90" : ""
                                     }`}
                                 xmlns="http://www.w3.org/2000/svg"
                                 fill="none"
@@ -743,7 +775,7 @@ function Sidebar() {
 
                         <div
                             id="product-dropdown"
-                            className={`overflow-hidden transition-all duration-500 space-y-2 ${isDropdownVisible
+                            className={`overflow-hidden transition-all duration-500 space-y-2 ${isDropDownUserACCDropdown
                                 ? "max-h-40 opacity-100"
                                 : "max-h-0"
                                 }`}
@@ -781,8 +813,8 @@ function Sidebar() {
 
                     <li className="space-y-2">
                         <button
-                            onClick={handleDropdown}
-                            className={`flex items-center p-3 w-full text-left justify-between ${isDropdownVisible
+                            onClick={handleDropdownInvoice}
+                            className={`flex items-center p-3 w-full text-left justify-between ${isDropDownInvoiceDropdown
                                 ? "bg-blue-600 dark:bg-blue-500 text-white"
                                 : "text-gray-900 dark:text-white"
                                 }`}
@@ -799,7 +831,7 @@ function Sidebar() {
                                 </div>
                             </div>
                             <svg
-                                className={`w-4 h-4 transition-transform duration-300 ${isDropdownVisible ? "transform rotate-90" : ""
+                                className={`w-4 h-4 transition-transform duration-300 ${isDropDownInvoiceDropdown ? "transform rotate-90" : ""
                                     }`}
                                 xmlns="http://www.w3.org/2000/svg"
                                 fill="none"
@@ -817,7 +849,7 @@ function Sidebar() {
 
                         <div
                             id="product-dropdown"
-                            className={`overflow-hidden transition-all duration-500 space-y-2 ${isDropdownVisible
+                            className={`overflow-hidden transition-all duration-500 space-y-2 ${isDropDownInvoiceDropdown
                                 ? "max-h-96 opacity-100"
                                 : "max-h-0"
                                 }`}

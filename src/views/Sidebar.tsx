@@ -5,12 +5,23 @@ function Sidebar() {
     const location = useLocation();
     const [isDropdown, setIsDropdown] = useState(false);
     const [isUserClosed, setIsUserClosed] = useState(false);
-
+    //contact variable
     const [isContactDropdown, setIssContactDropdown] = useState(false)
     const [isContactClosed, setIsContactClose] = useState(false)
 
+    //proudct variable
+    const [isProductDropdown, setIsProductDropdown] = useState(false)
+    const [isProductClose, setIsProductClose] = useState(false)
+
+    //purchase variable
+
+    const [isPurchaseDropdown, setIsPurchasedropdown] = useState(false)
+    const [isPuchaseClose, setIsPuchaseClose] = useState(false)
+
     const productRoutes = ["/test", "/tst"];
-    const contactRoutes = ['/contact', "contactList"]
+    const contactRoutes = ['/test', "/contactList"]
+    const productsRoutes = ['/product', "/productList"]
+    const purchaseRoutes = ['/puchase', '/puchaseList']
 
     //product active
     const isProductActive = productRoutes.some((route) =>
@@ -19,6 +30,14 @@ function Sidebar() {
 
     //contact active
     const isContactActive = contactRoutes.some((route) => {
+        location.pathname.startsWith(route)
+    })
+
+    const isProductsActive = productsRoutes.some((route) => {
+        location.pathname.startsWith(route)
+    })
+
+    const isPuchaseActive = purchaseRoutes.some((route) => {
         location.pathname.startsWith(route)
     })
 
@@ -34,7 +53,17 @@ function Sidebar() {
             setIsContactClose(false)
         }
 
-    }, [isProductActive, isContactActive]);
+        else if(isProductsActive){
+            setIsProductDropdown(true)
+            setIsProductClose(false)
+        }
+
+        else if(isPuchaseActive){
+            setIsPurchasedropdown(true)
+            setIsPuchaseClose(false)
+        }
+
+    }, [isProductActive, isContactActive, isPuchaseActive]);
 
     const navLinkStyle = ({ isActive }: { isActive: boolean }) => {
         return `flex items-center p-3 ${isActive
@@ -73,10 +102,45 @@ function Sidebar() {
         }
     }
 
+    const handleProductDropdown = () =>{
+        if(isProductsActive){
+            if(!isProductClose){
+                setIsProductDropdown(false)
+                setIsProductClose(true)
+            }
+            else{
+                setIsProductDropdown(true)
+                setIsProductClose(false)
+            }
+        }
+        else{
+            setIsProductDropdown(!isProductDropdown)
+        }
+    }
+
+    const handlePurchaseDropdown = () => {
+        if(isPuchaseActive){
+            if(!isPuchaseClose){
+                setIsPurchasedropdown(false)
+                setIsPuchaseClose(true)
+            }
+            else{
+                setIsPurchasedropdown(true)
+                setIsPuchaseClose(false)
+            }
+        }
+        else{
+            setIsPurchasedropdown(!isPurchaseDropdown)
+        }
+    }
+
 
     const isDropdownVisible = (isProductActive && !isUserClosed) || isDropdown;
     const isDropDownContactVisible = (isContactActive && !isContactClosed) || isContactDropdown;
 
+    const isProductDropdownVisible = (isProductsActive && !isProductClose) || isProductDropdown
+    
+    const isPurcahseDropdownVisible = (isPuchaseActive && !isPuchaseClose) || isPurchaseDropdown
 
 
     return (
@@ -138,7 +202,7 @@ function Sidebar() {
                             id="product-dropdown"
                             className={`overflow-hidden transition-all duration-500 space-y-2 ${isDropDownContactVisible
                                 ? "max-h-40 opacity-100"
-                                : "max-h-0 opacity-0"
+                                : "max-h-0"
                                 }`}
                         >
                             <NavLink
@@ -187,25 +251,26 @@ function Sidebar() {
                         </div>
                     </li>
 
+
                     <li className="space-y-2">
                         <button
-                            onClick={handleDropdown}
-                            className={`flex items-center p-3 w-full text-left justify-between ${isDropdownVisible
+                            onClick={handleProductDropdown}
+                            className={`flex items-center p-3 w-full text-left justify-between ${isProductDropdownVisible
                                 ? "bg-blue-600 dark:bg-blue-500 text-white"
                                 : "text-gray-900 dark:text-white"
                                 }`}
                         >
                             <div className="flex items-center">
-                                {/* SVG Icon */}
+
                                 <div className="flex items-center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-package-open"><path d="M12 22v-9" /><path d="M15.17 2.21a1.67 1.67 0 0 1 1.63 0L21 4.57a1.93 1.93 0 0 1 0 3.36L8.82 14.79a1.655 1.655 0 0 1-1.64 0L3 12.43a1.93 1.93 0 0 1 0-3.36z" /><path d="M20 13v3.87a2.06 2.06 0 0 1-1.11 1.83l-6 3.08a1.93 1.93 0 0 1-1.78 0l-6-3.08A2.06 2.06 0 0 1 4 16.87V13" /><path d="M21 12.43a1.93 1.93 0 0 0 0-3.36L8.83 2.2a1.64 1.64 0 0 0-1.63 0L3 4.57a1.93 1.93 0 0 0 0 3.36l12.18 6.86a1.636 1.636 0 0 0 1.63 0z" /></svg>
-                                    <span className="flex-1 ms-3 whitespace-nowrap font-NotoSansKhmer font-bold">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-package-open"><path d="M12 22v-9" /><path d="M15.17 2.21a1.67 1.67 0 0 1 1.63 0L21 4.57a1.93 1.93 0 0 1 0 3.36L8.82 14.79a1.655 1.655 0 0 1-1.64 0L3 12.43a1.93 1.93 0 0 1 0-3.36z" /><path d="M20 13v3.87a2.06 2.06 0 0 1-1.11 1.83l-6 3.08a1.93 1.93 0 0 1-1.78 0l-6-3.08A2.06 2.06 0 0 1 4 16.87V13" /><path d="M21 12.43a1.93 1.93 0 0 0 0-3.36L8.83 2.2a1.64 1.64 0 0 0-1.63 0L3 4.57a1.93 1.93 0 0 0 0 3.36l12.18 6.86a1.636 1.636 0 0 0 1.63 0z" /></svg>
+                                <span className="flex-1 ms-3 whitespace-nowrap font-NotoSansKhmer font-bold">
                                         ផលិតផល
                                     </span>
                                 </div>
                             </div>
                             <svg
-                                className={`w-4 h-4 transition-transform duration-300 ${isDropdownVisible ? "transform rotate-90" : ""
+                                className={`w-4 h-4 transition-transform duration-300 ${isProductDropdownVisible ? "transform rotate-90" : ""
                                     }`}
                                 xmlns="http://www.w3.org/2000/svg"
                                 fill="none"
@@ -223,9 +288,9 @@ function Sidebar() {
 
                         <div
                             id="product-dropdown"
-                            className={`overflow-hidden transition-all duration-500 space-y-2 ${isDropdownVisible
+                            className={`overflow-hidden transition-all duration-500 space-y-2 ${isProductDropdownVisible
                                 ? "max-h-40 opacity-100"
-                                : "max-h-0 opacity-0"
+                                : "max-h-0"
                                 }`}
                         >
                             <NavLink
@@ -240,10 +305,10 @@ function Sidebar() {
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-6">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
                                 </svg>
-                                <p className="font-bold font-NotoSansKhmer">បង្កើតផលិតផល</p>
+                                <p className="font-bold font-NotoSansKhmer">បញ្ជីផលិតផល</p>
                             </NavLink>
                             <NavLink
-                                to="/"
+                                to="/product-list"
                                 className={({ isActive }) =>
                                     `flex items-center gap-2 p-3 pl-6 text-gray-700 dark:text-gray-300 font-NotoSansKhmer hover:text-white hover:bg-blue-500 dark:hover:bg-gray-700 ${isActive
                                         ? "bg-blue-500 dark:bg-blue-500 text-white"
@@ -254,15 +319,16 @@ function Sidebar() {
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-6">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
                                 </svg>
-                                <p className="font-bold font-NotoSansKhmer">បញ្ជីផលិតផល</p>
+                                <p className="font-bold font-NotoSansKhmer">បង្កើតផលិតផល</p>
                             </NavLink>
                         </div>
                     </li>
 
+                    
                     <li className="space-y-2">
                         <button
-                            onClick={handleDropdown}
-                            className={`flex items-center p-3 w-full text-left justify-between ${isDropdownVisible
+                            onClick={handlePurchaseDropdown}
+                            className={`flex items-center p-3 w-full text-left justify-between ${isPurcahseDropdownVisible
                                 ? "bg-blue-600 dark:bg-blue-500 text-white"
                                 : "text-gray-900 dark:text-white"
                                 }`}
@@ -279,7 +345,7 @@ function Sidebar() {
                                 </div>
                             </div>
                             <svg
-                                className={`w-4 h-4 transition-transform duration-300 ${isDropdownVisible ? "transform rotate-90" : ""
+                                className={`w-4 h-4 transition-transform duration-300 ${isPurcahseDropdownVisible ? "transform rotate-90" : ""
                                     }`}
                                 xmlns="http://www.w3.org/2000/svg"
                                 fill="none"
@@ -297,9 +363,9 @@ function Sidebar() {
 
                         <div
                             id="product-dropdown"
-                            className={`overflow-hidden transition-all duration-500 space-y-2 ${isDropdownVisible
+                            className={`overflow-hidden transition-all duration-500 space-y-2 ${isPurcahseDropdownVisible
                                 ? "max-h-40 opacity-100"
-                                : "max-h-0 opacity-0"
+                                : "max-h-0"
                                 }`}
                         >
                             <NavLink
@@ -389,7 +455,7 @@ function Sidebar() {
                             id="product-dropdown"
                             className={`overflow-hidden transition-all duration-500 space-y-2 ${isDropdownVisible
                                 ? "max-h-40 opacity-100"
-                                : "max-h-0 opacity-0"
+                                : "max-h-0"
                                 }`}
                         >
                             <NavLink
@@ -464,7 +530,7 @@ function Sidebar() {
                             id="product-dropdown"
                             className={`overflow-hidden transition-all duration-500 space-y-2 ${isDropdownVisible
                                 ? "max-h-40 opacity-100"
-                                : "max-h-0 opacity-0"
+                                : "max-h-0 "
                                 }`}
                         >
                             <NavLink
@@ -536,7 +602,7 @@ function Sidebar() {
                             id="product-dropdown"
                             className={`overflow-hidden transition-all duration-500 space-y-2 ${isDropdownVisible
                                 ? "max-h-40 opacity-100"
-                                : "max-h-0 opacity-0"
+                                : "max-h-0 "
                                 }`}
                         >
                             <NavLink
@@ -607,7 +673,7 @@ function Sidebar() {
                             id="product-dropdown"
                             className={`overflow-hidden transition-all duration-500 space-y-2 ${isDropdownVisible
                                 ? "max-h-40 opacity-100"
-                                : "max-h-0 opacity-0"
+                                : "max-h-0"
                                 }`}
                         >
                             <NavLink
@@ -679,7 +745,7 @@ function Sidebar() {
                             id="product-dropdown"
                             className={`overflow-hidden transition-all duration-500 space-y-2 ${isDropdownVisible
                                 ? "max-h-40 opacity-100"
-                                : "max-h-0 opacity-0"
+                                : "max-h-0"
                                 }`}
                         >
                             <NavLink
@@ -753,7 +819,7 @@ function Sidebar() {
                             id="product-dropdown"
                             className={`overflow-hidden transition-all duration-500 space-y-2 ${isDropdownVisible
                                 ? "max-h-96 opacity-100"
-                                : "max-h-0 opacity-0"
+                                : "max-h-0"
                                 }`}
                         >
                             <NavLink

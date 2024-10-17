@@ -12,6 +12,7 @@ import Contact from './views/Contact'
 import Purchase from './views/Purchase'
 import POS from './views/POS'
 import Supplier from './views/contact/Supplier'
+import Customer from './views/contact/Customer'
 
 function App() {
 
@@ -25,6 +26,7 @@ function App() {
           <Route path="test" element={<Test />} />
           <Route path='dashboard' element={<Dashboard/>}/>
           <Route path='supplier' element={<Supplier/>}/>
+          <Route path='customer' element={<Customer/>}/>
 
           <Route path='product' element={<Product/>}/>
           <Route path='/contact' element={<Contact/>}/>

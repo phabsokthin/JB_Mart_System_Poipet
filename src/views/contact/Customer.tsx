@@ -46,7 +46,7 @@ function Supplier() {
                             </TabList>
                             <TabPanels className="mt-3">
                                 <TabPanel className="p-4">
-                                    <CreateCustomer />
+                                    <CreateCustomer  />
                                 </TabPanel>
                             </TabPanels>
                             <TabPanels className="mt-3">

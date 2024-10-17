@@ -17,7 +17,7 @@ function Sidebar() {
     const [isCurrencyDropdown, setIsCurrencyDropdown] = useState(false);
 
     // Routes
-    const contactRoutes = ["/supplier", "/test"];
+    const contactRoutes = ["/supplier", "/customer", "/test"];
     const productsRoutes = ["/product", "/product-list"];
     const purchaseRoutes = ["/purchase", "/purchase-list"];
     const topupRoutes = ['/topup', '/topupList']
@@ -39,7 +39,6 @@ function Sidebar() {
     const isUsersActive = usersRoutes.some((route) => location.pathname.startsWith(route))
     const isReportsActive = reportsRoutes.some((route) => location.pathname.startsWith(route))
     const isCurrencyActive = currentcyRoutes.some((route) => location.pathname.startsWith(route))
-
 
     // Dropdown behavior on route change
     useEffect(() => {

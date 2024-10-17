@@ -26,7 +26,7 @@ function App() {
           <Route path="test" element={<Test />} />
           <Route path='dashboard' element={<Dashboard/>}/>
           <Route path='supplier' element={<Supplier/>}/>
-          <Route path='customer' element={<Customer/>}/>
+          <Route path='/customer' element={<Customer/>}/>
 
           <Route path='product' element={<Product/>}/>
           <Route path='/contact' element={<Contact/>}/>

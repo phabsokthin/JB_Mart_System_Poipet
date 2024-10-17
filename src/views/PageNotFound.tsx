@@ -11,6 +11,7 @@ function PageNotFound() {
                         <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2.25M12 15.25h.01M21.75 12c0 5.385-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12 6.615 2.25 12 2.25 21.75 6.615 21.75 12z" />
                     </svg>
                 </div>
+
                 <div className="flex justify-center">
                     <h1 className="font-NotoSansKhmer font-bold text-2xl text-center mb-2">រកមិនឃើញ</h1>
                 </div>
@@ -19,7 +20,8 @@ function PageNotFound() {
                 </p>
                 <div className="flex justify-center">
                     <Link to="/login" className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 font-NotoSansKhmer">
-                        ត្រលប់ដើម្បីចូលប្រើប្រាស់
+                        ត្រលប់ដើម្បីចូលប្រើប្រាស់ 
+                        
                     </Link>
                 </div>
             </div>

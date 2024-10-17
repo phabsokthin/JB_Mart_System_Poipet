@@ -57,23 +57,28 @@ function CreateSupplier() {
                     </div>
                 </div>
 
+
+                {isTypeSupplier === 'ផ្ទាល់ខ្លួន' && (
+                    <div className="w-full flex flex-col gap-2">
+                        <label htmlFor="supplierName" className="font-NotoSansKhmer font-bold">
+                            ឈ្មោះអ្នកផ្គត់ផ្គង់: *
+                        </label>
+                        <input
+                            type="text"
+                            required
+                            value={supplierName}
+                            onChange={(e) => setSupplierName(e.target.value)}
+                            className="input_text w-[300px]"
+                            placeholder="ឈ្មោះអ្នកផ្គត់ផ្គង់"
+                        />
+                    </div>
+                )}
+
+
                 <div className="flex flex-wrap gap-3 items-center w-full">
                     {isTypeSupplier === "ផ្ទាល់ខ្លួន" && (
                         <div className="flex gap-2">
-                            <div className="flex flex-col gap-2">
-                                <label htmlFor="supplierName" className="font-NotoSansKhmer font-bold">
-                                    ឈ្មោះអ្នកផ្គត់ផ្គង់: *
-                                </label>
-                                <input
-                                    type="text"
-                                    required
-                                    value={supplierName}
-                                    onChange={(e) => setSupplierName(e.target.value)}
-                                    className="input_text w-[300px]"
-                                    placeholder="ឈ្មោះអ្នកផ្គត់ផ្គង់"
-                                />
-                            </div>
-                            <div className="flex flex-col gap-2">
+                             <div className="flex flex-col gap-2">
                                 <label htmlFor="halfSupplierName" className="font-NotoSansKhmer font-bold">
                                     ឈ្មោះអ្នកផ្គត់ផ្គង់(ឈ្មោះកាត់)
                                 </label>

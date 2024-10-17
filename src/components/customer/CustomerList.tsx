@@ -111,11 +111,11 @@ function CustomerList() {
         <div className="supplier-list">
             <div className="flex items-center mb-3 gap-2 ">
                 <p><FaClipboardList className="text-lg " /></p>
-                <p className="font-NotoSansKhmer font-bold ">តារាងបញ្ជីអ្នកផ្គត់ផ្គង់</p>
+                <p className="font-NotoSansKhmer font-bold ">តារាងបញ្ជីអតិថិជន</p>
             </div>
             <div className="flex justify-end">
 
-                <button onClick={handleCreateNew} className="button_only_submit">+ បង្កើតអ្នកផ្គត់ផ្គង់ថ្មី</button>
+                <button onClick={handleCreateNew} className="button_only_submit">+ បង្កើតអតិថិជនថ្មី</button>
 
 
             </div>

@@ -1,8 +1,8 @@
 import { FaClipboardList } from "react-icons/fa";
 
-function SupplierList() {
+function CustomerDetails() {
     // Example data for suppliers
-    const suppliers = [
+    const customers = [
         {
             id: 1,
             name: 'John Doe',
@@ -51,6 +51,55 @@ function SupplierList() {
             email: 'jane@example.com',
             businessName: '',
         },
+        {
+            id: 1,
+            name: 'John Doe',
+            contact: '012345678',
+            type: 'ផ្ទាល់ខ្លួន',
+            email: 'john@example.com',
+            businessName: 'String',
+        },
+        {
+            id: 2,
+            name: 'ABC Corp',
+            contact: '0987654321',
+            type: 'អាជីវកម្ម',
+            email: 'contact@abccorp.com',
+            businessName: 'ABC Corp',
+        },
+        {
+            id: 3,
+            name: 'Jane Smith',
+            contact: '093456789',
+            type: 'ផ្ទាល់ខ្លួន',
+            email: 'jane@example.com',
+            businessName: '',
+        },
+        {
+            id: 4,
+            name: 'Jane Smiths',
+            contact: '088483843',
+            type: 'ផ្ទាល់ខ្លួន',
+            email: 'jane@example.com',
+            businessName: '',
+        },
+        {
+            id: 5,
+            name: 'Jane Smiths',
+            contact: '088483843',
+            type: 'ផ្ទាល់ខ្លួន',
+            email: 'jane@example.com',
+            businessName: '',
+        },
+        {
+            id: 6,
+            name: 'Jane Smiths',
+            contact: '088483843',
+            type: 'ផ្ទាល់ខ្លួន',
+            email: 'jane@example.com',
+            businessName: '',
+        },
+        
 
     ];
 
@@ -59,14 +108,14 @@ function SupplierList() {
     }
 
     return (
-        <div className="">
+        <div className="supplier-list">
             <div className="flex items-center mb-3 gap-2 ">
                 <p><FaClipboardList className="text-lg " /></p>
-                <p className="font-NotoSansKhmer font-bold ">តារាងបញ្ជីអ្នកផ្គត់ផ្គង់</p>
+                <p className="font-NotoSansKhmer font-bold ">តារាងបញ្ជីអតិថិជន</p>
             </div>
             <div className="flex justify-end">
 
-                <button onClick={handleCreateNew} className="button_only_submit">+ បង្កើតអ្នកផ្គត់ផ្គង់ថ្មី</button>
+                <button onClick={handleCreateNew} className="button_only_submit">+ បង្កើតអតិថិជនថ្មី</button>
 
 
             </div>
@@ -81,7 +130,7 @@ function SupplierList() {
                     </select>
                 </div>
                 <div>
-                    <input type="text" className="input_text w-[300px]" placeholder="ស្វែងរកអ្នកផ្គត់ផ្គង់..." />
+                    <input type="text" className="input_text w-[300px]" placeholder="ស្វែងរកអតិថិជន..." />
                 </div>
             </div>
             <table className="min-w-full table-auto">
@@ -96,16 +145,16 @@ function SupplierList() {
                     </tr>
                 </thead>
                 <tbody>
-                    {suppliers.map((supplier, index) => (
-                        <tr key={supplier.id} className="text-sm font-NotoSansKhmer">
+                    {customers.map((customer, index) => (
+                        <tr key={customer.id} className="text-sm font-NotoSansKhmer">
                             <td className=" px-4 py-2">{index + 1}</td>
-                            <td className="px-4 py-2">{supplier.name}</td>
-                            <td className=" px-4 py-2">{supplier.type}</td>
+                            <td className="px-4 py-2">{customer.name}</td>
+                            <td className=" px-4 py-2">{customer.type}</td>
                             <td className="px-4 py-2">
-                                {supplier.businessName || 'N/A'}
+                                {customer.businessName || 'N/A'}
                             </td>
-                            <td className="px-4 py-2">{supplier.contact}</td>
-                            <td className="px-4 py-2">{supplier.email}</td>
+                            <td className="px-4 py-2">{customer.contact}</td>
+                            <td className="px-4 py-2">{customer.email}</td>
                         </tr>
                     ))}
                 </tbody>
@@ -114,4 +163,4 @@ function SupplierList() {
     );
 }
 
-export default SupplierList;
+export default CustomerDetails;

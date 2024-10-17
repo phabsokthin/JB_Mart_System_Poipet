@@ -62,7 +62,7 @@ function CreateCustomer() {
                         <div className="flex gap-2">
                             <div className="flex flex-col gap-2">
                                 <label htmlFor="supplierName" className="font-NotoSansKhmer font-bold">
-                                    ឈ្មោះអ្នកអតិជន: *
+                                    ឈ្មោះអតិជន: *
                                 </label>
                                 <input
                                     type="text"
@@ -70,12 +70,12 @@ function CreateCustomer() {
                                     value={supplierName}
                                     onChange={(e) => setSupplierName(e.target.value)}
                                     className="input_text w-[300px]"
-                                    placeholder="ឈ្មោះអ្នកអតិជន"
+                                    placeholder="ឈ្មោះអតិជន"
                                 />
                             </div>
                             <div className="flex flex-col gap-2">
                                 <label htmlFor="halfSupplierName" className="font-NotoSansKhmer font-bold">
-                                    ឈ្មោះអ្នកអតិជន(ឈ្មោះកាត់)
+                                    ឈ្មោះអតិជន(ឈ្មោះកាត់)
                                 </label>
                                 <input
                                     type="text"
@@ -83,7 +83,7 @@ function CreateCustomer() {
                                     value={halfSupplierName}
                                     onChange={(e) => setHalfSupplierName(e.target.value)}
                                     className="input_text w-[300px]"
-                                    placeholder="ឈ្មោះអ្នកអតិជន"
+                                    placeholder="ឈ្មោះអតិជន"
                                 />
                             </div>
                             <div className="flex flex-col gap-2">

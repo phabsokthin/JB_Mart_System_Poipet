@@ -1,6 +1,6 @@
 import { FaClipboardList } from "react-icons/fa";
 
-function SupplierList() {
+function SupplierDetail() {
     // Example data for suppliers
     const suppliers = [
         {
@@ -65,10 +65,7 @@ function SupplierList() {
                 <p className="font-NotoSansKhmer font-bold ">តារាងបញ្ជីអ្នកផ្គត់ផ្គង់</p>
             </div>
             <div className="flex justify-end">
-
                 <button onClick={handleCreateNew} className="button_only_submit">+ បង្កើតអ្នកផ្គត់ផ្គង់ថ្មី</button>
-
-
             </div>
             <div className="flex justify-between items-center my-3">
                 <div className="flex flex-col gap-2 font-bold font-NotoSansKhmer">
@@ -114,4 +111,4 @@ function SupplierList() {
     );
 }
 
-export default SupplierList;
+export default SupplierDetail;

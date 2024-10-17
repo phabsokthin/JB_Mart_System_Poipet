@@ -16,12 +16,11 @@ function PageNotFound() {
                     <h1 className="font-NotoSansKhmer font-bold text-2xl text-center mb-2">រកមិនឃើញ</h1>
                 </div>
                 <p className="text-center font-NotoSansKhmer text-gray-600 mb-4 ">
-                    ទំព័រ <span className="font-mono text-red-500 font-bold">{location.pathname}</span> មិនមានទេ។
+                    ទំព័រ <span className="font-mono text-red-500 font-bold">{location.pathname}</span>  មិនមានទេ។
                 </p>
                 <div className="flex justify-center">
                     <Link to="/login" className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 font-NotoSansKhmer">
                         ត្រលប់ដើម្បីចូលប្រើប្រាស់ 
-                        
                     </Link>
                 </div>
             </div>

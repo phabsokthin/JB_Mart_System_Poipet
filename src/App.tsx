@@ -8,6 +8,9 @@ import Test from './views/Test'
 import Dashboard from './views/Dashboard'
 import PageNotFound from './views/PageNotFound'
 import Product from './views/Product'
+import Contact from './views/Contact'
+import Purchase from './views/Purchase'
+import POS from './views/POS'
 
 function App() {
 
@@ -21,6 +24,10 @@ function App() {
           <Route path="test" element={<Test />} />
           <Route path='dashboard' element={<Dashboard/>}/>
           <Route path='product' element={<Product/>}/>
+          <Route path='/contact' element={<Contact/>}/>
+          <Route path='/purchase' element={<Purchase/>}/>
+          <Route path='/pos' element={<POS/>}/>
+
           <Route path='*' element={<PageNotFound/>}/>
         </Routes>
       </BrowserRouter>

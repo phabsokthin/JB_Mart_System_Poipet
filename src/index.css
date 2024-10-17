@@ -21,6 +21,28 @@
     }
 }
 
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 16px;
+    font-weight: 600;
+  }
+  
+  td,
+  th {
+    border: 1px solid #f5f7f8;
+    text-align: left;
+    padding: 8px;
+  }
+
+
+@layer base {
+    tr:nth-child(even) {
+      @apply bg-blue-500/10  text-black/70;
+    }
+  }
+
 .scrollbar-hidden::-webkit-scrollbar {
     display: none; /* Hide scrollbar for WebKit browsers */
   }

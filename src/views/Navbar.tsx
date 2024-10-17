@@ -49,6 +49,9 @@ function Navbar() {
                   <p className="font-bold font-NotoSansKhmer">
                     {location.pathname === "/product" ? "ផលិតផល​/បញ្ជីផលិតផល" : ""}
                   </p>
+                  <p className="font-bold font-NotoSansKhmer">
+                    {location.pathname === "/supplier" ? "ទំនាក់ទំនង/អ្នកផ្គត់ផ្គង់" : ""}
+                  </p>
                 </div>
               </div>
             </div>

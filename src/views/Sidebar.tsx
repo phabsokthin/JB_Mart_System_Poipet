@@ -17,7 +17,7 @@ function Sidebar() {
     const [isCurrencyDropdown, setIsCurrencyDropdown] = useState(false);
 
     // Routes
-    const contactRoutes = ["/contact", "/test"];
+    const contactRoutes = ["/supplier", "/test"];
     const productsRoutes = ["/product", "/product-list"];
     const purchaseRoutes = ["/purchase", "/purchase-list"];
     const topupRoutes = ['/topup', '/topupList']
@@ -199,7 +199,7 @@ function Sidebar() {
                         </button>
 
                         <div className={`overflow-hidden transition-all duration-500 space-y-2 ${isContactDropdown ? "max-h-96 opacity-100" : "max-h-0"}`}>
-                            <NavLink to="/contact" className={navLinkStyle}>
+                            <NavLink to="/supplier" className={navLinkStyle}>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-6 ml-3">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
                                 </svg>
@@ -217,12 +217,7 @@ function Sidebar() {
                                 </svg>
                                 <p className="font-bold font-NotoSansKhmer">បញ្ជីរក្រុមអតិជន</p>
                             </NavLink>
-                            <NavLink to="/test" className={navLinkStyle}>
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-6 ml-3">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
-                                </svg>
-                                <p className="font-bold font-NotoSansKhmer">បញ្ជីរក្រុមអតិជន</p>
-                            </NavLink>
+                           
                         </div>
                     </li>
 

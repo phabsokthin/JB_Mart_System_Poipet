@@ -11,6 +11,7 @@ import Product from './views/Product'
 import Contact from './views/Contact'
 import Purchase from './views/Purchase'
 import POS from './views/POS'
+import Supplier from './views/contact/Supplier'
 
 function App() {
 
@@ -23,6 +24,8 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="test" element={<Test />} />
           <Route path='dashboard' element={<Dashboard/>}/>
+          <Route path='supplier' element={<Supplier/>}/>
+
           <Route path='product' element={<Product/>}/>
           <Route path='/contact' element={<Contact/>}/>
           <Route path='/purchase' element={<Purchase/>}/>

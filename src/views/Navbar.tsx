@@ -12,7 +12,7 @@ function Navbar() {
 
   return (
     <div>
-      <nav className="top-0 z-50 w-full bg-white shadow-sm dark:bg-gray-800 dark:border-gray-700">
+      <nav className="top-0 z-50 w-full bg-white dark:bg-gray-800 dark:border-gray-700 -mt-1">
         <div className="px-3 py-2 lg:px-5 lg:pl-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center justify-start rtl:justify-end ">
@@ -35,8 +35,18 @@ function Navbar() {
                   <p className="font-bold font-NotoSansKhmer">
                     {location.pathname === "/customer" ? "ទំនាក់ទំនង/អតិថិជន" : ""}
                   </p>
+                  
                   <p className="font-bold font-NotoSansKhmer">
                     {location.pathname === "/contactInfo" ? "ទំនាក់ទំនង/ព័ត៍មានផ្សេងៗពីទំនាក់ទំនង" : ""}
+                  </p>
+
+
+                  <p className="font-bold font-NotoSansKhmer">
+                    {location.pathname === "/productUnit" ? "ផលិតផល/ឯកតាទំនិញ" : ""}
+                  </p>
+
+                  <p className="font-bold font-NotoSansKhmer">
+                    {location.pathname === "/category" ? "ផលិតផល/ប្រភេទទំនិញ" : ""}
                   </p>
                 </div>
               </div>

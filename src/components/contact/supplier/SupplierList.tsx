@@ -1,7 +1,7 @@
 import { FaClipboardList } from "react-icons/fa";
 
 function SupplierList() {
-    // Example data for suppliers
+   
     const suppliers = [
         {
             id: 1,

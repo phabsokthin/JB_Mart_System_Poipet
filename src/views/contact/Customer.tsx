@@ -3,9 +3,9 @@ import Sidebar from '../Sidebar';
 import Navbar from '../Navbar';
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
 import { RiContactsBook3Fill } from "react-icons/ri";
-import CreateCustomer from '../../components/customer/CreateCustomer';
-import CustomerList from '../../components/customer/CustomerList';
-import Customerinfo from '../../components/customer/Customerinfo';
+import CreateCustomer from '../../components/contact/customer/CreateCustomer';
+import CustomerList from '../../components/contact/customer/CustomerList';
+import Customerinfo from '../../components/contact/customer/Customerinfo';
 
 const categories = [
     {

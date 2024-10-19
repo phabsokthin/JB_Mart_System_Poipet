@@ -38,7 +38,7 @@ function CreateCustomer() {
                 <div className="my-2">
                     <div className="flex flex-col gap-2">
                         <label htmlFor="supplierType" className="font-NotoSansKhmer font-bold">
-                            ប្រភេទអ្នកអតិជន: *
+                            ប្រភេទអតិជន: *
                         </label>
                         <select
                             required

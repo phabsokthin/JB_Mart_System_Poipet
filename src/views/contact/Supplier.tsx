@@ -3,9 +3,9 @@ import Sidebar from '../Sidebar';
 import Navbar from '../Navbar';
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
 import { RiContactsBook3Fill } from "react-icons/ri";
-import CreateSupplier from '../../components/supplier/CreateSupplier';
-import SupplierList from '../../components/supplier/SupplierList';
-import SupplierInfo from '../../components/supplier/SupplierInfo';
+import CreateSupplier from '../../components/contact/supplier/CreateSupplier';
+import SupplierList from '../../components/contact/supplier/SupplierList';
+import SupplierInfo from '../../components/contact/supplier/SupplierInfo';
 
 const categories = [
     {

@@ -18,7 +18,7 @@ function Sidebar() {
 
     // Routes
     const contactRoutes = ["/supplier", "/customer", "/contactInfo"];
-    const productsRoutes = ["/product", "/product-list"];
+    const productsRoutes = ["/product", "/productUnit","/category"];
     const purchaseRoutes = ["/purchase", "/purchase-list"];
     const topupRoutes = ['/topup', '/topupList']
     const exspenseRoutes = ['/expense', '/expense_list']
@@ -159,8 +159,9 @@ function Sidebar() {
 
 
     return (
-        <aside className=" h-screen sm:ml-3.5 mt-3  bg-white shadow-sm mb-10 dark:bg-gray-800 dark:border-gray-700" aria-label="Sidebar">
-            <div className="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800 scrollbar-hidden">
+        
+        <aside className=" sm:ml-3.5 mt-3  bg-white mb-10 dark:bg-gray-800 dark:border-gray-700" aria-label="Sidebar">
+            <div className=" px-3 pb-4 sticky top-0 h-[1245px] overflow-y-auto bg-white dark:bg-gray-800 scrollbar-hidden">
                 <div className="my-4 text-center">
                     <h1 className="font-NotoSansKhmer font-bold text-xl">ហាងលក់ <br /> ទំនិញចែប៊ីម៉ាត</h1>
                 </div>
@@ -250,25 +251,25 @@ function Sidebar() {
                                 </svg>
                                 <p className="font-bold font-NotoSansKhmer">បញ្ចូលផលិតផល</p>
                             </NavLink>
-                            <NavLink to="/product" className={navLinkStyle}>
+                            <NavLink to="/productUnit" className={navLinkStyle}>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-6 ml-3">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
                                 </svg>
-                                <p className="font-bold font-NotoSansKhmer">ឯកតា</p>
+                                <p className="font-bold font-NotoSansKhmer">ឯកតាទំនិញ</p>
                             </NavLink>
-                            <NavLink to="/product-list" className={navLinkStyle}>
+                            <NavLink to="/category" className={navLinkStyle}>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-6 ml-3">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
                                 </svg>
                                 <p className="font-bold font-NotoSansKhmer">ប្រភេទទំនិញ</p>
                             </NavLink>
-                            <NavLink to="/product" className={navLinkStyle}>
+                            <NavLink to="/" className={navLinkStyle}>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-6 ml-3">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
                                 </svg>
                                 <p className="font-bold font-NotoSansKhmer">ម៉ាកយីហោ</p>
                             </NavLink>
-                            <NavLink to="/product-list" className={navLinkStyle}>
+                            <NavLink to="/" className={navLinkStyle}>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-6 ml-3">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
                                 </svg>

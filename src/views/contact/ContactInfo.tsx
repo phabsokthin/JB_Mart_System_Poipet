@@ -3,8 +3,8 @@ import Sidebar from '../Sidebar';
 import Navbar from '../Navbar';
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
 import { RiContactsBook3Fill } from "react-icons/ri";
-import SupplierDetail from '../../components/supplier/SupplierDetail';
-import CustomerDetails from '../../components/customer/CustomerDetail';
+import SupplierDetail from '../../components/contact/supplier/SupplierDetail';
+import CustomerDetails from '../../components/contact/customer/CustomerDetail';
 
 const categories = [
     {

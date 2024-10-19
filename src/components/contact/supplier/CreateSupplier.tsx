@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-function CreateCustomer() {
+function CreateSupplier() {
     const [isTypeSupplier, setIsSupplier] = useState("");
 
     const [supplierName, setSupplierName] = useState("");
@@ -38,7 +38,7 @@ function CreateCustomer() {
                 <div className="my-2">
                     <div className="flex flex-col gap-2">
                         <label htmlFor="supplierType" className="font-NotoSansKhmer font-bold">
-                            ប្រភេទអ្នកអតិជន: *
+                            ប្រភេទអ្នកផ្គត់ផ្គង់: *
                         </label>
                         <select
                             required
@@ -57,25 +57,30 @@ function CreateCustomer() {
                     </div>
                 </div>
 
+
+                {isTypeSupplier === 'ផ្ទាល់ខ្លួន' && (
+                    <div className="w-full flex flex-col gap-2">
+                        <label htmlFor="supplierName" className="font-NotoSansKhmer font-bold">
+                            ឈ្មោះអ្នកផ្គត់ផ្គង់: *
+                        </label>
+                        <input
+                            type="text"
+                            required
+                            value={supplierName}
+                            onChange={(e) => setSupplierName(e.target.value)}
+                            className="input_text w-[300px]"
+                            placeholder="ឈ្មោះអ្នកផ្គត់ផ្គង់"
+                        />
+                    </div>
+                )}
+
+
                 <div className="flex flex-wrap gap-3 items-center w-full">
                     {isTypeSupplier === "ផ្ទាល់ខ្លួន" && (
                         <div className="flex gap-2">
-                            <div className="flex flex-col gap-2">
-                                <label htmlFor="supplierName" className="font-NotoSansKhmer font-bold">
-                                    ឈ្មោះអ្នកអតិជន: *
-                                </label>
-                                <input
-                                    type="text"
-                                    required
-                                    value={supplierName}
-                                    onChange={(e) => setSupplierName(e.target.value)}
-                                    className="input_text w-[300px]"
-                                    placeholder="ឈ្មោះអ្នកអតិជន"
-                                />
-                            </div>
-                            <div className="flex flex-col gap-2">
+                             <div className="flex flex-col gap-2">
                                 <label htmlFor="halfSupplierName" className="font-NotoSansKhmer font-bold">
-                                    ឈ្មោះអ្នកអតិជន(ឈ្មោះកាត់)
+                                    ឈ្មោះអ្នកផ្គត់ផ្គង់(ឈ្មោះកាត់)
                                 </label>
                                 <input
                                     type="text"
@@ -83,7 +88,7 @@ function CreateCustomer() {
                                     value={halfSupplierName}
                                     onChange={(e) => setHalfSupplierName(e.target.value)}
                                     className="input_text w-[300px]"
-                                    placeholder="ឈ្មោះអ្នកអតិជន"
+                                    placeholder="ឈ្មោះអ្នកផ្គត់ផ្គង់"
                                 />
                             </div>
                             <div className="flex flex-col gap-2">
@@ -182,4 +187,4 @@ function CreateCustomer() {
     );
 }
 
-export default CreateCustomer;
+export default CreateSupplier;

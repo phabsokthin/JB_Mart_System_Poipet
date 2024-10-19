@@ -1,6 +1,6 @@
 import { FaClipboardList } from "react-icons/fa";
 
-function CustomerList() {
+function CustomerDetails() {
     // Example data for suppliers
     const customers = [
         {
@@ -111,11 +111,11 @@ function CustomerList() {
         <div className="supplier-list">
             <div className="flex items-center mb-3 gap-2 ">
                 <p><FaClipboardList className="text-lg " /></p>
-                <p className="font-NotoSansKhmer font-bold ">តារាងបញ្ជីអ្នកផ្គត់ផ្គង់</p>
+                <p className="font-NotoSansKhmer font-bold ">តារាងបញ្ជីអតិថិជន</p>
             </div>
             <div className="flex justify-end">
 
-                <button onClick={handleCreateNew} className="button_only_submit">+ បង្កើតអ្នកផ្គត់ផ្គង់ថ្មី</button>
+                <button onClick={handleCreateNew} className="button_only_submit">+ បង្កើតអតិថិជនថ្មី</button>
 
 
             </div>
@@ -130,7 +130,7 @@ function CustomerList() {
                     </select>
                 </div>
                 <div>
-                    <input type="text" className="input_text w-[300px]" placeholder="ស្វែងរកអ្នកផ្គត់ផ្គង់..." />
+                    <input type="text" className="input_text w-[300px]" placeholder="ស្វែងរកអតិថិជន..." />
                 </div>
             </div>
             <table className="min-w-full table-auto">
@@ -163,4 +163,4 @@ function CustomerList() {
     );
 }
 
-export default CustomerList;
+export default CustomerDetails;

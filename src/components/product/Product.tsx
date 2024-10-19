@@ -1,12 +1,11 @@
 
 import { RiContactsBook3Fill } from "react-icons/ri";
-import Sidebar from '../views/Sidebar';
-import Navbar from '../views/Navbar';
+import Sidebar from "../../views/Sidebar";
+import Navbar from "../../views/Navbar";
+;
 
 
-
-
-function Supplier() {
+function ProductUnit() {
 
     return (
         <div className='grid grid-cols-6'>
@@ -16,7 +15,7 @@ function Supplier() {
                 <div className="p-4 bg-white dark:border-gray-700 mt-5 animate-fade-up animate-duration-2000 animate-ease-in-out ">
                     <div className='flex items-center gap-2 py-5'>
                         <RiContactsBook3Fill className=' text-lg' />
-                        <p className='font-NotoSansKhmer font-bold text-lg'>អតិជន</p>
+                        <p className='font-NotoSansKhmer font-bold text-lg'>Product</p>
                     </div>
                    
                 </div>
@@ -25,4 +24,4 @@ function Supplier() {
     );
 }
 
-export default Supplier;
+export default ProductUnit;

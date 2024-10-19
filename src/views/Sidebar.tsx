@@ -3,7 +3,6 @@ import { NavLink, useLocation } from "react-router-dom";
 
 function Sidebar() {
     const location = useLocation();
-
     // Dropdown states
     const [isContactDropdown, setIsContactDropdown] = useState(false);
     const [isProductDropdown, setIsProductDropdown] = useState(false);

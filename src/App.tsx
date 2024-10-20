@@ -15,6 +15,8 @@ import ContactInfo from './views/contact/ContactInfo'
 import Product from './views/product/Product'
 import ProductUnit from './views/product/ProductUnit'
 import Category from './views/product/Category'
+import Brands from './views/product/Brands'
+import Warranty from './views/product/Warranty'
 
 function App() {
 
@@ -42,6 +44,8 @@ function App() {
        
           <Route path='/purchase' element={<Purchase/>}/>
           <Route path='/pos' element={<POS/>}/>
+          <Route path='/brands' element={<Brands/>}/>
+          <Route path='/warranty' element={<Warranty/>}/>
           <Route path='*' element={<PageNotFound/>}/>
         </Routes>
       </BrowserRouter>

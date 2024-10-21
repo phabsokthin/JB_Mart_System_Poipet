@@ -37,7 +37,7 @@ function CreateCustomer() {
             <form onSubmit={handleSubmit}>
                 <div className="my-2">
                     <div className="flex flex-col gap-2">
-                        <label htmlFor="supplierType" className="font-NotoSansKhmer font-bold">
+                        <label htmlFor="supplierType" className="font-bold font-NotoSansKhmer">
                             ប្រភេទអតិជន: *
                         </label>
                         <select
@@ -59,7 +59,7 @@ function CreateCustomer() {
 
                 {isTypeSupplier === 'ផ្ទាល់ខ្លួន' && (
                       <div className="flex flex-col gap-2">
-                      <label htmlFor="supplierName" className="font-NotoSansKhmer font-bold">
+                      <label htmlFor="supplierName" className="font-bold font-NotoSansKhmer">
                           ឈ្មោះអតិជន: *
                       </label>
                       <input
@@ -73,12 +73,12 @@ function CreateCustomer() {
                   </div>
                 )}
 
-                <div className="flex flex-wrap gap-3 items-center w-full">
+                <div className="flex flex-wrap items-center w-full gap-3">
                     {isTypeSupplier === "ផ្ទាល់ខ្លួន" && (
                         <div className="flex gap-2">
                           
                             <div className="flex flex-col gap-2">
-                                <label htmlFor="halfSupplierName" className="font-NotoSansKhmer font-bold">
+                                <label htmlFor="halfSupplierName" className="font-bold font-NotoSansKhmer">
                                     ឈ្មោះអតិជន(ឈ្មោះកាត់)
                                 </label>
                                 <input
@@ -91,7 +91,7 @@ function CreateCustomer() {
                                 />
                             </div>
                             <div className="flex flex-col gap-2">
-                                <label htmlFor="phoneNumber" className="font-NotoSansKhmer font-bold">
+                                <label htmlFor="phoneNumber" className="font-bold font-NotoSansKhmer">
                                     លេខទូរស័ព្ទ: *
                                 </label>
                                 <input
@@ -108,8 +108,8 @@ function CreateCustomer() {
 
                     {isTypeSupplier === "អាជីវកម្ម" && (
                         <div className="flex gap-2">
-                            <div className="w-full flex flex-col gap-2">
-                                <label htmlFor="businessName" className="font-NotoSansKhmer font-bold">
+                            <div className="flex flex-col w-full gap-2">
+                                <label htmlFor="businessName" className="font-bold font-NotoSansKhmer">
                                     ឈ្មោះអាជីវកម្ម: *
                                 </label>
                                 <input
@@ -122,7 +122,7 @@ function CreateCustomer() {
                                 />
                             </div>
                             <div className="flex flex-col gap-2">
-                                <label htmlFor="businessPhone" className="font-NotoSansKhmer font-bold">
+                                <label htmlFor="businessPhone" className="font-bold font-NotoSansKhmer">
                                     លេខទូរស័ព្ទ: *
                                 </label>
                                 <input
@@ -138,7 +138,7 @@ function CreateCustomer() {
                     )}
 
                     <div className="flex flex-col gap-2">
-                        <label htmlFor="supplierID" className="font-NotoSansKhmer font-bold">
+                        <label htmlFor="supplierID" className="font-bold font-NotoSansKhmer">
                             លេខសម្គាល់ទំនាក់ទំនង
                         </label>
                         <input
@@ -151,7 +151,7 @@ function CreateCustomer() {
                         />
                     </div>
                     <div className="flex flex-col gap-2">
-                        <label htmlFor="email" className="font-NotoSansKhmer font-bold">
+                        <label htmlFor="email" className="font-bold font-NotoSansKhmer">
                             អ៊ីម៉ែល
                         </label>
                         <input
@@ -166,14 +166,14 @@ function CreateCustomer() {
                 </div>
 
                 <div className="flex flex-col gap-3 mt-3">
-                    <label htmlFor="description" className="font-NotoSansKhmer font-bold">
+                    <label htmlFor="description" className="font-bold font-NotoSansKhmer">
                         ពិពណ៌នា
                     </label>
                     <textarea
                         id="description"
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
-                        className="input_text w-full py-5"
+                        className="w-full py-5 input_text"
                         placeholder="ពិពណ៌នា"
                     />
                 </div>

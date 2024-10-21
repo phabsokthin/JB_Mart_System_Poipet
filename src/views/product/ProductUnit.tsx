@@ -84,21 +84,21 @@ function ProductUnit() {
         },
     };
     
-
+    
     return (
         <div className='grid grid-cols-6'>
             <Sidebar />
-            <div className="p-4 col-span-5">
+            <div className="col-span-5 p-4">
                 <Navbar />
-                <div className="p-4 bg-white dark:border-gray-700 mt-5 animate-fade-up animate-duration-2000 animate-ease-in-out">
+                <div className="p-4 mt-5 bg-white dark:border-gray-700 animate-fade-up animate-duration-2000 animate-ease-in-out">
                     <div className='flex items-center gap-2 '>
                         <AiFillProduct className='text-xl' />
-                        <p className='font-NotoSansKhmer font-bold text-lg'>ឯកតាទំនិញ</p>
+                        <p className='text-lg font-bold font-NotoSansKhmer'>ឯកតាទំនិញ</p>
                     </div>
                     <div className="flex justify-end">
                         <button onClick={handleOpenModal} className="button_only_submit">+ បង្កើតឯកតាថ្មី</button>
                     </div>
-                    <div className="flex justify-between items-center my-3">
+                    <div className="flex items-center justify-between my-3">
                         <div className="flex flex-col gap-2 font-bold font-NotoSansKhmer">
                             <label htmlFor="">ច្រោះតាមចំនួន</label>
                             <select className="input_text w-[100px]">
@@ -113,8 +113,8 @@ function ProductUnit() {
                         </div>
                     </div>
                     <table className="min-w-full table-auto">
-                        <thead className="bg-blue-600/90 text-white">
-                            <tr className="font-NotoSansKhmer font-bold">
+                        <thead className="text-white bg-blue-600/90">
+                            <tr className="font-bold font-NotoSansKhmer">
                                 <th className="px-4 py-2">លេខរៀង</th>
                                 <th className="px-4 py-2">ឈ្មោះឯកតាទំនិញ</th>
                                 <th className="px-4 py-2">ពិពណ៌នា</th>
@@ -133,7 +133,7 @@ function ProductUnit() {
                                     variants={rowVariants}
                                     whileHover={{ scale: 1.02 }}
                                     whileTap={{ scale: 0.95 }}
-                                    className="text-sm font-NotoSansKhmer cursor-pointer"
+                                    className="text-sm cursor-pointer font-NotoSansKhmer"
                                 >
                                     <td className="px-4 py-2">{index + 1}</td>
                                     <td className="px-4 py-2">{unit.name}</td>

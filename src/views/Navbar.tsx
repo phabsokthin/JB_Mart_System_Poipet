@@ -12,7 +12,7 @@ function Navbar() {
 
   return (
     <div>
-      <nav className="top-0 z-50 w-full bg-white dark:bg-gray-800 dark:border-gray-700 -mt-1">
+      <nav className="top-0 z-50 w-full -mt-1 bg-white dark:bg-gray-800 dark:border-gray-700">
         <div className="px-3 py-2 lg:px-5 lg:pl-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center justify-start rtl:justify-end ">
@@ -45,9 +45,21 @@ function Navbar() {
                     {location.pathname === "/productUnit" ? "ផលិតផល/ឯកតាទំនិញ" : ""}
                   </p>
 
+                  
+
+                  <p className="font-bold font-NotoSansKhmer">
+                    {location.pathname === "/brands" ? "ផលិតផល/ម៉ាកយីហោ" : ""}
+                  </p>
+
                   <p className="font-bold font-NotoSansKhmer">
                     {location.pathname === "/category" ? "ផលិតផល/ប្រភេទទំនិញ" : ""}
                   </p>
+
+
+                  <p className="font-bold font-NotoSansKhmer">
+                    {location.pathname === "/warranty" ? "ផលិតផល/ការធានាលើទំនិញ" : ""}
+                  </p>
+                  
                 </div>
               </div>
             </div>
@@ -56,7 +68,7 @@ function Navbar() {
                     <h1 className="font-bold font-NotoSansKhmer">ប្រវត្តិរូប៖</h1>
                     <h1>Admin</h1>
                 </div>
-              <div onClick={toggleDropdown} className="bg-gray-50 rounded-full p-3 cursor-pointer">
+              <div onClick={toggleDropdown} className="p-3 rounded-full cursor-pointer bg-gray-50">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="20"
@@ -76,7 +88,7 @@ function Navbar() {
 
               {isUserDropdown && (
                 <div className="absolute z-10 top-4 w-32 p-2 bg-white shadow mt-10 -right-[20px] text-gray-600">
-                  <div className="flex gap-1 items-center hover:text-red-400 cursor-pointer">
+                  <div className="flex items-center gap-1 cursor-pointer hover:text-red-400">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="18"

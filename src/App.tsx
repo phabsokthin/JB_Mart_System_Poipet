@@ -17,6 +17,8 @@ import ProductUnit from './views/product/ProductUnit'
 import Category from './views/product/Category'
 import Brands from './views/product/Brands'
 import Warranty from './views/product/Warranty'
+import Expense from './views/expense/Expense'
+import Expense_Type from './views/expense/Expense_Type'
 
 function App() {
 
@@ -47,6 +49,12 @@ function App() {
           <Route path='/brands' element={<Brands/>}/>
           <Route path='/warranty' element={<Warranty/>}/>
           <Route path='*' element={<PageNotFound/>}/>
+
+
+             {/* expense Route */}
+             <Route path='/expense' element={<Expense/>}/>
+             <Route path='/expense_type' element={<Expense_Type/>}/>
+
         </Routes>
       </BrowserRouter>
 

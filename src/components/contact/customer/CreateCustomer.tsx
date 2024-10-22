@@ -1,4 +1,3 @@
-import { div } from "framer-motion/client";
 import { useState } from "react";
 
 function CreateCustomer() {
@@ -30,7 +29,7 @@ function CreateCustomer() {
             email,
             description
         };
-        console.log(formData); // Process form data or send to server
+        console.log(formData); 
     };
 
     return (
@@ -61,7 +60,7 @@ function CreateCustomer() {
                 {isTypeSupplier === 'ផ្ទាល់ខ្លួន' && (
                     <div>
                         <div className="flex flex-col gap-2">
-                            <label htmlFor="supplierName" className="font-NotoSansKhmer font-bold">
+                            <label htmlFor="supplierName" className="font-bold font-NotoSansKhmer">
                                 ឈ្មោះអតិជន: *
                             </label>
                             <input

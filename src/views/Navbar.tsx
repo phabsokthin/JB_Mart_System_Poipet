@@ -55,11 +55,18 @@ function Navbar() {
                     {location.pathname === "/category" ? "ផលិតផល/ប្រភេទទំនិញ" : ""}
                   </p>
 
-
+                  
                   <p className="font-bold font-NotoSansKhmer">
                     {location.pathname === "/warranty" ? "ផលិតផល/ការធានាលើទំនិញ" : ""}
                   </p>
+
                   
+                  <p className="font-bold font-NotoSansKhmer">
+                    {location.pathname === "/expense" ? "ចំណាយ/បញ្ជីចំណាយ" : ""}
+                  </p>
+                  <p className="font-bold font-NotoSansKhmer">
+                    {location.pathname === "/expense_type" ? "ចំណាយ/ប្រភេទការចំណាយ" : ""}
+                  </p>
                 </div>
               </div>
             </div>

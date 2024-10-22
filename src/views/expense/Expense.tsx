@@ -2,8 +2,8 @@ import Sidebar from "../Sidebar";
 import Navbar from "../Navbar";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { BiSolidCategoryAlt } from "react-icons/bi";
 import CreateExpenseModal from "../../components/exoense/modal/CreateExpenseModal";
+import { LuListStart } from "react-icons/lu";
 
 const exptense = [
     { id: 1, datetime: new Date().toLocaleString(), expense_type_id: 'បង់ទឺក', account: "nakry", interval: 1, interval_type: "ឆ្នាំ", tax: 10, price: 100, payment: 0, description: "", user_at: "admin" },
@@ -50,24 +50,24 @@ function Expense_Type() {
 
 
     return (
-        <div className='grid grid-cols-6 min-h-screen'>
+        <div className='grid min-h-screen grid-cols-6'>
             <div className="h-screen"> {/* Ensure this has full height */}
                 <div className="sticky top-0 z-10"> {/* Add z-index */}
                     <Sidebar />
                 </div>
             </div>
 
-            <div className="p-4 col-span-5">
+            <div className="col-span-5 p-4">
                 <Navbar />
-                <div className="p-4 bg-white dark:border-gray-700 mt-5 animate-fade-up animate-duration-2000 animate-ease-in-out">
+                <div className="p-4 mt-5 bg-white dark:border-gray-700 animate-fade-up animate-duration-2000 animate-ease-in-out">
                     <div className='flex items-center gap-2 '>
-                        <BiSolidCategoryAlt className='text-xl' />
-                        <p className='font-NotoSansKhmer font-bold text-lg'>បញ្ជីចំណាយ</p>
+                        <LuListStart className='text-xl' />
+                        <p className='text-lg font-bold font-NotoSansKhmer'>បញ្ជីចំណាយ</p>
                     </div>
                     <div className="flex justify-end gap-2">
                         <button onClick={handleOpenModal} className="button_only_submit">+ បង្កើតចំណាយ</button>
                     </div>
-                    <div className="flex justify-between items-center my-3">
+                    <div className="flex items-center justify-between my-3">
                         <div className="flex flex-col gap-2 font-bold font-NotoSansKhmer">
                             <label htmlFor="">ច្រោះតាមចំនួន</label>
                             <select className="input_text w-[100px]">
@@ -78,24 +78,21 @@ function Expense_Type() {
                             </select>
                         </div>
                         <div>
-                            <input type="text" className="input_text w-[300px]" placeholder="ស្វែងរកប្រភេទទំនិញ..." />
+                            <input type="text" className="input_text w-[300px]" placeholder="ស្វែងរកកាចំណាយ..." />
                         </div>
                     </div>
-                    <table className="min-w-full table-auto overflow-x-auto">
-                        <thead className="bg-blue-600/90 text-white">
-                            <tr className="font-NotoSansKhmer font-bold">
-                                <th className=" px-4 py-2">លេខរៀង</th>
-                                <th className=" px-4 py-2">កាលបរិច្ខេទ</th>
-                                <th className=" px-4 py-2">ប្រភេទនែការចំណាយ</th>
-                                <th className=" px-4 py-2">ប្រភេទគណនីចំណាយ</th>
-                                <th className=" px-4 py-2">ព័ត៌មានលម្អិតពីការបន្ត</th>
-                                <th className=" px-4 py-2">ស្ថានភាពការទូទាត់</th>
-                                <th className=" px-4 py-2">ពន្ធ</th>
-                                <th className=" px-4 py-2">ចំនួនសរុប</th>
-                                <th className=" px-4 py-2">ការទូទាត់ដល់ពេលតំណត់</th>
-                                <th className=" px-4 py-2">ការណិពណ័នា</th>
-                                <th className=" px-4 py-2">បន្ថែមដោយ</th>
-
+                    <table className="min-w-full">
+                        <thead className="text-white bg-blue-600/90">
+                            <tr className="font-bold font-NotoSansKhmer">
+                                <th className="px-4 py-2 ">លេខរៀង</th>
+                                <th className="px-4 py-2 ">កាលបរិច្ខេទ</th>
+                                <th className="px-4 py-2 ">ប្រភេទនែការចំណាយ</th>
+                                <th className="px-4 py-2 ">ប្រភេទគណនីចំណាយ</th>
+                                <th className="px-4 py-2 ">ព័ត៌មានលម្អិតពីការបន្ត</th>
+                                <th className="px-4 py-2 ">ស្ថានភាពការទូទាត់</th>
+                                <th className="px-4 py-2 ">ពន្ធ</th>
+                                <th className="px-4 py-2 ">ចំនួនសរុប</th>
+                                <th className="py-2 ">ការទូទាត់ដល់ពេលតំណត់</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -109,7 +106,7 @@ function Expense_Type() {
                                     variants={rowVariants}
                                     whileHover={{ scale: 1.02 }}
                                     whileTap={{ scale: 0.95 }}
-                                    className="text-sm font-NotoSansKhmer cursor-pointer"
+                                    className="text-sm cursor-pointer font-NotoSansKhmer"
                                 >
                                     <td className="px-4 py-2">{index + 1}</td>
                                     <td className="px-4 py-2">{cate.datetime}</td>
@@ -128,15 +125,14 @@ function Expense_Type() {
                                     <td className="px-4 py-2">{cate.tax || '0.00'} $</td>
                                     <td className="px-4 py-2">{(cate.price).toFixed(2)} $</td>
                                     <td className="px-4 py-2">{(cate.payment).toFixed(2)} $</td>
-                                    <td className="px-4 py-2">{cate.description || 'N/A'}</td>
-                                    <td className="px-4 py-2">{cate.user_at}</td>
+                                   
 
                                 </motion.tr>
                             ))}
                             
                         {/* Sum */}
                         <motion.tr className='bg-gray-300'>
-                            <td colSpan={5} className="font-bold text-center h-20">សរុប :</td>
+                            <td colSpan={5} className="h-20 font-bold text-center">សរុប :</td>
                             <td>
                                 {exptense.reduce((total, cost) => cost.payment >= cost.price ? total + 1 : total, 0) > 0 && (
                                     <span className="text-green-400">
@@ -156,7 +152,7 @@ function Expense_Type() {
                                     </span>
                                 )}
                             </td>
-                            <td className="font-bold px-4 py-1">
+                            <td className="px-4 py-1 font-bold">
                                 {exptense.reduce((total, cost) => total + cost.tax, 0).toFixed(2)} $
                             </td>
                             <td>
@@ -165,7 +161,7 @@ function Expense_Type() {
                             <td>
                                 {exptense.reduce((total, cost) => total + cost.payment, 0).toFixed(2)} $
                             </td>
-                            <td colSpan={3}></td>
+                            {/* <td colSpan={3}></td> */}
                         </motion.tr>
                         </tbody>
                     </table>

@@ -1,3 +1,4 @@
+import { div } from "framer-motion/client";
 import { useState } from "react";
 
 function CreateCustomer() {
@@ -58,35 +59,34 @@ function CreateCustomer() {
                 </div>
 
                 {isTypeSupplier === 'ផ្ទាល់ខ្លួន' && (
-<<<<<<< HEAD
-                    <div className="flex flex-col gap-2">
-                        <label htmlFor="supplierName" className="font-NotoSansKhmer font-bold">
-                            ឈ្មោះអតិជន: *
-                        </label>
-                        <input
-                            type="text"
-                            required
-                            value={supplierName}
-                            onChange={(e) => setSupplierName(e.target.value)}
-                            className="input_text w-[300px]"
-                            placeholder="ឈ្មោះអតិជន"
-                        />
+                    <div>
+                        <div className="flex flex-col gap-2">
+                            <label htmlFor="supplierName" className="font-NotoSansKhmer font-bold">
+                                ឈ្មោះអតិជន: *
+                            </label>
+                            <input
+                                type="text"
+                                required
+                                value={supplierName}
+                                onChange={(e) => setSupplierName(e.target.value)}
+                                className="input_text w-[300px]"
+                                placeholder="ឈ្មោះអតិជន"
+                            />
+                        </div>
+                        <div className="flex flex-col gap-2">
+                            <label htmlFor="supplierName" className="font-bold font-NotoSansKhmer">
+                                ឈ្មោះអតិជន: *
+                            </label>
+                            <input
+                                type="text"
+                                required
+                                value={supplierName}
+                                onChange={(e) => setSupplierName(e.target.value)}
+                                className="input_text w-[300px]"
+                                placeholder="ឈ្មោះអតិជន"
+                            />
+                        </div>
                     </div>
-=======
-                      <div className="flex flex-col gap-2">
-                      <label htmlFor="supplierName" className="font-bold font-NotoSansKhmer">
-                          ឈ្មោះអតិជន: *
-                      </label>
-                      <input
-                          type="text"
-                          required
-                          value={supplierName}
-                          onChange={(e) => setSupplierName(e.target.value)}
-                          className="input_text w-[300px]"
-                          placeholder="ឈ្មោះអតិជន"
-                      />
-                  </div>
->>>>>>> 3750fa67de848391a6440606bb19161f4c70e316
                 )}
 
                 <div className="flex flex-wrap items-center w-full gap-3">

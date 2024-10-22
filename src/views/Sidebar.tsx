@@ -400,24 +400,14 @@ function Sidebar() {
                         </button>
 
                         <div className={`overflow-hidden transition-all duration-500 space-y-2 ${isExpenseDropdown ? "max-h-40 opacity-100" : "max-h-0"}`}>
-<<<<<<< HEAD
                             <NavLink to="/expense" className={navLinkStyle}>
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-6 ml-3">
-=======
-                            <NavLink to="/purchase" className={navLinkStyle}>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="ml-3 size-6">
->>>>>>> 3750fa67de848391a6440606bb19161f4c70e316
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
                                 </svg>
                                 <p className="font-bold font-NotoSansKhmer">បញ្ជីចំណាយ</p>
                             </NavLink>
-<<<<<<< HEAD
                             <NavLink to="/expense_type" className={navLinkStyle}>
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-6 ml-3">
-=======
-                            <NavLink to="/purchase-list" className={navLinkStyle}>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="ml-3 size-6">
->>>>>>> 3750fa67de848391a6440606bb19161f4c70e316
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
                                 </svg>
                                 <p className="font-bold font-NotoSansKhmer">ប្រភេទនៃការចំណាយ</p>

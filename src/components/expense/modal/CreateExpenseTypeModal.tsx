@@ -3,33 +3,33 @@ import { MdOutlineAddCircle } from "react-icons/md";
 
 function CreateCategoryModal({onClose} : {onClose: () => void}) {
     return (
-        <div className="fixed inset-0 z-10 bg-black bg-opacity-50 flex items-center justify-center">
+        <div className="fixed inset-0 z-10 flex items-center justify-center bg-black bg-opacity-50">
             <motion.div
-                className="bg-white w-[90%] md:w-[60%] lg:w-[30%] shadow-lg p-4 "
+                className="bg-white w-[90%] md:w-[60%] lg:w-[40%] shadow-lg p-4 "
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }} 
                 exit={{ opacity: 0, scale: 0.8 }} 
                 transition={{ duration: 0.2 }} 
             >
-                <div className="flex items-center gap-2 font-NotoSansKhmer my-4">
+                <div className="flex items-center gap-2 my-4 font-NotoSansKhmer">
                 <MdOutlineAddCircle className="text-xl"/>
                 <h2 className="text-lg font-bold">បង្កើតប្រភេទអំណាយថ្មី</h2>
                 </div>
                 <form >
                     <div className="mb-4 space-y-2">
-                        <label  className="block font-NotoSansKhmer text-gray-700 font-bold ">ឈ្មោះប្រភេទអំណាយ: *</label>
+                        <label  className="block font-bold text-gray-700 font-NotoSansKhmer ">ឈ្មោះប្រភេទចំណាយ: *</label>
                         <input 
                             type="text"
                             required
-                            className="input_text" placeholder="ឈ្មោះប្រភេទទំនិញ"
+                            className="input_text" placeholder="ឈ្មោះប្រភេទចំណាយ"
                         />
                     </div>
                     <div className="mb-4 space-y-2">
-                        <label  className="block font-NotoSansKhmer text-gray-700 font-bold ">បង្កើតថ្ងៃទី: *</label>
+                        <label  className="block font-bold text-gray-700 font-NotoSansKhmer ">បង្កើតថ្ងៃទី: *</label>
                         <input 
                             type="date"
                             required
-                            className="input_text" placeholder="ឈ្មោះប្រភេទទំនិញ"
+                            className="input_text" 
                         />
                     </div>
                     <div className="flex justify-end space-x-3">

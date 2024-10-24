@@ -53,24 +53,24 @@ function Category() {
 
 
     return (
-        <div className='grid grid-cols-6 min-h-screen'>
+        <div className='grid min-h-screen grid-cols-6'>
             <div className="h-screen"> {/* Ensure this has full height */}
                 <div className="sticky top-0 z-10"> {/* Add z-index */}
                     <Sidebar />
                 </div>
             </div>
 
-            <div className="p-4 col-span-5">
+            <div className="col-span-5 p-4">
                 <Navbar />
-                <div className="p-4 bg-white dark:border-gray-700 mt-5 animate-fade-up animate-duration-2000 animate-ease-in-out">
+                <div className="p-4 mt-5 bg-white dark:border-gray-700 animate-fade-up animate-duration-2000 animate-ease-in-out">
                     <div className='flex items-center gap-2 '>
                         <BiSolidCategoryAlt className='text-xl' />
-                        <p className='font-NotoSansKhmer font-bold text-lg'>បញ្ជីធានា</p>
+                        <p className='text-lg font-bold font-NotoSansKhmer'>បញ្ជីធានា</p>
                     </div>
                     <div className="flex justify-end gap-2">
                         <button onClick={handleOpenModal} className="button_only_submit">+ បង្កើតការធានា</button>
                     </div>
-                    <div className="flex justify-between items-center my-3">
+                    <div className="flex items-center justify-between my-3">
                         <div className="flex flex-col gap-2 font-bold font-NotoSansKhmer">
                             <label htmlFor="">ច្រោះតាមចំនួន</label>
                             <select className="input_text w-[100px]">
@@ -81,12 +81,12 @@ function Category() {
                             </select>
                         </div>
                         <div>
-                            <input type="text" className="input_text w-[300px]" placeholder="ស្វែងរកប្រភេទទំនិញ..." />
+                            <input type="text" className="input_text w-[300px]" placeholder="ស្វែងរកផលិតផលធានា..." />
                         </div>
                     </div>
-                    <table className="min-w-full table-auto overflow-x-auto">
-                        <thead className="bg-blue-600/90 text-white">
-                            <tr className="font-NotoSansKhmer font-bold">
+                    <table className="min-w-full overflow-x-auto table-auto">
+                        <thead className="text-white bg-blue-600/90">
+                            <tr className="font-bold font-NotoSansKhmer">
                                 <th className="px-4 py-2">លេខរៀង</th>
                                 <th className="px-4 py-2">ឈ្មោះប្រភេទធានា</th>
                                 <th className="px-4 py-2">ពិពណ៌នា</th>
@@ -105,7 +105,7 @@ function Category() {
                                     variants={rowVariants}
                                     whileHover={{ scale: 1.02 }}
                                     whileTap={{ scale: 0.95 }}
-                                    className="text-sm font-NotoSansKhmer cursor-pointer"
+                                    className="text-sm cursor-pointer font-NotoSansKhmer"
                                 >
                                     <td className="px-4 py-2">{index + 1}</td>
                                     <td className="px-4 py-2">{cate.name}</td>

@@ -7,7 +7,7 @@ import Dashboard from "./views/Dashboard";
 import PageNotFound from "./views/PageNotFound";
 
 import Contact from "./views/Contact";
-import Purchase from "./views/Purchase";
+import Purchase from "./views/purchase/Purchase";
 import POS from "./views/POS";
 import Supplier from "./views/contact/Supplier";
 import Customer from "./views/contact/Customer";
@@ -19,6 +19,7 @@ import Brands from "./views/product/Brands";
 import Warranty from "./views/product/Warranty";
 import Expense from "./views/expense/Expense";
 import Expense_Type from "./views/expense/Expense_Type";
+import CreatePurchase from "./views/purchase/CreatePurchase";
 
 function App() {
   return (
@@ -49,9 +50,18 @@ function App() {
           <Route path="/warranty" element={<Warranty />} />
           <Route path="*" element={<PageNotFound />} />
 
-          {/* expense Route */}
+           {/* Purchase Route */}
+           <Route path="/purchase" element={<Purchase />} />
+           <Route path="/createPurchase" element={<CreatePurchase />} />
+
+
+          {/* Expense Route */}
           <Route path="/expense" element={<Expense />} />
           <Route path="/expense_type" element={<Expense_Type />} />
+
+          
+         
+      
         </Routes>
       </BrowserRouter>
     </div>

@@ -14,6 +14,7 @@ function CreateCustomer() {
 
     const handleChange = (event: any) => {
         setIsSupplier(event.target.value);
+        
     };
 
     const handleSubmit = (event: any) => {

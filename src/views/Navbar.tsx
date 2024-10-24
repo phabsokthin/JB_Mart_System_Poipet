@@ -60,6 +60,15 @@ function Navbar() {
                     {location.pathname === "/warranty" ? "ផលិតផល/ការធានាលើទំនិញ" : ""}
                   </p>
 
+
+                  <p className="font-bold font-NotoSansKhmer">
+                    {location.pathname === "/purchase" ? "បញ្ជាទិញទំនិញ/រាយបញ្ជីទិញ" : ""}
+                  </p>
+
+                  <p className="font-bold font-NotoSansKhmer">
+                    {location.pathname === "/createPurchase" ? "បញ្ជាទិញទំនិញ/បង្កើតការទិញទំនិញ" : ""}
+                  </p>
+
                   
                   <p className="font-bold font-NotoSansKhmer">
                     {location.pathname === "/expense" ? "ចំណាយ/បញ្ជីចំណាយ" : ""}

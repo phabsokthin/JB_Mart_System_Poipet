@@ -4,11 +4,10 @@
 
 
 
-@import url("https://fonts.googleapis.com/css2?family=Moul&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Moul&family=Noto+Sans+Khmer:wght@100..900&display=swap");
 
 * {
   font-family: "Noto Sans Khmer", sans-serif;
+  font-weight: 600;
 }
 
 @layer components {

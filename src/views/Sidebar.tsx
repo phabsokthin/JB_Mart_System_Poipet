@@ -18,8 +18,8 @@ function Sidebar() {
     // Routes
     const contactRoutes = ["/supplier", "/customer", "/contactInfo"];
     const productsRoutes = ["/product", "/productUnit","/category","/brands","/warranty"];
-    const purchaseRoutes = ["/purchase", "/createPurchase"];
-    const topupRoutes = ['/topup', '/topupList']
+    const purchaseRoutes = ["/purchase", "/createPurchase", '/puchaseReturn'];
+    const topupRoutes = ['/topup','/createTopup', '/topuType']
     const exspenseRoutes = ['/expense', '/expense_list']
     const accountRoutes = ['/account', '/account_list']
     const paymentRoutes = ['/payment', '/payment_list']
@@ -306,11 +306,11 @@ function Sidebar() {
                                 </svg>
                                 <p className="font-bold font-NotoSansKhmer">បង្កើតការទិញផលិតផល</p>
                             </NavLink>
-                            <NavLink to="/purchase-list" className={navLinkStyle}>
+                            <NavLink to="/puchaseReturn" className={navLinkStyle}>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="ml-3 size-6">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
                                 </svg>
-                                <p className="font-bold font-NotoSansKhmer">ផ្លាស់ប្តូទំនិញវិញ</p>
+                                <p className="font-bold font-NotoSansKhmer">បង្កើតការផ្លាស់ប្តូទំនិញវិញ</p>
                             </NavLink>
                         </div>
                     </li>
@@ -346,18 +346,30 @@ function Sidebar() {
                             </svg>
                         </button>
 
-                        <div className={`overflow-hidden transition-all duration-500 space-y-2 ${isTopupDropdown ? "max-h-40 opacity-100" : "max-h-0"}`}>
-                            <NavLink to="/purchase" className={navLinkStyle}>
+                        <div className={`overflow-hidden transition-all duration-500 space-y-2 ${isTopupDropdown ? "max-h-52 opacity-100" : "max-h-0"}`}>
+                            <NavLink to="/topup" className={navLinkStyle}>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="ml-3 size-6">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
                                 </svg>
-                                <p className="font-bold font-NotoSansKhmer">បង្កើតបញ្ជាទិញ</p>
+                                <p className="font-bold font-NotoSansKhmer">បញ្ជីកាតទូរស័ព្ទ</p>
+                            </NavLink>
+                            <NavLink to="/createTopup" className={navLinkStyle}>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="ml-3 size-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
+                                </svg>
+                                <p className="font-bold font-NotoSansKhmer">លក់កាត់ទូរស័ព្ទ</p>
+                            </NavLink>
+                            <NavLink to="/topuType" className={navLinkStyle}>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="ml-3 size-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
+                                </svg>
+                                <p className="font-bold font-NotoSansKhmer">ប្រភេទកាតទូរស័ព្ទ</p>
                             </NavLink>
                             <NavLink to="/purchase-list" className={navLinkStyle}>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="ml-3 size-6">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
                                 </svg>
-                                <p className="font-bold font-NotoSansKhmer">បញ្ជីបញ្ជាទិញ</p>
+                                <p className="font-bold font-NotoSansKhmer">ទិញចូល</p>
                             </NavLink>
                         </div>
                     </li>
@@ -484,7 +496,6 @@ function Sidebar() {
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                             </svg>
                         </button>
-
 
                         <div className={`overflow-hidden transition-all duration-500 space-y-2 ${isPaymentMethodDropdown ? "max-h-40 opacity-100" : "max-h-0"}`}>
                             <NavLink to="/purchase" className={navLinkStyle}>

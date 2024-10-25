@@ -20,6 +20,10 @@ import Warranty from "./views/product/Warranty";
 import Expense from "./views/expense/Expense";
 import Expense_Type from "./views/expense/Expense_Type";
 import CreatePurchase from "./views/purchase/CreatePurchase";
+import PurchaseReturn from "./views/purchase/PurchaseReturn";
+import Topup from "./views/topup/Topup";
+import TopupType from "./views/topup/TopupType";
+import CreateTopUp from "./views/topup/CreateTopUp";
 
 function App() {
   return (
@@ -51,10 +55,17 @@ function App() {
           <Route path="*" element={<PageNotFound />} />
 
            {/* Purchase Route */}
-           <Route path="/purchase" element={<Purchase />} />
-           <Route path="/createPurchase" element={<CreatePurchase />} />
+          <Route path="/purchase" element={<Purchase />} />
+          <Route path="/createPurchase" element={<CreatePurchase />} />
+          <Route path="/puchaseReturn" element={<PurchaseReturn/>}/>
 
 
+          {/* top up */}
+
+          <Route path="/topup" element={<Topup/>}/>
+          <Route path="/createTopup" element={<CreateTopUp/>}/>
+          <Route path="/topuType" element={<TopupType/>}/> 
+          
           {/* Expense Route */}
           <Route path="/expense" element={<Expense />} />
           <Route path="/expense_type" element={<Expense_Type />} />

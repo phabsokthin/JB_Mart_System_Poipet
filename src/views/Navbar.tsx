@@ -1,7 +1,54 @@
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
 
+function getDateInKhmer(): string {
+  const today = new Date();
+
+  const khmerMonths: string[] = [
+    "មករា",
+    "កម្ភៃ",
+    "មីនា",
+    "មេសា",
+    "ឧសភា",
+    "មិថុនា",
+    "កក្កដា",
+    "សីហា",
+    "កញ្ញា",
+    "តុលា",
+    "វិច្ឆិកា",
+    "ធ្នូ",
+  ];
+
+  const convertToKhmerNumber = (number: number): string => {
+    const khmerDigits: string[] = [
+      "០",
+      "១",
+      "២",
+      "៣",
+      "៤",
+      "៥",
+      "៦",
+      "៧",
+      "៨",
+      "៩",
+    ];
+    return number
+      .toString()
+      .split("")
+      .map((digit) => khmerDigits[parseInt(digit)])
+      .join("");
+  };
+
+  const day: string = convertToKhmerNumber(today.getDate());
+  const month: string = khmerMonths[today.getMonth()];
+  const year: string = convertToKhmerNumber(today.getFullYear());
+
+  return `${day} ${month} ${year}`;
+}
+
 function Navbar() {
+  const [currentDate, setCurrentDate] = useState(getDateInKhmer());
+
   const [isUserDropdown, setIsUserDropdown] = useState(false);
 
   const location = useLocation();
@@ -16,75 +63,122 @@ function Navbar() {
         <div className="px-3 py-2 lg:px-5 lg:pl-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center justify-start rtl:justify-end ">
-             
               <div className="flex justify-between">
                 <div>
                   <p className="font-bold font-NotoSansKhmer">
-                    {location.pathname === "/dashboard" ? "ទំព័រដើម/ផ្ទាំងគ្រប់គ្រង" : ""}
+                    {location.pathname === "/dashboard"
+                      ? "ទំព័រដើម/ផ្ទាំងគ្រប់គ្រង"
+                      : ""}
                   </p>
                   <p className="font-bold font-NotoSansKhmer">
                     {location.pathname === "/test" ? "សាកល្បង" : ""}
                   </p>
                   <p className="font-bold font-NotoSansKhmer">
-                    {location.pathname === "/product" ? "ផលិតផល​/បញ្ជីផលិតផល" : ""}
+                    {location.pathname === "/product"
+                      ? "ផលិតផល​/បញ្ជីផលិតផល"
+                      : ""}
                   </p>
                   <p className="font-bold font-NotoSansKhmer">
-                    {location.pathname === "/supplier" ? "ទំនាក់ទំនង/អ្នកផ្គត់ផ្គង់" : ""}
-                  </p>
-                  
-                  <p className="font-bold font-NotoSansKhmer">
-                    {location.pathname === "/customer" ? "ទំនាក់ទំនង/អតិថិជន" : ""}
-                  </p>
-                  
-                  <p className="font-bold font-NotoSansKhmer">
-                    {location.pathname === "/contactInfo" ? "ទំនាក់ទំនង/ព័ត៍មានផ្សេងៗពីទំនាក់ទំនង" : ""}
+                    {location.pathname === "/supplier"
+                      ? "ទំនាក់ទំនង/អ្នកផ្គត់ផ្គង់"
+                      : ""}
                   </p>
 
-
                   <p className="font-bold font-NotoSansKhmer">
-                    {location.pathname === "/productUnit" ? "ផលិតផល/ឯកតាទំនិញ" : ""}
+                    {location.pathname === "/customer"
+                      ? "ទំនាក់ទំនង/អតិថិជន"
+                      : ""}
                   </p>
 
-                  
+                  <p className="font-bold font-NotoSansKhmer">
+                    {location.pathname === "/contactInfo"
+                      ? "ទំនាក់ទំនង/ព័ត៍មានផ្សេងៗពីទំនាក់ទំនង"
+                      : ""}
+                  </p>
+
+                  <p className="font-bold font-NotoSansKhmer">
+                    {location.pathname === "/productUnit"
+                      ? "ផលិតផល/ឯកតាទំនិញ"
+                      : ""}
+                  </p>
 
                   <p className="font-bold font-NotoSansKhmer">
                     {location.pathname === "/brands" ? "ផលិតផល/ម៉ាកយីហោ" : ""}
                   </p>
 
                   <p className="font-bold font-NotoSansKhmer">
-                    {location.pathname === "/category" ? "ផលិតផល/ប្រភេទទំនិញ" : ""}
-                  </p>
-
-                  
-                  <p className="font-bold font-NotoSansKhmer">
-                    {location.pathname === "/warranty" ? "ផលិតផល/ការធានាលើទំនិញ" : ""}
-                  </p>
-
-
-                  <p className="font-bold font-NotoSansKhmer">
-                    {location.pathname === "/purchase" ? "បញ្ជាទិញទំនិញ/រាយបញ្ជីទិញ" : ""}
+                    {location.pathname === "/category"
+                      ? "ផលិតផល/ប្រភេទទំនិញ"
+                      : ""}
                   </p>
 
                   <p className="font-bold font-NotoSansKhmer">
-                    {location.pathname === "/createPurchase" ? "បញ្ជាទិញទំនិញ/បង្កើតការទិញទំនិញ" : ""}
+                    {location.pathname === "/warranty"
+                      ? "ផលិតផល/ការធានាលើទំនិញ"
+                      : ""}
                   </p>
 
-                  
+                  <p className="font-bold font-NotoSansKhmer">
+                    {location.pathname === "/purchase"
+                      ? "បញ្ជាទិញទំនិញ/រាយបញ្ជីទិញ"
+                      : ""}
+                  </p>
+
+                  <p className="font-bold font-NotoSansKhmer">
+                    {location.pathname === "/createPurchase"
+                      ? "បញ្ជាទិញទំនិញ/បង្កើតការទិញទំនិញ"
+                      : ""}
+                  </p>
+
+                  <p className="font-bold font-NotoSansKhmer">
+                    {location.pathname === "/puchaseReturn"
+                      ? "បញ្ជាទិញទំនិញ/បង្កើតការផ្លាស់ប្តូទំនិញវិញ"
+                      : ""}
+                  </p>
+
+                  <p className="font-bold font-NotoSansKhmer">
+                    {location.pathname === "/topup"
+                      ? "កាតទូរស័ព្ទ/បញ្ជីកាតទូរស័ព្ទ"
+                      : ""}
+                  </p>
+
+                  <p className="font-bold font-NotoSansKhmer">
+                    {location.pathname === "/topuType"
+                      ? "កាតទូរស័ព្ទ/ប្រភេទកាតទូរស័ព្ទ"
+                      : ""}
+                  </p>
+
+                  <p className="font-bold font-NotoSansKhmer">
+                    {location.pathname === "/createTopup"
+                      ? "កាតទូរស័ព្ទ/លក់កាតទូរស័ព្ទ"
+                      : ""}
+                  </p>
+
                   <p className="font-bold font-NotoSansKhmer">
                     {location.pathname === "/expense" ? "ចំណាយ/បញ្ជីចំណាយ" : ""}
                   </p>
                   <p className="font-bold font-NotoSansKhmer">
-                    {location.pathname === "/expense_type" ? "ចំណាយ/ប្រភេទការចំណាយ" : ""}
+                    {location.pathname === "/expense_type"
+                      ? "ចំណាយ/ប្រភេទការចំណាយ"
+                      : ""}
                   </p>
                 </div>
               </div>
             </div>
+
             <div className="relative flex items-center gap-3 select-none">
-                <div className="flex gap-2">
-                    <h1 className="font-bold font-NotoSansKhmer">ប្រវត្តិរូប៖</h1>
-                    <h1>Admin</h1>
-                </div>
-              <div onClick={toggleDropdown} className="p-3 rounded-full cursor-pointer bg-gray-50">
+              <div className="flex items-center gap-1">
+                <p>កាលបរិច្ឆេត:</p>
+                <p className="text-blue-600">{currentDate}</p>
+              </div>
+              <div className="flex gap-2">
+                <h1 className="font-bold font-NotoSansKhmer">ប្រវត្តិរូប៖</h1>
+                <h1>Admin</h1>
+              </div>
+              <div
+                onClick={toggleDropdown}
+                className="p-3 rounded-full cursor-pointer bg-gray-50"
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="20"

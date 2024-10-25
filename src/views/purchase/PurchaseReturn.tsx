@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import Sidebar from "../../views/Sidebar";
 import Navbar from "../../views/Navbar";
-import { BiPurchaseTag } from "react-icons/bi";
 import { FaSearch } from "react-icons/fa";
 import { IoMdClose } from "react-icons/io";
+import { PiKeyReturn } from "react-icons/pi";
+import { IoReturnDownForwardSharp } from "react-icons/io5";
 
 type Product = {
   id: number;
@@ -67,7 +68,7 @@ const productList: Product[] = [
   },
 ];
 
-function CreatePurchase() {
+function PurchaseReturn() {
   const [productSearchQuery, setProductSearchQuery] = useState<string>("");
   const [supplierSearchQuery, setSupplierSearchQuery] = useState<string>("");
   const [selectedProducts, setSelectedProducts] = useState<Product[]>([]);
@@ -164,12 +165,6 @@ function CreatePurchase() {
     }));
   };
 
-  const handleDiscountChange = (productId: number, discount: number) => {
-    setProductDetails((prev) => ({
-      ...prev,
-      [productId]: { ...prev[productId], discount },
-    }));
-  };
   const handleTaxChange = (productId: number, tax: number) => {
     setProductDetails((prev) => ({
       ...prev,
@@ -231,7 +226,6 @@ function CreatePurchase() {
           name: product.name,
           price: productDetail.price || product.price,
           qty: productDetail.qty || 0,
-          discount: productDetail.discount || 0,
           tax: productDetail.tax || 0,
           total:
             (productDetail.price || product.price || 0) *
@@ -274,8 +268,8 @@ function CreatePurchase() {
         <Navbar />
         <div className="p-4 mt-5 bg-white dark:border-gray-700 animate-fade-up animate-duration-2000 animate-ease-in-out">
           <div className="flex items-center gap-2 ">
-            <BiPurchaseTag className="text-xl" />
-            <p className="text-lg font-bold font-NotoSansKhmer">ការទិញផលិតផល</p>
+            <PiKeyReturn className="text-xl" />
+            <p className="text-lg font-bold font-NotoSansKhmer">បង្កើតការផ្លាស់ប្តូទំនិញវិញ</p>
           </div>
 
           <form onSubmit={handleSubmit}>
@@ -327,23 +321,18 @@ function CreatePurchase() {
 
               <div className="space-y-2">
                 <label htmlFor="" className="font-bold font-NotoSansKhmer">
-                  កាលបរិច្ឆេតទិញ
+                  កាលបរិច្ឆេតប្តូរទំនិញ: *
                 </label>
                 <input type="date" required className="input_text  p-[7px]" />
               </div>
+
               <div className="space-y-2">
                 <label htmlFor="" className="font-bold font-NotoSansKhmer">
-                  ស្ថានភាព: *
+                  មូលហេតុ
                 </label>
-                <select name="" id="" className="input_text font-NotoSansKhmer">
-                  <option value="" selected disabled>
-                    --ជ្រើសរើស--
-                  </option>
-                  <option value={1}>បានទទួល</option>
-                  <option value={2}>រងចាំ</option>
-                  <option value={3}>បានបញ្ជាទិញ</option>
-                </select>
+                <textarea required className="input_text  p-[7px]" placeholder="មូលហេតុនៃការប្តូរទំនិញ" rows={3} />
               </div>
+             
             </div>
             <div className="relative items-center gap-3 mx-auto my-10">
               <div className="relative">
@@ -355,16 +344,11 @@ function CreatePurchase() {
                     value={productSearchQuery}
                     onChange={handleProductSearchChange}
                   />
-                  <div className="absolute right-[22%] top-3.5">
+                  <div className="absolute right-[11%] top-3.5">
                     <FaSearch className="text-gray-400" />
                   </div>
                 </div>
-                <div className="absolute top-0 right-[10%]">
-                  <button className="py-2.5 button_only_submit">
-                    {" "}
-                    + បន្ថែមផលិតផល
-                  </button>
-                </div>
+                
               </div>
 
               <div className="flex justify-center">
@@ -394,7 +378,7 @@ function CreatePurchase() {
             
             {/* Display selected products */}
             <div className="mt-6">
-              <h3 className="text-lg font-semibold">កំណត់ការបញ្ជាទិញ</h3>
+              <h3 className="text-lg font-semibold">កំណត់ការផ្លាស់ប្តូទំនិញវិញ</h3>
               <table className="w-full mt-4 border-collapse">
                 <thead className="p-2 text-white bg-blue-600/90">
                   <tr>
@@ -402,10 +386,9 @@ function CreatePurchase() {
                     <th className="p-2 border w-[20%]">ឈ្មោះផលិតផល</th>
                     <th className="p-2 border w-[10%]">តម្លៃដើម(ឯកតា)</th>
                     <th className="p-2 border w-[15%]">បរិមាណទិញចូល</th>
-                    <th className="p-2 border w-[15%]">បញ្ចុះតម្លៃ</th>
                     <th className="p-2 border w-[15%]">ពន្ធសរុប</th>
                     <th className="p-2 border w-[15%]">សរុប</th>
-                    <th className="p-2 border w-[5]">
+                    <th className="p-2 border w-[5%]">
                       <p className="text-center">ស្ថានភាព</p>
                     </th>
                   </tr>
@@ -463,23 +446,7 @@ function CreatePurchase() {
                           />
                         </td>
 
-                        {/* Discount Input */}
-                        <td>
-                          <input
-                            min={0}
-                            type="number"
-                            placeholder="0.0"
-                            value={productDetails[product.id]?.discount || ""}
-                            onChange={(e) =>
-                              handleDiscountChange(
-                                product.id,
-                                Number(e.target.value)
-                              )
-                            }
-                            className="input_text"
-                          />
-                        </td>
-
+                      
                         {/* Tax Input */}
                         <td>
                           <input
@@ -541,7 +508,7 @@ function CreatePurchase() {
             </div>
 
             <div className="mt-3">
-              <h3 className="text-lg font-semibold">បន្ថែមការទូទាត់</h3>
+              <h3 className="text-lg font-semibold">សរុបចំនួនទូទាត់ប្តូរទំនិញ</h3>
               <hr className="my-2" />
               <div className="grid grid-cols-3 gap-3">
 
@@ -579,27 +546,7 @@ function CreatePurchase() {
                   />
                 </div>
 
-                <div className="space-y-2">
-                  <label htmlFor="">កាលបរិច្ឆេតបង់ប្រាក់</label>
-                  <input type="date" placeholder="0.0" className="input_text" />
-                </div>
-                <div className="space-y-2">
-                  <label htmlFor="">វិធីសាទូទាត់</label>
-                  <select name="" id="" className="input_text">
-                    <option value="">--ជ្រើសរើស--</option>
-                    <option value="abA">QR Code</option>
-                    <option value="បង់ផ្ទាល់">បង់ផ្ទាល់</option>
-                  </select>
-                </div>
-
-                <div className="space-y-2">
-                  <label htmlFor="">គណនី</label>
-                  <select name="" id="" className="input_text">
-                    <option value="">--ជ្រើសរើស--</option>
-                    <option value="aba">ABA</option>
-                    <option value="AC Lida">AC Lida</option>
-                  </select>
-                </div>
+               
 
                 <div className="space-y-2">
                   <label htmlFor="">ចំនួននៅសល់($)</label>
@@ -616,9 +563,10 @@ function CreatePurchase() {
             <div className="flex justify-end mt-5">
               <button
                 type="submit"
-                className="px-4 py-2 font-semibold text-white bg-blue-500 hover:bg-blue-600"
+                className="flex items-center gap-2 px-4 py-2 font-semibold text-white bg-blue-500 hover:bg-blue-600"
               >
-                រក្សាទុក
+                <IoReturnDownForwardSharp className="text-xl"/>
+               <p>ផ្លាសប្តូរទំនិញ</p>
               </button>
             </div>
           </form>
@@ -627,4 +575,4 @@ function CreatePurchase() {
     </div>
   );
 }
-export default CreatePurchase;
+export default PurchaseReturn;

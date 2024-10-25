@@ -2,17 +2,17 @@ import { useState } from 'react'; // Import useState
 import Sidebar from '../Sidebar';
 import Navbar from '../Navbar';
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
-import { BiPurchaseTag } from "react-icons/bi";
-import PurchaseList from '../../components/purchase/PurchaseList';
 import PurchaseListInfo from '../../components/purchase/PurchaseListInfo';
+import { FaBlenderPhone } from "react-icons/fa";
+import TopupList from '../../components/topup/TopUpList';
 
 const categories = [
     {
-        name: 'បញ្ជីទិញផលិតផល',
+        name: 'បញ្ជីលក់កាត',
 
     },
     {
-        name: 'បញ្ជីប្តូរទំនិញវិញ',
+        name: 'បញ្ជីទិញចូល',
 
     },
     {
@@ -26,7 +26,7 @@ const categories = [
     
 ];
 
-function Purchase() {
+function Topup() {
     const [activeTabIndex, setActiveTabIndex] = useState(0);
 
     return (
@@ -36,8 +36,8 @@ function Purchase() {
                 <Navbar />
                 <div className="w-full p-4 mt-5 bg-white dark:border-gray-700 animate-fade-up animate-duration-2000 animate-ease-in-out">
                     <div className='flex items-center gap-2 py-5'>
-                        <BiPurchaseTag className='text-xl ' />
-                        <p className='text-lg font-bold font-NotoSansKhmer'>រាយបញ្ជីទិញផលិតផល</p>
+                        <FaBlenderPhone className='text-xl ' />
+                        <p className='text-lg font-bold font-NotoSansKhmer'>រាយបញ្ជីកាតទូរស័ព្ទ</p>
                     </div>
                     <div className="w-full">
                         <TabGroup selectedIndex={activeTabIndex} onChange={setActiveTabIndex}>
@@ -54,7 +54,7 @@ function Purchase() {
                             
                             <TabPanels className="mt-3">
                                 <TabPanel className="p-4 border">
-                                    <PurchaseList/>
+                                    <TopupList/>
                                 </TabPanel>
                             </TabPanels>
                             <TabPanels className="mt-3">
@@ -78,4 +78,4 @@ function Purchase() {
     );
 }
 
-export default Purchase;
+export default Topup;

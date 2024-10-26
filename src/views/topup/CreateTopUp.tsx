@@ -7,7 +7,7 @@ import { FaShoppingCart } from "react-icons/fa";
 import { CiShoppingBasket } from "react-icons/ci";
 import BackgroundArrow from "../../components/background/BackgroundArrow";
 import KhmerDateInput from "../../components/khmerDateInputComponents/KhmerInputDate";
-import { getCurrentDateForInput } from "../../composable/dateUtils";
+import { getCurrentDateForInput } from "../../composable/utils/dateUtils";
 
 type Product = {
   id: number;

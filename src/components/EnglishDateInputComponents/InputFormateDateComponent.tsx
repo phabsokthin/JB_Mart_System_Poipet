@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getCurrentDate } from "../../composable/dateFormateUtils";
+import { getCurrentDate } from "../../composable/utils/dateFormateUtils";
 
 interface DateInputProps {
   initialValue?: string; // Optional initial date in YYYY-MM-DD format

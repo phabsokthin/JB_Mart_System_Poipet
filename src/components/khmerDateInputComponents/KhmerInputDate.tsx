@@ -1,20 +1,26 @@
-import React, { useState, useEffect } from 'react';
-import { getCurrentDateForInput, getCurrentDateInKhmer } from '../../composable/dateUtils';
+import React, { useState, useEffect } from "react";
+import {
+  getCurrentDateForInput,
+  getCurrentDateInKhmer,
+} from "../../composable/utils/dateUtils";
 
 interface KhmerDateInputProps {
-  label: string; 
-  required?: boolean; 
-  onChange?: (value: string) => void; 
+  label: string;
+  required?: boolean;
+  onChange?: (value: string) => void;
 }
 
-const KhmerDateInput: React.FC<KhmerDateInputProps> = ({ required = false, onChange }) => {
-  const [dateValue, setDateValue] = useState<string>(''); 
-  const [khmerDateValue, setKhmerDateValue] = useState<string>(''); 
+const KhmerDateInput: React.FC<KhmerDateInputProps> = ({
+  required = false,
+  onChange,
+}) => {
+  const [dateValue, setDateValue] = useState<string>("");
+  const [khmerDateValue, setKhmerDateValue] = useState<string>("");
 
   useEffect(() => {
     const initialDate = getCurrentDateForInput();
     setDateValue(initialDate);
-    setKhmerDateValue(getCurrentDateInKhmer(initialDate)); 
+    setKhmerDateValue(getCurrentDateInKhmer(initialDate));
   }, []);
 
   // Handle input change
@@ -30,7 +36,6 @@ const KhmerDateInput: React.FC<KhmerDateInputProps> = ({ required = false, onCha
 
   return (
     <div className="space-y-2">
-   
       {/* Display input field with Khmer date */}
       <input
         type="text"

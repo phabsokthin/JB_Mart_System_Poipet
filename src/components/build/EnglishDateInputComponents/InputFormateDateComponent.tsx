@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { getCurrentDate } from "../../composable/utils/dateFormateUtils";
+import { getCurrentDate } from "../../../composable/utils/dateFormateUtils";
 
 interface DateInputProps {
   initialValue?: string; // Optional initial date in YYYY-MM-DD format
   onDateChange?: (date: string) => void; // Callback for date changes
 }
 
-const DateInputFormat: React.FC<DateInputProps> = ({ initialValue, onDateChange }) => {
+const DateInputFormat: React.FC<DateInputProps> = ({
+  initialValue,
+  onDateChange,
+}) => {
   const [currentDate, setCurrentDate] = useState<string>("");
 
   useEffect(() => {
@@ -26,11 +29,11 @@ const DateInputFormat: React.FC<DateInputProps> = ({ initialValue, onDateChange 
   };
 
   return (
-    <input 
-      type="date"  
-      className="input_text w-44"
-      value={currentDate} 
-      onChange={handleChange} 
+    <input
+      type="date"
+      className="input_text "
+      value={currentDate}
+      onChange={handleChange}
     />
   );
 };

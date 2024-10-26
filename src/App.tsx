@@ -24,6 +24,7 @@ import PurchaseReturn from "./views/purchase/PurchaseReturn";
 import Topup from "./views/topup/Topup";
 import TopupType from "./views/topup/TopupType";
 import CreateTopUp from "./views/topup/CreateTopUp";
+import CreateProduct from "./views/product/CreateProduct";
 
 function App() {
   return (
@@ -45,9 +46,10 @@ function App() {
 
           {/* Product Route */}
           <Route path="/product" element={<Product />} />
+          <Route path="/createProduct" element={<CreateProduct/>}/>
           <Route path="/productUnit" element={<ProductUnit />} />
           <Route path="/category" element={<Category />} />
-
+      
           <Route path="/purchase" element={<Purchase />} />
           <Route path="/pos" element={<POS />} />
           <Route path="/brands" element={<Brands />} />

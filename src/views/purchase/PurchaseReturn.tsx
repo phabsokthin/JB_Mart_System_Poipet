@@ -5,6 +5,7 @@ import { FaSearch } from "react-icons/fa";
 import { IoMdClose } from "react-icons/io";
 import { PiKeyReturn } from "react-icons/pi";
 import { IoReturnDownForwardSharp } from "react-icons/io5";
+import DateInputFormat from "../../components/build/EnglishDateInputComponents/InputFormateDateComponent";
 
 type Product = {
   id: number;
@@ -77,6 +78,7 @@ function PurchaseReturn() {
   const [payment, setPayment] = useState<number | undefined>(undefined);
   const [remainingAmount, setRemainingAmount] = useState<number>(totalAmount);
   const [discount, setDiscount] = useState<number>(0);
+  const [selectedDate, setSelectedDate] = useState<string>("");
 
   //calculate Proeduct
   const [productDetails, setProductDetails] = useState<{
@@ -207,6 +209,9 @@ function PurchaseReturn() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    const dateToSubmit = selectedDate || new Date().toISOString().split("T")[0];
+    console.log("Submitting date:", dateToSubmit);
+
     // Validation
     if (selectedProducts.length === 0 || !selectedSupplier) {
       alert("Please select at least one product and a supplier.");
@@ -256,6 +261,13 @@ function PurchaseReturn() {
     setProductDetails({});
   };
 
+  const handleDateChange = (date: string) => {
+    setSelectedDate(date);
+    console.log("Selected date:", date);
+  };
+
+  const currentDate = new Date().toISOString().split("T")[0];
+
   return (
     <div className="grid min-h-screen grid-cols-6 select-none">
       <div className="h-screen">
@@ -269,7 +281,9 @@ function PurchaseReturn() {
         <div className="p-4 mt-5 bg-white dark:border-gray-700 animate-fade-up animate-duration-2000 animate-ease-in-out">
           <div className="flex items-center gap-2 ">
             <PiKeyReturn className="text-xl" />
-            <p className="text-lg font-bold font-NotoSansKhmer">បង្កើតការផ្លាស់ប្តូទំនិញវិញ</p>
+            <p className="text-lg font-bold font-NotoSansKhmer">
+              បង្កើតការផ្លាស់ប្តូទំនិញវិញ
+            </p>
           </div>
 
           <form onSubmit={handleSubmit}>
@@ -323,16 +337,25 @@ function PurchaseReturn() {
                 <label htmlFor="" className="font-bold font-NotoSansKhmer">
                   កាលបរិច្ឆេតប្តូរទំនិញ: *
                 </label>
-                <input type="date" required className="input_text  p-[7px]" />
+                <div>
+                  <DateInputFormat
+                    initialValue={currentDate}
+                    onDateChange={handleDateChange}
+                  />
+                </div>
               </div>
 
               <div className="space-y-2">
                 <label htmlFor="" className="font-bold font-NotoSansKhmer">
                   មូលហេតុ
                 </label>
-                <textarea required className="input_text  p-[7px]" placeholder="មូលហេតុនៃការប្តូរទំនិញ" rows={3} />
+                <textarea
+                  required
+                  className="input_text  p-[7px]"
+                  placeholder="មូលហេតុនៃការប្តូរទំនិញ"
+                  rows={3}
+                />
               </div>
-             
             </div>
             <div className="relative items-center gap-3 mx-auto my-10">
               <div className="relative">
@@ -348,7 +371,6 @@ function PurchaseReturn() {
                     <FaSearch className="text-gray-400" />
                   </div>
                 </div>
-                
               </div>
 
               <div className="flex justify-center">
@@ -375,10 +397,12 @@ function PurchaseReturn() {
                 )}
               </div>
             </div>
-            
+
             {/* Display selected products */}
             <div className="mt-6">
-              <h3 className="text-lg font-semibold">កំណត់ការផ្លាស់ប្តូទំនិញវិញ</h3>
+              <h3 className="text-lg font-semibold">
+                កំណត់ការផ្លាស់ប្តូទំនិញវិញ
+              </h3>
               <table className="w-full mt-4 border-collapse">
                 <thead className="p-2 text-white bg-blue-600/90">
                   <tr>
@@ -446,7 +470,6 @@ function PurchaseReturn() {
                           />
                         </td>
 
-                      
                         {/* Tax Input */}
                         <td>
                           <input
@@ -508,11 +531,12 @@ function PurchaseReturn() {
             </div>
 
             <div className="mt-3">
-              <h3 className="text-lg font-semibold">សរុបចំនួនទូទាត់ប្តូរទំនិញ</h3>
+              <h3 className="text-lg font-semibold">
+                សរុបចំនួនទូទាត់ប្តូរទំនិញ
+              </h3>
               <hr className="my-2" />
               <div className="grid grid-cols-3 gap-3">
-
-              <div className="space-y-2">
+                <div className="space-y-2">
                   <label htmlFor="">ចំនួនការទូទាត់សរុប($)</label>
                   <input
                     type="number"
@@ -523,7 +547,7 @@ function PurchaseReturn() {
                     className="bg-gray-100 input_text"
                   />
                 </div>
-               
+
                 <div className="space-y-2">
                   <label htmlFor="">ចំនួនទឹកប្រាក់បញ្ចុះតម្លៃ</label>
                   <input
@@ -537,7 +561,6 @@ function PurchaseReturn() {
                 <div className="space-y-2">
                   <label htmlFor="">ទូទាត់សាច់ប្រាក់($): * </label>
                   <input
-                  
                     value={payment}
                     onChange={handlePaymentChange}
                     type="number"
@@ -545,8 +568,6 @@ function PurchaseReturn() {
                     className="input_text"
                   />
                 </div>
-
-               
 
                 <div className="space-y-2">
                   <label htmlFor="">ចំនួននៅសល់($)</label>
@@ -565,8 +586,8 @@ function PurchaseReturn() {
                 type="submit"
                 className="flex items-center gap-2 px-4 py-2 font-semibold text-white bg-blue-500 hover:bg-blue-600"
               >
-                <IoReturnDownForwardSharp className="text-xl"/>
-               <p>ផ្លាសប្តូរទំនិញ</p>
+                <IoReturnDownForwardSharp className="text-xl" />
+                <p>ផ្លាសប្តូរទំនិញ</p>
               </button>
             </div>
           </form>

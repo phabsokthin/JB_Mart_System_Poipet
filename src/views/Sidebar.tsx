@@ -17,7 +17,7 @@ function Sidebar() {
 
     // Routes
     const contactRoutes = ["/supplier", "/customer", "/contactInfo"];
-    const productsRoutes = ["/product", "/productUnit","/category","/brands","/warranty"];
+    const productsRoutes = ["/product","/createProduct", "/productUnit","/category","/brands","/warranty"];
     const purchaseRoutes = ["/purchase", "/createPurchase", '/puchaseReturn'];
     const topupRoutes = ['/topup','/createTopup', '/topuType']
     const exspenseRoutes = ['/expense', '/expense_list']
@@ -244,7 +244,7 @@ function Sidebar() {
                                 </svg>
                                 <p className="font-bold font-NotoSansKhmer">បញ្ជីផលិតផល</p>
                             </NavLink>
-                            <NavLink to="/product-list" className={navLinkStyle}>
+                            <NavLink to="/createProduct" className={navLinkStyle}>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="ml-3 size-6">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
                                 </svg>

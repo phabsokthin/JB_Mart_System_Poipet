@@ -4,6 +4,7 @@ import Navbar from "../../views/Navbar";
 import { BiPurchaseTag } from "react-icons/bi";
 import { FaSearch } from "react-icons/fa";
 import { IoMdClose } from "react-icons/io";
+import DateInputFormat from "../../components/build/EnglishDateInputComponents/InputFormateDateComponent";
 
 type Product = {
   id: number;
@@ -76,6 +77,7 @@ function CreatePurchase() {
   const [payment, setPayment] = useState<number | undefined>(undefined);
   const [remainingAmount, setRemainingAmount] = useState<number>(totalAmount);
   const [discount, setDiscount] = useState<number>(0);
+  const [selectedDate, setSelectedDate] = useState<string>("");
 
   //calculate Proeduct
   const [productDetails, setProductDetails] = useState<{
@@ -212,6 +214,9 @@ function CreatePurchase() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    const dateToSubmit = selectedDate || new Date().toISOString().split("T")[0];
+    console.log("Submitting date:", dateToSubmit);
+
     // Validation
     if (selectedProducts.length === 0 || !selectedSupplier) {
       alert("Please select at least one product and a supplier.");
@@ -244,6 +249,7 @@ function CreatePurchase() {
       discount,
       totalAmount,
       remainingAmount,
+      dateToSubmit,
     };
 
     console.log("Submitting data:", data);
@@ -261,6 +267,13 @@ function CreatePurchase() {
   const resetProductDetails = () => {
     setProductDetails({});
   };
+
+  const handleDateChange = (date: string) => {
+    setSelectedDate(date);
+    console.log("Selected date:", date);
+  };
+
+  const currentDate = new Date().toISOString().split("T")[0];
 
   return (
     <div className="grid min-h-screen grid-cols-6 select-none">
@@ -325,11 +338,18 @@ function CreatePurchase() {
                 )}
               </div>
 
-              <div className="space-y-2">
+              <div className="space-y-2 ">
                 <label htmlFor="" className="font-bold font-NotoSansKhmer">
                   កាលបរិច្ឆេតទិញ
                 </label>
-                <input type="date" required className="input_text  p-[7px]" />
+                <div>
+                  <DateInputFormat
+                    initialValue={currentDate}
+                    onDateChange={handleDateChange}
+                  />
+                </div>
+
+                {/* <input type="date" required className="input_text  p-[7px]" /> */}
               </div>
               <div className="space-y-2">
                 <label htmlFor="" className="font-bold font-NotoSansKhmer">
@@ -391,7 +411,7 @@ function CreatePurchase() {
                 )}
               </div>
             </div>
-            
+
             {/* Display selected products */}
             <div className="mt-6">
               <h3 className="text-lg font-semibold">កំណត់ការបញ្ជាទិញ</h3>
@@ -544,8 +564,7 @@ function CreatePurchase() {
               <h3 className="text-lg font-semibold">បន្ថែមការទូទាត់</h3>
               <hr className="my-2" />
               <div className="grid grid-cols-3 gap-3">
-
-              <div className="space-y-2">
+                <div className="space-y-2">
                   <label htmlFor="">ចំនួនការទូទាត់សរុប($)</label>
                   <input
                     type="number"
@@ -556,7 +575,7 @@ function CreatePurchase() {
                     className="bg-gray-100 input_text"
                   />
                 </div>
-               
+
                 <div className="space-y-2">
                   <label htmlFor="">ចំនួនទឹកប្រាក់បញ្ចុះតម្លៃ</label>
                   <input
@@ -570,7 +589,6 @@ function CreatePurchase() {
                 <div className="space-y-2">
                   <label htmlFor="">ទូទាត់សាច់ប្រាក់($): * </label>
                   <input
-                  
                     value={payment}
                     onChange={handlePaymentChange}
                     type="number"

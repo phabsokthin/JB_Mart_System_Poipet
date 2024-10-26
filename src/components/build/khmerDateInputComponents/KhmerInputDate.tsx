@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
-import {
-  getCurrentDateForInput,
-  getCurrentDateInKhmer,
-} from "../../composable/utils/dateUtils";
+import { getCurrentDateForInput, getCurrentDateInKhmer } from "../../../composable/utils/dateUtils";
+
 
 interface KhmerDateInputProps {
   label: string;
@@ -25,7 +23,7 @@ const KhmerDateInput: React.FC<KhmerDateInputProps> = ({
 
   // Handle input change
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = e.target.value; // Format: YYYY-MM-DD
+    const newValue = e.target.value; 
     setDateValue(newValue);
     setKhmerDateValue(getCurrentDateInKhmer(newValue)); // Update Khmer display
 

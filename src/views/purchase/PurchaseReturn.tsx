@@ -70,6 +70,7 @@ const productList: Product[] = [
 ];
 
 function PurchaseReturn() {
+  
   const [productSearchQuery, setProductSearchQuery] = useState<string>("");
   const [supplierSearchQuery, setSupplierSearchQuery] = useState<string>("");
   const [selectedProducts, setSelectedProducts] = useState<Product[]>([]);

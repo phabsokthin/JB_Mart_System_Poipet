@@ -19,11 +19,9 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
     const file = event.target.files?.[0];
     const maxSize = maxSizeMB * 1024 * 1024; // Convert MB to bytes
 
-    // Reset error message for new file selection
     setErrMsg(null);
 
     if (file) {
-      // Validate file type
       if (!allowedTypes.includes(file.type)) {
         setErrMsg("សូមបញ្ចូលរូបភាព PNG, JPG");
         setSelectedImage(null); // Reset image preview
@@ -44,7 +42,6 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
       setSelectedImage(objectUrl); // Set the local image preview
       setImageUrl(objectUrl); // Pass the URL to the parent component
     } else {
-      // If no file is chosen, reset image preview and URL
       setSelectedImage(null);
       setImageUrl(null);
     }
@@ -94,7 +91,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
           />
         </label>
       </div>
-      {errMsg && <MessageError message={errMsg} />}
+      {errMsg && <MessageError message={errMsg} onClear={() => setErrMsg(null)} />}
     </div>
   );
 };

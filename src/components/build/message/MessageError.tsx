@@ -1,32 +1,31 @@
 import { useEffect, useState } from "react";
 
 interface MessageErrorProps {
-  message: string; // Define the prop type
+  message: string;
+  onClear: () => void; 
 }
 
-function MessageError({ message }: MessageErrorProps) {
-  const [visible, setVisible] = useState(false); // Start as not visible
+function MessageError({ message, onClear }: MessageErrorProps) {
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     if (message) {
-      setVisible(true); // Show the message when it changes
+      setVisible(true);
       const timer = setTimeout(() => {
-        setVisible(false); // Hide after 5 seconds
-      }, 2000);
+        setVisible(false);
+        onClear(); 
+      }, 3000);
 
-      return () => clearTimeout(timer); // Cleanup on unmount or message change
-    } else {
-      setVisible(false); // Hide if no message is present
+      return () => clearTimeout(timer);
     }
-  }, [message]); // Dependency array includes message
+  }, [message, onClear]);
 
-  // If not visible, return null
   if (!visible) {
     return null;
   }
 
   return (
-    <div className="fixed right-0 z-[2] -top-2 w-2/3">
+    <div className="fixed right-0 z-[2] -top-20 w-2/3">
       <div
         className="flex items-center w-full max-w-xs p-4 text-white rounded-full shadow-2xl bg-red-500/80 animate-fade-down dark:bg-gray-800"
         role="alert"
@@ -47,7 +46,6 @@ function MessageError({ message }: MessageErrorProps) {
             <path d="M18 6 6 18" />
             <path d="m6 6 12 12" />
           </svg>
-          <span className="sr-only">Error icon</span>
         </div>
         <div className="text-lg font-NotoSansKhmer ms-3">{message}</div>
       </div>

@@ -100,7 +100,7 @@ function CreateCategoryModal({ onClose }: { onClose: () => void }) {
                         <div className="col-span-2">
                             <label className="font-NotoSansKhmer font-bold">ការណិពណ័នា</label>
                             <textarea id="description"
-                                rows="2"
+                                rows={2}
                                 className="input_text"
                                 placeholder="ការណិពណ័នា">
                             </textarea>

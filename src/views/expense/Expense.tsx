@@ -7,11 +7,9 @@ import CreateExpenseModal from "../../components/exoense/modal/CreateExpenseModa
 
 const exptense = [
     { id: 1, datetime: new Date().toLocaleString(), expense_type_id: 'បង់ទឺក', account: "nakry", interval: 1, interval_type: "ឆ្នាំ", tax: 10, price: 100, payment: 0, description: "", user_at: "admin" },
-    { id: 2, datetime: new Date().toLocaleString(), expense_type_id: 'បង់ផ្លើង', account: "", interval:40, interval_type: "ថ្ងៃ", tax: 10, price: 110, payment: 50, description: "", user_at: "admin" },
-
-    { id: 1, datetime: new Date().toLocaleString(), expense_type_id: 'អាហារ', account: "សុធិន", interval: 1, interval_type: "ឆ្នាំ", tax: 10, price: 100, payment: 110, description: "", user_at: "admin" },
-    { id: 2, datetime: new Date().toLocaleString(), expense_type_id: 'Event', account: "", interval:2, interval_type: "ខែ", tax: 10, price: 110, payment: 50, description: "", user_at: "admin" },
-
+    { id: 2, datetime: new Date().toLocaleString(), expense_type_id: 'បង់ផ្លើង', account: "", interval:40, interval_type: "ថ្ងៃ", tax: 0, price: 110, payment: 50, description: "", user_at: "admin" },
+    { id: 3, datetime: new Date().toLocaleString(), expense_type_id: 'អាហារ', account: "សុធិន", interval: 1, interval_type: "ឆ្នាំ", tax: 10, price: 100, payment: 110, description: "", user_at: "admin" },
+    { id: 4, datetime: new Date().toLocaleString(), expense_type_id: 'Event', account: "", interval:2, interval_type: "ខែ", tax: 0, price: 110, payment: 50, description: "", user_at: "admin" },
 ];
 
 

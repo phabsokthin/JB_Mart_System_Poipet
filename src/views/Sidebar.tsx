@@ -214,7 +214,7 @@ function Sidebar() {
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="ml-3 size-6">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
                                 </svg>
-                                <p className="font-bold font-NotoSansKhmer">ព័ត៍មានផ្សេងៗពីទំនាក់ទំនង</p>
+                                <p className="font-bold font-NotoSansKhmer">អំពីទំនាក់ទំនង</p>
                             </NavLink>
                            
                         </div>
@@ -583,7 +583,7 @@ function Sidebar() {
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="ml-3 size-6">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
                                 </svg>
-                                <p className="font-bold font-NotoSansKhmer whitespace-nowrap">អតិថិជន​ & អ្នកផ្គត់ផ្គង់</p>
+                                <p className="font-bold font-NotoSansKhmer whitespace-nowrap">អតិថិជន & អ្នកផ្គត់ផ្គង់</p>
                             </NavLink>
                             <NavLink to="/purchase-list" className={navLinkStyle}>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="ml-3 size-6">

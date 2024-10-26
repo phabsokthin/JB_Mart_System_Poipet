@@ -28,7 +28,7 @@ import CreateProduct from "./views/product/CreateProduct";
 
 function App() {
   return (
-    <div className="min-h-screen overflow-x-auto bg-gray-100 min-w-max ">
+    <div className="min-h-screen overflow-x-auto bg-gray-100 min-w-max xl:min-w-min">
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Dashboard />} />

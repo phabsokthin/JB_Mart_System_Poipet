@@ -163,6 +163,21 @@ function Navbar() {
                   </p>
 
                   <p className="font-bold font-NotoSansKhmer">
+                    {location.pathname === "/puchaseTopup"
+                      ? "កាតទូរស័ព្ទ/ទិញកាតចូល"
+                      : ""}
+                  </p>
+
+                  <p className="font-bold font-NotoSansKhmer">
+                    {location.pathname === "/exchangeRate"
+                      ? "រូបិយប័ណ្ណ/អាត្រាប្តូប្រាក់"
+                      : ""}
+                  </p>
+
+
+                  
+
+                  <p className="font-bold font-NotoSansKhmer">
                     {location.pathname === "/expense" ? "ចំណាយ/បញ្ជីចំណាយ" : ""}
                   </p>
                   <p className="font-bold font-NotoSansKhmer">

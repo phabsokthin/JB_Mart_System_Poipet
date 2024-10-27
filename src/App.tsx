@@ -25,6 +25,8 @@ import Topup from "./views/topup/Topup";
 import TopupType from "./views/topup/TopupType";
 import CreateTopUp from "./views/topup/CreateTopUp";
 import CreateProduct from "./views/product/CreateProduct";
+import PurchaseTopup from "./views/topup/PurchaseTopUp";
+import ExchangeRate from "./views/currency/ExchangeRate";
 
 function App() {
   return (
@@ -67,13 +69,17 @@ function App() {
           <Route path="/topup" element={<Topup/>}/>
           <Route path="/createTopup" element={<CreateTopUp/>}/>
           <Route path="/topuType" element={<TopupType/>}/> 
+          <Route path="/puchaseTopup" element={<PurchaseTopup/>}/>
           
           {/* Expense Route */}
           <Route path="/expense" element={<Expense />} />
           <Route path="/expense_type" element={<Expense_Type />} />
 
           
-         
+           {/*​​ Exchange rate  */}
+          
+           <Route path="/exchangeRate" element={<ExchangeRate />} />
+
       
         </Routes>
       </BrowserRouter>

@@ -1,27 +1,30 @@
+import React, { useState } from "react";
+import DateInputFormat from "../../components/EnglishDateInputComponents/InputFormateDateComponent";
 
-import { RiContactsBook3Fill } from "react-icons/ri";
-import Sidebar from "../Sidebar";
-import Navbar from "../Navbar";
+const ParentComponent: React.FC = () => {
+  const [selectedDate, setSelectedDate] = useState<string>(''); 
 
+  const handleDateChange = (date: string) => {
+    setSelectedDate(date); 
+    console.log("Selected date:", date);
+  };
 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault(); 
+    const dateToSubmit = selectedDate || new Date().toISOString().split('T')[0]; 
+    console.log("Submitting date:", dateToSubmit); 
+  };
 
-function ProductUnit() {
+  const currentDate = new Date().toISOString().split('T')[0]; 
 
-    return (
-        <div className='grid grid-cols-6'>
-            <Sidebar />
-            <div className="p-4 col-span-5">
-                <Navbar />
-                <div className="p-4 bg-white dark:border-gray-700 mt-5 animate-fade-up animate-duration-2000 animate-ease-in-out ">
-                    <div className='flex items-center gap-2 py-5'>
-                        <RiContactsBook3Fill className=' text-lg' />
-                        <p className='font-NotoSansKhmer font-bold text-lg'>Product</p>
-                    </div>
-                   
-                </div>
-            </div>
-        </div>
-    );
-}
+  return (
+    <div>
+      <form onSubmit={handleSubmit}> 
+        <DateInputFormat initialValue={currentDate} onDateChange={handleDateChange} />
+        <button type="submit" className="p-2 mt-4 text-white bg-blue-500 rounded">Submit</button>
+      </form>
+    </div>
+  );
+};
 
-export default ProductUnit;
+export default ParentComponent;

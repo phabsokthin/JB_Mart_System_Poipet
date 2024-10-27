@@ -19,13 +19,13 @@ function Sidebar() {
     const contactRoutes = ["/supplier", "/customer", "/contactInfo"];
     const productsRoutes = ["/product","/createProduct", "/productUnit","/category","/brands","/warranty"];
     const purchaseRoutes = ["/purchase", "/createPurchase", '/puchaseReturn'];
-    const topupRoutes = ['/topup','/createTopup', '/topuType']
+    const topupRoutes = ['/topup','/createTopup', '/topuType', '/puchaseTopup']
     const exspenseRoutes = ['/expense', '/expense_list']
     const accountRoutes = ['/account', '/account_list']
     const paymentRoutes = ['/payment', '/payment_list']
     const usersRoutes = ['/payment', '/payment_list']
     const reportsRoutes = ['/reports', '/report_list']
-    const currentcyRoutes = ['/currency', '/currency_list']
+    const currentcyRoutes = ['/exchangeRate', '/currency_list']
 
     // Active route checks
     const isContactActive = contactRoutes.some((route) => location.pathname.startsWith(route));
@@ -346,7 +346,7 @@ function Sidebar() {
                             </svg>
                         </button>
 
-                        <div className={`overflow-hidden transition-all duration-500 space-y-2 ${isTopupDropdown ? "max-h-52 opacity-100" : "max-h-0"}`}>
+                        <div className={`overflow-hidden transition-all duration-500 space-y-2 ${isTopupDropdown ? "max-h-96 opacity-100" : "max-h-0"}`}>
                             <NavLink to="/topup" className={navLinkStyle}>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="ml-3 size-6">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
@@ -365,7 +365,7 @@ function Sidebar() {
                                 </svg>
                                 <p className="font-bold font-NotoSansKhmer">ប្រភេទកាតទូរស័ព្ទ</p>
                             </NavLink>
-                            <NavLink to="/purchase-list" className={navLinkStyle}>
+                            <NavLink to="/puchaseTopup" className={navLinkStyle}>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="ml-3 size-6">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
                                 </svg>
@@ -388,11 +388,11 @@ function Sidebar() {
                         </button>
 
                         <div className={`overflow-hidden transition-all duration-500 space-y-2 ${isCurrencyDropdown ? "max-h-40 opacity-100" : "max-h-0"}`}>
-                            <NavLink to="/purchase" className={navLinkStyle}>
+                            <NavLink to="/exchangeRate" className={navLinkStyle}>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="ml-3 size-6">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
                                 </svg>
-                                <p className="font-bold font-NotoSansKhmer">បង្កើតបញ្ជាទិញ</p>
+                                <p className="font-bold font-NotoSansKhmer">អត្រាប្តូប្រាក់</p>
                             </NavLink>
                             <NavLink to="/purchase-list" className={navLinkStyle}>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="ml-3 size-6">

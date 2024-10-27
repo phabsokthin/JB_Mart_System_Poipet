@@ -96,6 +96,14 @@ function Navbar() {
                       : ""}
                   </p>
 
+                  
+                    
+                  <p className="font-bold font-NotoSansKhmer">
+                    {location.pathname === "/createProduct"
+                      ? "ផលិតផល/បង្កើតផលិតផល"
+                      : ""}
+                  </p>
+                  
                   <p className="font-bold font-NotoSansKhmer">
                     {location.pathname === "/productUnit"
                       ? "ផលិតផល/ឯកតាទំនិញ"

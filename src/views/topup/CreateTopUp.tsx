@@ -6,7 +6,7 @@ import { IoMdClose } from "react-icons/io";
 import { FaShoppingCart } from "react-icons/fa";
 import { CiShoppingBasket } from "react-icons/ci";
 import BackgroundArrow from "../../components/background/BackgroundArrow";
-import KhmerDateInput from "../../components/khmerDateInputComponents/KhmerInputDate";
+import KhmerDateInput from "../../components/build/khmerDateInputComponents/KhmerInputDate";
 import { getCurrentDateForInput } from "../../composable/utils/dateUtils";
 
 type Product = {

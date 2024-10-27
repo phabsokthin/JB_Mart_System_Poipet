@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { MdOutlineAddCircle } from "react-icons/md";
-import KhmerDateInput from "../../khmerDateInputComponents/KhmerInputDate";
 import { useState } from "react";
+import KhmerDateInput from "../../build/khmerDateInputComponents/KhmerInputDate";
 
 function CreateCategoryModal({ onClose }: { onClose: () => void }) {
   const [selectedDate, setSelectedDate] = useState<string>("");
@@ -38,11 +38,7 @@ function CreateCategoryModal({ onClose }: { onClose: () => void }) {
             <label className="block font-bold text-gray-700 font-NotoSansKhmer ">
               បង្កើតថ្ងៃទី: *
             </label>
-            {/* <input 
-                            type="date"
-                            required
-                            className="input_text" 
-                        /> */}
+         
 
             <KhmerDateInput
               label="កាលបរិច្ឆេទលក់"

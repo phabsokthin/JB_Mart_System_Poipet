@@ -173,18 +173,32 @@ function Navbar() {
                       ? "រូបិយប័ណ្ណ/អាត្រាប្តូប្រាក់"
                       : ""}
                   </p>
-
-
                   
-
                   <p className="font-bold font-NotoSansKhmer">
                     {location.pathname === "/expense" ? "ចំណាយ/បញ្ជីចំណាយ" : ""}
                   </p>
+                  
                   <p className="font-bold font-NotoSansKhmer">
                     {location.pathname === "/expense_type"
                       ? "ចំណាយ/ប្រភេទការចំណាយ"
                       : ""}
                   </p>
+
+                  
+
+                  <p className="font-bold font-NotoSansKhmer">
+                    {location.pathname === "/paymentMethod"
+                      ? "វិធីសស្រ្តបង់ប្រាក់/បញ្ជីបង់ប្រាក់"
+                      : ""}
+                  </p>
+
+                  <p className="font-bold font-NotoSansKhmer">
+                    {location.pathname === "/paymentMethodType"
+                      ? "វិធីសស្រ្តបង់ប្រាក់/បញ្ជីប្រភេទបង់ប្រាក់"
+                      : ""}
+                  </p>
+
+                    
                 </div>
               </div>
             </div>

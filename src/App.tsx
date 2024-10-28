@@ -27,6 +27,8 @@ import CreateTopUp from "./views/topup/CreateTopUp";
 import CreateProduct from "./views/product/CreateProduct";
 import PurchaseTopup from "./views/topup/PurchaseTopUp";
 import ExchangeRate from "./views/currency/ExchangeRate";
+import PaymentMethodList from "./views/paymentMethod/PaymentMethodList";
+import PaymentMethodType from "./views/paymentMethod/PaymentMethodType";
 
 function App() {
   return (
@@ -80,7 +82,10 @@ function App() {
           
            <Route path="/exchangeRate" element={<ExchangeRate />} />
 
-      
+            {/* payment method */}
+            <Route path="/paymentMethod" element={<PaymentMethodList/>}/>      
+            <Route path="/paymentMethodType" element={<PaymentMethodType/>}/>
+            
         </Routes>
       </BrowserRouter>
     </div>

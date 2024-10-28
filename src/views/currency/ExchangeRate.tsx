@@ -1,10 +1,9 @@
-
 import { useState, useEffect, ChangeEvent } from "react";
-import { RiContactsBook3Fill } from "react-icons/ri";
+import { MdCurrencyExchange } from "react-icons/md";
 import { TbSwitch3 } from "react-icons/tb";
 import { GoArrowRight } from "react-icons/go";
-import Sidebar from '../Sidebar';
-import Navbar from '../Navbar';
+import Sidebar from "../Sidebar";
+import Navbar from "../Navbar";
 
 type Currency = "រៀល" | "ដុល្លារ" | "បាត";
 
@@ -22,11 +21,7 @@ const ExchangeRate: React.FC = () => {
   const [fromCurrency, setFromCurrency] = useState<Currency>("រៀល");
   const [toCurrency, setToCurrency] = useState<Currency>("ដុល្លារ");
 
-  const images = {
-    រៀល: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Flag_of_Cambodia.svg/640px-Flag_of_Cambodia.svg.png",
-    ដុល្លារ: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Flag_of_the_United_States_%28DoS_ECA_Color_Standard%29.svg/640px-Flag_of_the_United_States_%28DoS_ECA_Color_Standard%29.svg.png",
-    បាត: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgR91x7xqvhr1q_3QLs_UWSbKgSOHG0fST4EMqdpwG97qD4u1Ig9tnLG6dxmxJb1kOLPU&usqp=CAU",
-  };
+  
 
   const exchangeRateKHR = 4100; // រៀល to ដុល្លារ​
   const thbToKhrRateTHB = 120; // បាត to រៀល
@@ -51,11 +46,12 @@ const ExchangeRate: React.FC = () => {
     }
 
     // Determine order currency based on the selected toCurrency
-    const currencyMap: { [key in Currency]: { [key in Currency]?: Currency } } = {
-      ដុល្លារ: { រៀល: "បាត", បាត: "រៀល" },
-      រៀល: { ដុល្លារ: "បាត", បាត: "ដុល្លារ" },
-      បាត: { ដុល្លារ: "រៀល", រៀល: "ដុល្លារ" },
-    };
+    const currencyMap: { [key in Currency]: { [key in Currency]?: Currency } } =
+      {
+        ដុល្លារ: { រៀល: "បាត", បាត: "រៀល" },
+        រៀល: { ដុល្លារ: "បាត", បាត: "ដុល្លារ" },
+        បាត: { ដុល្លារ: "រៀល", រៀល: "ដុល្លារ" },
+      };
 
     setOrderCurrency(currencyMap[toCurrency][fromCurrency] as Currency);
   }, [fromCurrency, toCurrency]);
@@ -63,7 +59,9 @@ const ExchangeRate: React.FC = () => {
   useEffect(() => {
     // Update orderOutputValue when inputValue or currencies change
     const conversionRateOrder = exchangeRates[fromCurrency][orderOutCurrency];
-    setOrderOutputValue(parseFloat((inputValue * conversionRateOrder).toFixed(2)));
+    setOrderOutputValue(
+      parseFloat((inputValue * conversionRateOrder).toFixed(2))
+    );
   }, [inputValue, fromCurrency, orderOutCurrency]);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -97,13 +95,13 @@ const ExchangeRate: React.FC = () => {
     ];
 
     return options.filter((option) => {
-      if (fromCurrency === "ដុល្លារ" && option.value === "ដុល្លារ") return false;
+      if (fromCurrency === "ដុល្លារ" && option.value === "ដុល្លារ")
+        return false;
       if (fromCurrency === "រៀល" && option.value === "រៀល") return false;
       if (fromCurrency === "បាត" && option.value === "បាត") return false;
       return true;
     });
   };
-
 
   // Function to get all exchange rate statements
   const getExchangeRateStatements = () => {
@@ -133,14 +131,21 @@ const ExchangeRate: React.FC = () => {
         <Navbar />
         <div className="p-4 mt-5 bg-white dark:border-gray-700 animate-fade-up animate-duration-2000 animate-ease-in-out">
           <div className="flex items-center gap-2 py-5">
-            <RiContactsBook3Fill className="text-lg" />
-            <p className="text-lg font-bold font-NotoSansKhmer">អត្រាប្តូប្រាក់</p>
+            <MdCurrencyExchange className="text-lg" />
+            <p className="text-lg font-bold font-NotoSansKhmer">
+              អត្រាប្តូប្រាក់
+            </p>
           </div>
 
           {/* Currency Selector */}
-          <div className="mt-5 flex gap-5 items-center pb-8">
+          <div className="flex items-center gap-5 pb-8 mt-5">
             <div className="space-y-2">
-              <label htmlFor="fromCurrencySelect" className="font-NotoSansKhmer font-bold text-lg">អត្រាប្តូប្រាក់ ពី</label>
+              <label
+                htmlFor="fromCurrencySelect"
+                className="text-lg font-bold font-NotoSansKhmer"
+              >
+                អត្រាប្តូប្រាក់ ពី
+              </label>
               <select
                 id="fromCurrencySelect"
                 value={fromCurrency}
@@ -152,9 +157,16 @@ const ExchangeRate: React.FC = () => {
                 <option value="បាត">Thai Baht (បាត)</option>
               </select>
             </div>
-            <div><GoArrowRight className="w-10 h-10 translate-y-3 text-gray-600" /></div>
+            <div>
+              <GoArrowRight className="w-10 h-10 text-gray-600 translate-y-3" />
+            </div>
             <div className="space-y-2">
-              <label htmlFor="toCurrencySelect" className="font-NotoSansKhmer font-bold text-lg">ទៅ</label>
+              <label
+                htmlFor="toCurrencySelect"
+                className="text-lg font-bold font-NotoSansKhmer"
+              >
+                ទៅ
+              </label>
               <select
                 id="toCurrencySelect"
                 value={toCurrency}
@@ -173,7 +185,12 @@ const ExchangeRate: React.FC = () => {
           {/* From Currency Input */}
           <div className="flex items-center gap-10">
             <div className="relative w-full space-y-2">
-              <label htmlFor="fromCurrency" className="font-NotoSansKhmer font-bold">អត្រាប្តូប្រាក់ ពី ប្រាក់{fromCurrency}</label>
+              <label
+                htmlFor="fromCurrency"
+                className="font-bold font-NotoSansKhmer"
+              >
+                អត្រាប្តូប្រាក់ ពី ប្រាក់{fromCurrency}
+              </label>
               <input
                 type="number"
                 id="fromCurrency"
@@ -196,7 +213,12 @@ const ExchangeRate: React.FC = () => {
             </div>
 
             <div className="relative w-full space-y-2">
-              <label htmlFor="toCurrency" className="font-NotoSansKhmer font-bold">ទៅ  ប្រាក់{toCurrency}</label>
+              <label
+                htmlFor="toCurrency"
+                className="font-bold font-NotoSansKhmer"
+              >
+                ទៅ ប្រាក់{toCurrency}
+              </label>
               <input
                 type="number"
                 id="toCurrency"
@@ -211,7 +233,12 @@ const ExchangeRate: React.FC = () => {
             </div>
 
             <div className="relative w-full space-y-2">
-              <label htmlFor="orderCurrency" className="font-NotoSansKhmer font-bold">ប្រាក់{orderOutCurrency}</label>
+              <label
+                htmlFor="orderCurrency"
+                className="font-bold font-NotoSansKhmer"
+              >
+                ប្រាក់{orderOutCurrency}
+              </label>
               <input
                 type="number"
                 id="orderCurrency"
@@ -227,105 +254,45 @@ const ExchangeRate: React.FC = () => {
           </div>
         </div>
 
-
-        <div className="flex border-t-4 justify-between mt-10 shadow-lg p-2 pr-8 border-blue-700 rounded-lg">
+        <div className="flex justify-end p-2 pr-8 mt-5 animate-fade-up animate-duration-2000 animate-ease-in-out">
           <div>
-            <div className="max-w-sm w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
-              <div className="flex justify-between mb-5">
-                <div>
-                  <h5 className="leading-none text-3xl font-bold text-gray-900 dark:text-white pb-2">$12,423</h5>
-                  <p className="text-base font-normal text-gray-500 dark:text-gray-400">Sales this week</p>
-                </div>
-                <div
-                  className="flex items-center px-2.5 py-0.5 text-base font-semibold text-green-500 dark:text-green-500 text-center">
-                  23%
-                  <svg className="w-3 h-3 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 14">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13V1m0 0L1 5m4-4 4 4" />
-                  </svg>
-                </div>
-              </div>
-              <div id="legend-chart"></div>
-              <div className="grid grid-cols-1 items-center border-gray-200 border-t dark:border-gray-700 justify-between mt-5">
-                <div className="flex justify-between items-center pt-5">
+          <h1 className="mb-2 text-lg font-bold">ហាងឆេងថ្ងៃនេះ</h1>
+            <div className="p-4 text-black bg-white ">
+              <table className="min-w-full border border-collapse border-gray-200">
+                <thead>
+                  <tr className="text-white bg-blue-600/90">
+                    <th className="px-4 py-2 border border-gray-300">
+                      រូបិយប័ណ្ណ
+                    </th>
+                    <th className="px-4 py-2 border border-gray-300">អត្រាប្តូប្រាក់</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {exchangeRateStatements.map((statement, index) => (
+                    <tr key={index} className="text-lg hover:bg-gray-50">
+                      <td className="px-4 py-2 text-center border border-gray-300">
+                        <div className="flex items-center space-x-12">
+                          <span> {statement.fromCurrency}</span>
+                          <span>
+                            <img
+                              className="h-8"
+                              src="https://cdn.pixabay.com/animation/2022/10/06/13/44/13-44-02-515_512.gif"
+                              alt=""
+                            />
+                          </span>
+                          <span> {statement.toCurrency}</span>
+                        </div>
+                      </td>
 
-                  <button
-                    id="dropdownDefaultButton"
-                    data-dropdown-toggle="lastDaysdropdown"
-                    data-dropdown-placement="bottom"
-                    className="text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-gray-900 text-center inline-flex items-center dark:hover:text-white"
-                    type="button">
-                    Last 7 days
-                    <svg className="w-2.5 m-2.5 ms-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4" />
-                    </svg>
-                  </button>
-                  <div id="lastDaysdropdown" className="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
-                    <ul className="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
-                      <li>
-                        <a href="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Yesterday</a>
-                      </li>
-                      <li>
-                        <a href="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Today</a>
-                      </li>
-                      <li>
-                        <a href="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Last 7 days</a>
-                      </li>
-                      <li>
-                        <a href="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Last 30 days</a>
-                      </li>
-                      <li>
-                        <a href="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Last 90 days</a>
-                      </li>
-                    </ul>
-                  </div>
-                  <a
-                    href="#"
-                    className="uppercase text-sm font-semibold inline-flex items-center rounded-lg text-blue-600 hover:text-blue-700 dark:hover:text-blue-500  hover:bg-gray-100 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700 px-3 py-2">
-
-                    <svg className="w-2.5 h-2.5 ms-1.5 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4" />
-                    </svg>
-                  </a>
-                </div>
-              </div>
+                      <td className="px-4 py-2 border border-gray-300">
+                        {statement.rate}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
-          <div className=" bg-blue-950 rounded-lg">
-            <table className="min-w-full border-collapse border border-gray-200">
-              <thead>
-                <tr className="bg-gray-100">
-                  <th className="border border-gray-300 px-4 py-2"></th>
-                  <th className="border border-gray-300 px-4 py-2">អត្រាប្តូប្រាក់</th>
-                  <th className="border border-gray-300 px-4 py-2">Rate</th>
-                </tr>
-              </thead>
-              <tbody>
-                {exchangeRateStatements.map((statement, index) => (
-                  <tr key={index} className="hover:bg-gray-50 text-2xl">
-                    <td className="border border-gray-300 px-4 py-2 flex space-x-2 items-center">
-                      <img src={images[statement.fromCurrency]} alt={statement.fromCurrency} width="50" height="50" />
-                      <img className="h-8 w-8" src="https://cdn.pixabay.com/animation/2023/08/11/21/18/21-18-05-265_512.gif" />
-                      <img src={images[statement.toCurrency]} alt={statement.toCurrency} width="50" height="50" />
-                    </td>
-                    <td className="border border-gray-300 px-4 text-center text-yellow-300 py-2">
-                      <div className="flex space-x-12 items-center">
-                        <span>   {statement.fromCurrency}</span>
-                        <span><img className="h-8" src="https://cdn.pixabay.com/animation/2022/10/06/13/44/13-44-02-515_512.gif" alt="" />
-                        </span>
-                        <span>   {statement.toCurrency}</span>
-                      </div>
-                    </td>
-
-                    <td className="border border-gray-300 text-yellow-300 px-4 py-2">
-                      {statement.rate}
-                    </td>
-                  </tr>
-
-                ))}
-              </tbody>
-            </table>
-          </div>
-
         </div>
       </div>
     </div>

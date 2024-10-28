@@ -5,8 +5,6 @@ import { FaBoxOpen } from "react-icons/fa6";
 import ImageUpload from "../../components/build/uploadImage/UploadImage";
 import KhmerDateInput from "../../components/build/khmerDateInputComponents/KhmerInputDate";
 import { Switch } from "@headlessui/react";
-import { IoClose } from "react-icons/io5";
-import { div } from "framer-motion/client";
 import { IoMdClose } from "react-icons/io";
 import { FaSearch } from "react-icons/fa";
 
@@ -54,6 +52,7 @@ function CreateProduct() {
   const [sellingPrice, setSellingPrice] = useState(0);
   const [profit, setProfit] = useState(0);
   const [enabled, setEnabled] = useState(false);
+  const [sellingPriceGroup, setSellingPriceGroup] = useState(0)
   const [selectedDate, setSelectedDate] = useState<string>("");
 
   const [productSearchQuery, setProductSearchQuery] = useState<string>("");
@@ -381,7 +380,7 @@ function CreateProduct() {
                         <th className="p-2 border w-[20%]">ឈ្មោះផលិតផល</th>
                         <th className="p-2 border w-[10%]">តម្លៃដើម(ឯកតា)</th>
                         <th className="p-2 border w-[15%]">បរិមាណ</th>
-
+                        <th className="p-2 border w-[15%]">បរិមាណ</th>
                         <th className="p-2 border w-[15%]">សរុប</th>
                         <th className="p-2 border w-[5%]">
                           <p className="text-center">ស្ថានភាព</p>
@@ -441,6 +440,7 @@ function CreateProduct() {
                               />
                             </td>
 
+                           
                             {/* Total Price Calculation */}
                             <td>
                               <input
@@ -547,6 +547,7 @@ function CreateProduct() {
                         </th>
                         <th className="p-2 border w-[10%]">បូកពន្ធ</th>
                         <th className="p-2 border w-[15%]">តម្លៃលក់ដើម($)</th>
+                        <th className="p-2 border w-[15%]">តម្លៃលក់ដុំ</th>
                         <th className="p-2 border w-[15%]">ប្រាក់ចំណេញ($)</th>
                         <th className="p-2 border w-[15%]">សរុប($)</th>
                       </tr>
@@ -586,6 +587,17 @@ function CreateProduct() {
                             }
                           />
                         </td>
+                        <td>
+                              <input
+                                min={0}
+                                type="number"
+                                placeholder="0.0"
+                                value={sellingPriceGroup}
+                                onChange={(e:any) => setSellingPriceGroup(e.target.value)}
+                                className="input_text"
+                              />
+                            </td>
+
                         <td>
                           <input
                             type="number"

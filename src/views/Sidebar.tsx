@@ -394,12 +394,7 @@ function Sidebar() {
                                 </svg>
                                 <p className="font-bold font-NotoSansKhmer">អត្រាប្តូប្រាក់</p>
                             </NavLink>
-                            <NavLink to="/purchase-list" className={navLinkStyle}>
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="ml-3 size-6">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
-                                </svg>
-                                <p className="font-bold font-NotoSansKhmer">បញ្ជីបញ្ជាទិញ</p>
-                            </NavLink>
+                        
                         </div>
                     </li>
 
@@ -484,6 +479,7 @@ function Sidebar() {
                         </div>
                     </li>
 
+                  
                     {/*  Payment method dropdown */}
                     <li className="space-y-2">
                         <button onClick={handlepaymentDropdown} className={`flex items-center p-3 w-full text-left justify-between ${isPaymentMethodDropdown ? "bg-blue-700 dark:bg-blue-500 text-white" : "text-gray-900 dark:text-white"}`}>
@@ -498,51 +494,22 @@ function Sidebar() {
                         </button>
 
                         <div className={`overflow-hidden transition-all duration-500 space-y-2 ${isPaymentMethodDropdown ? "max-h-40 opacity-100" : "max-h-0"}`}>
-                            <NavLink to="/purchase" className={navLinkStyle}>
+                            <NavLink to="/paymentMethod" className={navLinkStyle}>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="ml-3 size-6">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
                                 </svg>
-                                <p className="font-bold font-NotoSansKhmer">បង្កើតបញ្ជាទិញ</p>
+                                <p className="font-bold font-NotoSansKhmer">បញ្ជីវិធីសាស្រ្តបង់ប្រាក់</p>
                             </NavLink>
-                            <NavLink to="/purchase-list" className={navLinkStyle}>
+                            <NavLink to="/paymentMethodType" className={navLinkStyle}>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="ml-3 size-6">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
                                 </svg>
-                                <p className="font-bold font-NotoSansKhmer">បញ្ជីបញ្ជាទិញ</p>
-                            </NavLink>
-                        </div>
-                    </li>
-
-                    {/*  User dropdown */}
-                    <li className="space-y-2">
-                        <button onClick={handleUsersDropdown} className={`flex items-center p-3 w-full text-left justify-between ${isUsersDropdown ? "bg-blue-700 dark:bg-blue-500 text-white" : "text-gray-900 dark:text-white"}`}>
-                            <div className="flex items-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-users-round"><path d="M18 21a8 8 0 0 0-16 0" /><circle cx="10" cy="8" r="5" /><path d="M22 20c0-3.37-2-6.5-4-8a5 5 0 0 0-.45-8.3" /></svg>                                    <span className="flex-1 font-bold ms-3 whitespace-nowrap font-NotoSansKhmer">
-                                    អ្នកប្រើប្រាស់
-                                </span>
-                            </div>
-                            <svg className={`w-4 h-4 transition-transform duration-300 ${isUsersDropdown ? "transform rotate-90" : ""}`} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                            </svg>
-                        </button>
-
-
-                        <div className={`overflow-hidden transition-all duration-500 space-y-2 ${isUsersDropdown ? "max-h-40 opacity-100" : "max-h-0"}`}>
-                            <NavLink to="/purchase" className={navLinkStyle}>
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="ml-3 size-6">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
-                                </svg>
-                                <p className="font-bold font-NotoSansKhmer">បញ្ជីឈ្មោះអ្នកប្រើប្រាស់</p>
-                            </NavLink>
-                            <NavLink to="/purchase-list" className={navLinkStyle}>
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="ml-3 size-6">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
-                                </svg>
-                                <p className="font-bold font-NotoSansKhmer">បន្ថែមអ្នកប្រើប្រាស់</p>
+                                <p className="font-bold font-NotoSansKhmer">បញ្ជីប្រភេទបង់ប្រាក់</p>
                             </NavLink>
                         </div>
                     </li>
 
+            
                     {/*  Report dropdown */}
                     <li className="space-y-2">
                         <button onClick={handleReportDropdown} className={`flex items-center p-3 w-full text-left justify-between ${isReportsDropdown ? "bg-blue-700 dark:bg-blue-500 text-white" : "text-gray-900 dark:text-white"}`}>

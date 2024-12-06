@@ -17,6 +17,7 @@ const exptense = [
     datetime: new Date().toLocaleString(),
     expense_type_id: "បង់ទឺក",
     account: "nakry",
+    
     interval: 1,
     interval_type: "ឆ្នាំ",
     tax: 10,
@@ -115,7 +116,7 @@ function PaymentMethodType() {
 
       <div className="col-span-5 p-4">
         <Navbar />
-        <div className="p-4 mt-5 bg-white dark:border-gray-700 animate-fade-up animate-duration-2000 animate-ease-in-out">
+        <div className="p-4 mt-5 bg-white dark:border-gray-700 animate-fade-up animate-duration-2000 animate-ease-in-out ">
           <div className="flex items-center gap-2 ">
             <MdOutlinePayments className="text-xl" />
             <p className="text-lg font-bold font-NotoSansKhmer">បញ្ជីប្រភេទបង់ប្រាក់</p>

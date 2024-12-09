@@ -4,22 +4,6 @@ import Sidebar from './Sidebar'
 
 function Dashboard() {
 
-    // const [fetchApi, setFetchApi] =  useState<string | null>(null);;
-
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         try {
-    //             const res = await fetch('http://localhost:3002/api');
-    //             const data = await res.text();
-    //             setFetchApi(data);
-    //         } catch (error) {
-    //             console.error('Error fetching data:', error);
-    //         }
-    //     };
-
-    //     fetchData();
-    // }, []);
-
     
     return (
         
@@ -86,57 +70,7 @@ function Dashboard() {
                                 </div>
                             </div>
                         </div>
-
-                        <div className="flex items-center h-24 bg-white border-t-2 border-red-500">
-                            <div className='flex items-center gap-4 mx-5'>
-                                <div className='p-3 rounded-full bg-red-500/20'>
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="text-red-500 size-6">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                    </svg>
-                                </div>
-                                <div>
-                                    <h3 className='font-bold text-gray-600 font-NotoSansKhmer'>300</h3>
-                                    <h3 className='font-bold text-gray-600 font-NotoSansKhmer'>ចំណាយសរុប</h3>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="flex items-center h-24 bg-white border-t-2 border-blue-600">
-                            <div className='flex items-center gap-4 mx-5'>
-                                <div className='p-3 rounded-full bg-blue-600/20'>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="text-blue-600 lucide lucide-users"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M22 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg>
-
-                                </div>
-                                <div>
-                                    <h3 className='font-bold text-gray-600 font-NotoSansKhmer'>4400</h3>
-                                    <h3 className='font-bold text-gray-600 font-NotoSansKhmer'>អតិថិជនសរុប</h3>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="flex items-center h-24 bg-white border-t-2 border-red-600">
-                            <div className='flex items-center gap-4 mx-5'>
-                                <div className='p-3 rounded-full bg-red-600/20'>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="text-red-600 lucide lucide-ban"><circle cx="12" cy="12" r="10"/><path d="m4.9 4.9 14.2 14.2"/></svg>
-                                </div>
-                                <div>
-                                    <h3 className='font-bold text-gray-600 font-NotoSansKhmer'>3030</h3>
-                                    <h3 className='font-bold text-gray-600 font-NotoSansKhmer'>ផលិតផលអស់ស្តុក</h3>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="flex items-center h-24 bg-white border-t-2 border-orange-500">
-                            <div className='flex items-center gap-4 mx-5'>
-                                <div className='p-3 rounded-full bg-orange-500/20'>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="text-orange-500 lucide lucide-arrow-right-left"><path d="m16 3 4 4-4 4"/><path d="M20 7H4"/><path d="m8 21-4-4 4-4"/><path d="M4 17h16"/></svg>
-                                </div>
-                                <div>
-                                    <h3 className='font-bold text-gray-600 font-NotoSansKhmer'>300</h3>
-                                    <h3 className='font-bold text-gray-600 font-NotoSansKhmer'>ទំនិញប្តូរសរុប</h3>
-                                </div>
-                            </div>
-                        </div>
                     </div>
-
-          
 
                 </div>
             </div>

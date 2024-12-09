@@ -78,7 +78,7 @@ function App() {
           <Route path="/expense_type" element={<Expense_Type />} />
 
           
-           {/*​​ Exchange rate  */}
+           {/* Exchange rate  */}
           
            <Route path="/exchangeRate" element={<ExchangeRate />} />
 

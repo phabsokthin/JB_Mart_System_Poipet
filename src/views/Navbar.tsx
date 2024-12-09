@@ -1,7 +1,12 @@
-import { useState } from "react";
-import { useLocation } from "react-router-dom";
-
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { url } from "../api/url";
+import {jwtDecode} from 'jwt-decode'
 function getDateInKhmer(): string {
+
   const today = new Date();
 
   const khmerMonths: string[] = [
@@ -46,16 +51,59 @@ function getDateInKhmer(): string {
   return `${day} ${month} ${year}`;
 }
 
+//decode
+interface DecodedToken {
+  userName: string;
+  exp: number; 
+  iat?: number; 
+}
 function Navbar() {
+  
   const [currentDate, setCurrentDate] = useState(getDateInKhmer());
-
+  const [token, setToken] = useState("")
+  const [names, setName] = useState<null | string>(null)
   const [isUserDropdown, setIsUserDropdown] = useState(false);
 
   const location = useLocation();
+  const navigate = useNavigate();
 
   const toggleDropdown = () => {
     setIsUserDropdown(!isUserDropdown);
   };
+
+  useEffect(() => {
+    refreshToken();
+  }, [])
+
+  //refresh token
+
+  const refreshToken =  async() => {
+    try{
+        const response = await axios.get(`${url}token`);
+        setToken(response.data.accessToken);
+        const decoded = jwtDecode<DecodedToken>(response.data.accessToken);
+        // console.log(decoded)
+        setName(decoded.userName)
+    }
+    catch(err:any){
+      if(err.response){
+        navigate('/login')
+      }
+    }
+  }
+
+
+  //logout
+  const handleLogout = async () => {
+    try {
+      await axios.delete(`${url}logout`);
+      navigate('/login'); 
+    } catch (err) {
+      console.error('Logout failed:', err);
+    }
+  };
+
+
 
   return (
     <div>
@@ -96,14 +144,14 @@ function Navbar() {
                       : ""}
                   </p>
 
-                  
-                    
+
+
                   <p className="font-bold font-NotoSansKhmer">
                     {location.pathname === "/createProduct"
                       ? "ផលិតផល/បង្កើតផលិតផល"
                       : ""}
                   </p>
-                  
+
                   <p className="font-bold font-NotoSansKhmer">
                     {location.pathname === "/productUnit"
                       ? "ផលិតផល/ឯកតាទំនិញ"
@@ -173,18 +221,18 @@ function Navbar() {
                       ? "រូបិយប័ណ្ណ/អាត្រាប្តូប្រាក់"
                       : ""}
                   </p>
-                  
+
                   <p className="font-bold font-NotoSansKhmer">
                     {location.pathname === "/expense" ? "ចំណាយ/បញ្ជីចំណាយ" : ""}
                   </p>
-                  
+
                   <p className="font-bold font-NotoSansKhmer">
                     {location.pathname === "/expense_type"
                       ? "ចំណាយ/ប្រភេទការចំណាយ"
                       : ""}
                   </p>
 
-                  
+
 
                   <p className="font-bold font-NotoSansKhmer">
                     {location.pathname === "/paymentMethod"
@@ -198,7 +246,7 @@ function Navbar() {
                       : ""}
                   </p>
 
-                    
+
                 </div>
               </div>
             </div>
@@ -210,7 +258,7 @@ function Navbar() {
               </div>
               <div className="flex gap-2">
                 <h1 className="font-bold font-NotoSansKhmer">ប្រវត្តិរូប៖</h1>
-                <h1>Admin</h1>
+                <h1>{names}</h1>
               </div>
               <div
                 onClick={toggleDropdown}
@@ -235,7 +283,7 @@ function Navbar() {
 
               {isUserDropdown && (
                 <div className="absolute z-10 top-4 w-32 p-2 bg-white shadow mt-10 -right-[20px] text-gray-600">
-                  <div className="flex items-center gap-1 cursor-pointer hover:text-red-400">
+                  <div onClick={handleLogout} className="flex items-center gap-1 cursor-pointer hover:text-red-400">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="18"

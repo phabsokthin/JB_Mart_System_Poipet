@@ -1,128 +1,168 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { url } from "../../../api/url";
 import MessageSuccess from "../../build/message/MessageSuccess";
 import sound_success from '../../../assets/sound/success.mp3'
+import { MdOutlineAdd } from "react-icons/md";
+import { motion } from "framer-motion";
 
-function CreateSupplier() {
+
+interface supplierData {
+    full_Name: string;
+    supplier_type: string;
+    phone: string;
+    email: string;
+}
+
+function CreateSupplier({ onClose, fetchSupplier, onSuccess, dataUpdate }: { 
+    onClose: () => void; 
+    fetchSupplier: () => void; 
+    onSuccess: (message: string) => void;
+
+    dataUpdate: supplierData | any 
+}) {
     const [isTypeSupplier, setIsSupplier] = useState("");
-
     const [fullName, setFullName] = useState("");
-
     const [phone, setPhone] = useState("");
     const [email, setEmail] = useState("");
-    const [address, setAddress] = useState("")
+    const [address, setAddress] = useState("");
     const [description, setDescription] = useState("");
-    const [loading, setIsLoading] = useState(false)
-    const [successMsg, setSuccessMsg] = useState<string | null>(null)
+    const [loading, setIsLoading] = useState(false);
+    const [successMsg, setSuccessMsg] = useState<string | null>(null);
+    const [errorMsg, setErrorMsg] = useState<string | null>(null); // Error message state
+
+    useEffect(() => {
+        if (dataUpdate) {
+            setFullName(dataUpdate.full_Name);
+            setEmail(dataUpdate.email);
+            setPhone(dataUpdate.phone);
+            setAddress(dataUpdate.address || "");
+            setDescription(dataUpdate.description || "");
+            setIsSupplier(dataUpdate.supplier_type);
+        }
+    }, [dataUpdate]);
 
     const handleChange = (event: any) => {
         setIsSupplier(event.target.value);
     };
 
- 
-
     const handleSubmit = async (event: any) => {
         event.preventDefault();
-        setIsLoading(true)
+        setIsLoading(true);
+        setErrorMsg(null); // Clear previous error message
         try {
-            const response = await axios.post(`${url}supplier`, {
+            const data = {
                 supplier_type: isTypeSupplier,
                 full_Name: fullName,
                 phone: phone,
                 email: email,
                 address: address,
                 description: description,
-                
-            })
+            };
 
-            if(response.data.msg){
-                setSuccessMsg("បានរក្សាទុកជោគជ័យ")
-                handleClear()
+            if (!dataUpdate) {
+                const response = await axios.post(`${url}supplier`, data);
+                if (response.data.err) {
+                    throw new Error(response.data.err); // Handle error
+                }
+                if (response.data.msg) {
+                    handleClear();
+                    onClose();
+                    fetchSupplier();
+                    onSuccess("បានរក្សាទុកជោគជ័យ");
+                    sound_message();
+                    setIsLoading(false);
+                }
+            } else {
+                const response = await axios.put(`${url}supplier/${dataUpdate.supplierId}`, data);
+                if (response.data.msg) {
+                    handleClear();
+                    onClose();
+                    fetchSupplier();
+                    onSuccess("បានកែប្រែដោយជោគជ័យ");
+                    sound_message();
+                    setIsLoading(false);
+                }
             }
-
-            sound_message();
-
-
-            setIsLoading(false)
-   
+        } catch (err: any) {
+            setIsLoading(false);
+            if (err.response && err.response.data.err) {
+                setErrorMsg(err.response.data.err); 
+            } else {
+                setErrorMsg("An error occurred. Please try again."); 
+            }
+           
         }
-        catch (err) {
-            console.log(err)
-        }
 
-        function sound_message(){
+        function sound_message() {
             new Audio(sound_success).play();
         }
-
     };
 
-
-    //clear
     const handleClear = () => {
-        setAddress("")
-        setIsSupplier("ជ្រើសរើស")
-        setFullName("")
-        setEmail("")
-        setPhone("")
-        setDescription("")
-        
-    }
-
-
+        setAddress("");
+        setIsSupplier("ជ្រើសរើស");
+        setFullName("");
+        setEmail("");
+        setPhone("");
+        setDescription("");
+    };
 
     return (
         <div>
-            <form onSubmit={handleSubmit}>
-                <div className="flex gap-4 my-3">
-                    <div className="flex flex-col gap-2">
-                        <label htmlFor="supplierType" className="font-bold font-NotoSansKhmer">
-                            ប្រភេទអ្នកផ្គត់ផ្គង់: *
-                        </label>
-                        <select
-                            required
-                            onChange={handleChange}
-                            className="input_text w-[300px] font-NotoSansKhmer"
-                            value={isTypeSupplier}
-                        >
-                            <option value="">ជ្រើសរើស</option>
-                            <option value="ផ្ទាល់ខ្លួន" className="font-bold">
-                                ផ្ទាល់ខ្លួន
-                            </option>
-                            <option value="អាជីវកម្ម" className="font-bold">
-                                អាជីវកម្ម
-                            </option>
-                        </select>
+            <div className="fixed inset-0 z-10 flex items-center justify-center bg-black bg-opacity-50">
+                <motion.div
+                    className="bg-white w-[90%] md:w-[60%] lg:w-[50%] shadow-lg p-4 "
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.8 }}
+                    transition={{ duration: 0.2 }}
+                >
+                    <div className="flex items-center gap-2 my-4 font-NotoSansKhmer">
+                        <MdOutlineAdd className="text-xl" />
+                        <h2 className="text-lg font-bold">{dataUpdate ? 'កែប្រែអ្នកផ្គត់ផ្គង់' : 'បង្កើតប្រភេទអ្នកផ្គត់ផ្គង់ថ្មី'}</h2>
                     </div>
 
+                    <form onSubmit={handleSubmit}>
+                        <div className="flex gap-4 my-3">
+                            <div className="flex flex-col w-full gap-2">
+                                <label htmlFor="supplierType" className="font-bold font-NotoSansKhmer">
+                                    ប្រភេទអ្នកផ្គត់ផ្គង់: *
+                                </label>
+                                <select
+                                    required
+                                    onChange={handleChange}
+                                    className="w-full input_text font-NotoSansKhmer"
+                                    value={isTypeSupplier}
+                                >
+                                    <option value="">ជ្រើសរើស</option>
+                                    <option value="ផ្ទាល់ខ្លួន" className="font-bold">
+                                        ផ្ទាល់ខ្លួន
+                                    </option>
+                                    <option value="អាជីវកម្ម" className="font-bold">
+                                        អាជីវកម្ម
+                                    </option>
+                                </select>
+                            </div>
 
-                    <div className="flex flex-col w-full gap-2">
-                    <label htmlFor="supplierName" className="font-bold font-NotoSansKhmer">
-                        ឈ្មោះអ្នកផ្គត់ផ្គង់: *
-                    </label>
-                    <input
-                        type="text"
-                        required
-                        value={fullName}
-                        onChange={(e) => setFullName(e.target.value)}
-                        className="input_text w-[300px]"
-                        placeholder="ឈ្មោះអ្នកផ្គត់ផ្គង់"
-                    />
-                </div>
+                            <div className="flex flex-col w-full gap-2">
+                                <label htmlFor="supplierName" className="font-bold font-NotoSansKhmer">
+                                    ឈ្មោះអ្នកផ្គត់ផ្គង់: *
+                                </label>
+                                <input
+                                    type="text"
+                                    required
+                                    value={fullName}
+                                    onChange={(e) => setFullName(e.target.value)}
+                                    className="w-full input_text"
+                                    placeholder="ឈ្មោះអ្នកផ្គត់ផ្គង់"
+                                />
+                            </div>
+                        </div>
 
-                </div>
-
-
-
-              
-
-
-                <div className="flex flex-wrap items-center w-full gap-3">
-                  
-                        <div className="flex gap-2">
-
-                            <div className="flex flex-col gap-2">
+                        <div className="flex gap-4 my-3">
+                            <div className="flex flex-col w-full gap-2">
                                 <label htmlFor="phoneNumber" className="font-bold font-NotoSansKhmer">
                                     លេខទូរស័ព្ទ: *
                                 </label>
@@ -131,75 +171,75 @@ function CreateSupplier() {
                                     required
                                     value={phone}
                                     onChange={(e) => setPhone(e.target.value)}
-                                    className="input_text w-[300px]"
+                                    className="w-full input_text"
                                     placeholder="លេខទូរស័ព្ទ"
                                 />
                             </div>
+
+                            <div className="flex flex-col w-full gap-2">
+                                <label htmlFor="email" className="font-bold font-NotoSansKhmer">
+                                    អ៊ីម៉ែល
+                                </label>
+                                <input
+                                    type="email"
+                                    id="email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    className="w-full input_text"
+                                    placeholder="អ៊ីម៉ែល"
+                                />
+                            </div>
                         </div>
-                  
 
-                  
+                        <div className="flex flex-col gap-3 mt-3">
+                            <label htmlFor="address" className="font-bold font-NotoSansKhmer">
+                                អាស័យដ្ឋាន
+                            </label>
+                            <textarea
+                                id="description"
+                                value={address}
+                                onChange={(e) => setAddress(e.target.value)}
+                                className="w-full py-5 input_text"
+                                placeholder="អាស័យដ្ឋាន"
+                            />
+                        </div>
 
+                        <div className="flex flex-col gap-3 mt-3">
+                            <label htmlFor="description" className="font-bold font-NotoSansKhmer">
+                                ពិពណ៌នា
+                            </label>
+                            <textarea
+                                id="description"
+                                value={description}
+                                onChange={(e) => setDescription(e.target.value)}
+                                className="w-full py-5 input_text"
+                                placeholder="ពិពណ៌នា"
+                            />
+                        </div>
 
-                    <div className="flex flex-col gap-2">
-                        <label htmlFor="email" className="font-bold font-NotoSansKhmer">
-                            អ៊ីម៉ែល
-                        </label>
-                        <input
-                            type="email"
-                            id="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            className="input_text w-[300px]"
-                            placeholder="អ៊ីម៉ែល"
-                        />
-                    </div>
-                </div>
+                        {errorMsg && (
+                            <div className="msg_error">
+                                <strong></strong> {errorMsg}
+                            </div>
+                        )}
 
-                <div className="flex flex-col gap-3 mt-3">
-                    <label htmlFor="address" className="font-bold font-NotoSansKhmer">
-                        អាស័យដ្ឋាន
-                    </label>
-                    <textarea
-                        id="description"
-                        value={address}
-                        onChange={(e) => setAddress(e.target.value)}
-                        className="w-full py-5 input_text"
-                        placeholder="អាស័យដ្ឋាន"
-                    />
-                </div>
+                        <div className="flex justify-end gap-2 my-2">
+                            <button type="button" onClick={onClose} className="button_only_close">
+                                បោះបង់
+                            </button>
+                            <button
+                                type="submit"
+                                className={`button_only_submit font-NotoSansKhmer ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                disabled={loading}
+                            >
+                                {loading ? 'កំពុងរក្សា...' : 'រក្សាទុក'}
+                            </button>
+                        </div>
+                    </form>
 
-                <div className="flex flex-col gap-3 mt-3">
-                    <label htmlFor="description" className="font-bold font-NotoSansKhmer">
-                        ពិពណ៌នា
-                    </label>
-                    <textarea
-                        id="description"
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
-                        className="w-full py-5 input_text"
-                        placeholder="ពិពណ៌នា"
-                    />
-                </div>
-
-                <div className="flex justify-end my-3">
-                    {/* <button type="submit" className="button_only_submit">រក្សាទុក</button> */}
-
-
-                    <button
-                        type="submit"
-                        className={`mt-3 button_only_submit font-NotoSansKhmer ${loading ? 'opacity-50 cursor-not-allowed' : ''
-                            }`}
-                        disabled={loading}
-                    >
-                        {loading ? 'កំពុងរក្សា...' : 'រក្សាទុក'}
-                    </button>
-                </div>
-            </form>
-
-
-            {successMsg && <MessageSuccess message={successMsg} onClear={()=>setSuccessMsg(null)}/>}
-
+                    {successMsg && <MessageSuccess message={successMsg} onClear={() => setSuccessMsg(null)} />}
+                </motion.div>
+            </div>
         </div>
     );
 }

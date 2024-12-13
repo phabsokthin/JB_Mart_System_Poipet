@@ -29,6 +29,8 @@ import PurchaseTopup from "./views/topup/PurchaseTopUp";
 import ExchangeRate from "./views/currency/ExchangeRate";
 import PaymentMethodList from "./views/paymentMethod/PaymentMethodList";
 import PaymentMethodType from "./views/paymentMethod/PaymentMethodType";
+import SupplierList from "./components/contact/supplier/SupplierList";
+import CustomerList from "./components/contact/customer/CustomerList";
 
 function App() {
   return (
@@ -41,9 +43,11 @@ function App() {
           <Route path="test" element={<Test />} />
           <Route path="/dashboard" element={<Dashboard />} />
 
-          {/* Customer */}
+          {/* contact */}
 
           <Route path="/supplier" element={<Supplier />} />
+          <Route path="/supplierList" element={<SupplierList/>}/>
+          <Route path="/customerList" element={<CustomerList/>}/>
           <Route path="/contact" element={<Contact />} />
           <Route path="/customer" element={<Customer />} />
           <Route path="/contactInfo" element={<ContactInfo />} />

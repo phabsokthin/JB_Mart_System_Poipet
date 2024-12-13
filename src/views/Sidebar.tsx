@@ -144,9 +144,9 @@ function Sidebar() {
         setIsPaymentMethodDropdown(!isPaymentMethodDropdown)
     }
 
-    const handleUsersDropdown = () => {
-        setIsUsersDropdown(!isUsersDropdown)
-    }
+    // const handleUsersDropdown = () => {
+    //     setIsUsersDropdown(!isUsersDropdown)
+    // }
 
     const handleReportDropdown = () => {
         setIsReportsDropdown(!isReportsDropdown)
@@ -198,24 +198,24 @@ function Sidebar() {
                         </button>
 
                         <div className={`overflow-hidden transition-all duration-500 space-y-2 ${isContactDropdown ? "max-h-96 opacity-100" : "max-h-0"}`}>
-                            <NavLink to="/supplier" className={navLinkStyle}>
+                            <NavLink to="/supplierList" className={navLinkStyle}>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="ml-3 size-6">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
                                 </svg>
                                 <p className="font-bold font-NotoSansKhmer">អ្នកផ្គត់ផ្គង់</p>
                             </NavLink>
-                            <NavLink to="/customer" className={navLinkStyle}>
+                            <NavLink to="/customerList" className={navLinkStyle}>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="ml-3 size-6">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
                                 </svg>
                                 <p className="font-bold font-NotoSansKhmer">អតិជន</p>
                             </NavLink>
-                            <NavLink to="/contactInfo" className={navLinkStyle}>
+                            {/* <NavLink to="/contactInfo" className={navLinkStyle}>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="ml-3 size-6">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
                                 </svg>
                                 <p className="font-bold font-NotoSansKhmer">អំពីទំនាក់ទំនង</p>
-                            </NavLink>
+                            </NavLink> */}
                            
                         </div>
                     </li>

@@ -3,7 +3,7 @@ import Sidebar from '../Sidebar';
 import Navbar from '../Navbar';
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
 import { RiContactsBook3Fill } from "react-icons/ri";
-import CreateSupplier from '../../components/contact/supplier/CreateSupplier';
+// import CreateSupplier from '../../components/contact/supplier/CreateSupplier';
 import SupplierList from '../../components/contact/supplier/SupplierList';
 import SupplierInfo from '../../components/contact/supplier/SupplierInfo';
 
@@ -16,9 +16,9 @@ const categories = [
         name: 'បញ្ជីអ្នកផ្គត់ផ្គង់',
 
     },
-    {
-        name: 'ព័ត៍មានរបស់អ្នកផ្គត់ផ្គង់',
-    },
+    // {
+    //     name: 'ព័ត៍មានរបស់អ្នកផ្គត់ផ្គង់',
+    // },
 ];
 
 function Supplier() {
@@ -27,12 +27,12 @@ function Supplier() {
     return (
         <div className='grid grid-cols-6'>
             <Sidebar />
-            <div className="p-4 col-span-5">
+            <div className="col-span-5 p-4">
                 <Navbar />
-                <div className="p-4 bg-white w-full dark:border-gray-700 mt-5 animate-fade-up animate-duration-2000 animate-ease-in-out ">
+                <div className="w-full p-4 mt-5 bg-white dark:border-gray-700 animate-fade-up animate-duration-2000 animate-ease-in-out ">
                     <div className='flex items-center gap-2 py-5'>
-                        <RiContactsBook3Fill className=' text-lg' />
-                        <p className='font-NotoSansKhmer font-bold text-lg'>អ្នកផ្គត់ផ្គង់</p>
+                        <RiContactsBook3Fill className='text-lg ' />
+                        <p className='text-lg font-bold font-NotoSansKhmer'>អ្នកផ្គត់ផ្គង់</p>
                     </div>
                     <div className="w-full">
                         <TabGroup selectedIndex={activeTabIndex} onChange={setActiveTabIndex}>
@@ -48,7 +48,7 @@ function Supplier() {
                             </TabList>
                             <TabPanels className="mt-3">
                                 <TabPanel className="p-4">
-                                    <CreateSupplier />
+                                    {/* <CreateSupplier /> */}
                                 </TabPanel>
                             </TabPanels>
                             <TabPanels className="mt-3">

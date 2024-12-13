@@ -8,7 +8,7 @@ const Supplier = (sequelize) => {
             autoIncrement: true,
             allowNull: false,
         },
-        customer_type: {
+        supplier_type: {
             type: DataTypes.STRING,
             allowNull: false,
         },

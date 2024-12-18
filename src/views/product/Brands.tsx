@@ -1,124 +1,269 @@
-import Sidebar from "../../views/Sidebar";
-import Navbar from "../../views/Navbar";
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { BiSolidCategoryAlt } from "react-icons/bi";
-import CreateProductBrandsModal from "../../components/product/modal/CreateProductBrandsModal";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { FaClipboardList } from "react-icons/fa";
+import Pagination from "../../components/build/paginate/Pagination";
 
-const category = [
-    { id: 1, name: 'Electronics', description: 'Gadgets and devices', datetime: new Date().toLocaleString() },
-    { id: 2, name: 'Groceries', description: 'Food and daily essentials', datetime: new Date().toLocaleString() },
-    { id: 3, name: 'Clothing', description: 'Apparel and accessories', datetime: new Date().toLocaleString() },
-    { id: 4, name: 'Furniture', description: 'Home and office furniture', datetime: new Date().toLocaleString() },
-    { id: 5, name: 'Books', description: 'Literature and study material', datetime: new Date().toLocaleString() },
-    { id: 6, name: 'Toys', description: 'Toys and games', datetime: new Date().toLocaleString() },
-];
+import Search from "../../components/build/search/Search";
+import { MdDelete } from "react-icons/md";
+import { FaUserEdit } from "react-icons/fa";
+import DeleteAction from "../../components/build/modal/DeleteAction";
+import { AnimatePresence } from "framer-motion";
+
+import sound_success from '../../../src/assets/sound/success.mp3'
 
 
-function Category() {
-    const [isOpen, setIsOpen] = useState(false);
 
+import Sidebar from "../Sidebar";
+import MessageSuccess from "../../components/build/message/MessageSuccess";
+import Navbar from "../Navbar";
+import { url } from "../../api/url";
+import CreateProductBrandModal from "../../components/product/modal/CreateProductBrandsModal";
+
+function Brand() {
+    const [brand, setBrand] = useState<any[]>([]);
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const [dataPerPage, setDataPerPage] = useState<number>(15);
+    const [searchQuery, setSearchQuery] = useState<string>("");
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [dataToDelete, setdataToDelete] = useState<{ brandId: number; bnames: string } | null>(null);
+    const [isOpenModal, setIsOpenModal] = useState(false);
+    const [successMsg, setSuccessMsg] = useState<string | null>(null); // State for success message
+
+    const [isLoading, setIsLoading] = useState(false);
+    const [dataUpdate, setDataUpdate] = useState<string | null>(null)
+
+    const fetchdata = async () => {
+        try {
+            const response = await axios.get(`${url}brand`);
+            if (response.data) {
+                setBrand(response.data);
+            }
+        } catch (error) {
+            console.error("Error fetching customer:", error);
+        }
+    };
+
+    useEffect(() => {
+        fetchdata();
+    }, []);
+
+    const filtereData = brand.filter((data) =>
+        data.bnames.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        data.description.includes(searchQuery) 
+    );
+
+    const totalPage = Math.ceil(filtereData.length / dataPerPage);
+
+    const handlePageChange = (newPage: number) => {
+        setCurrentPage(newPage);
+    };
+
+    // Search
+    const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchQuery(e.target.value);
+        setCurrentPage(1);
+    };
+
+    const currentData = filtereData.slice(
+        (currentPage - 1) * dataPerPage,
+        currentPage * dataPerPage
+    );
+
+    // Delete handling
+    const handleDeleteClick = (bnames: { brandId: number; bnames: string }) => {
+        setdataToDelete(bnames);
+        console.log(bnames)
+        setIsDeleteModalOpen(true);
+    };
+
+
+    const handleDelete = async () => {
+        if (dataToDelete !== null) {
+            try {
+                await axios.delete(`${url}brand/${dataToDelete.brandId}`);
+                setBrand(brand.filter(data => data.brandId !== dataToDelete.brandId));
+                setIsDeleteModalOpen(false);
+                setIsLoading(true)
+                handleSuccess("បានលុបទុកដោយជោគជ័យ!");
+                sound_message();
+    
+
+            } catch (error) {
+                console.error("Error deleting customer:", error);
+            }
+
+            finally {
+                setIsLoading(false)
+            }
+        }
+    };
+
+    // Open modal
     const handleOpenModal = () => {
-        setIsOpen(true);
+        setDataUpdate(null)
+        setIsOpenModal(true);
+
+
     };
 
-    const handleCloseModal = () => {
-        setIsOpen(false);
+    const handleClose = () => {
+        setIsOpenModal(false);
     };
 
-    const rowVariants = {
-        open: (index: number) => ({
-            y: 0,
-            opacity: 1,
-            transition: {
-                type: "spring",
-                stiffness: 100,
-                damping: 30,
-                delay: index * 0.1, 
-            },
-        }),
-        closed: {
-            y: 30,
-            opacity: 0,
-            transition: {
-                type: "spring",
-                stiffness: 200,
-                damping: 20,
-            },
-        },
+    // Handle success message
+    const handleSuccess = (message: string) => {
+        setSuccessMsg(message);
+        setTimeout(() => setSuccessMsg(null), 3000);
     };
 
+
+    function sound_message() {
+        new Audio(sound_success).play();
+    }
+
+
+    //handle update
+
+    const handleUpdate = (item: string) => {
+        setDataUpdate(item)
+        setIsOpenModal(true)
+    }
 
     return (
         <div className='grid min-h-screen grid-cols-6'>
-            <div className="h-screen"> {/* Ensure this has full height */}
-                <div className="sticky top-0 z-10"> {/* Add z-index */}
+            <div className="h-screen">
+                <div className="sticky top-0 z-10">
                     <Sidebar />
                 </div>
             </div>
 
             <div className="col-span-5 p-4">
                 <Navbar />
-                <div className="p-4 mt-5 bg-white dark:border-gray-700 animate-fade-up animate-duration-2000 animate-ease-in-out">
-                    <div className='flex items-center gap-2 '>
-                        <BiSolidCategoryAlt className='text-xl' />
-                        <p className='text-lg font-bold font-NotoSansKhmer'>ម៉ាកយីហោ</p>
-                    </div>
-                    <div className="flex justify-end gap-2">
-                        <button onClick={handleOpenModal} className="button_only_submit">+ បង្កើតម៉ាកយីហោ</button>
-                    </div>
-                    <div className="flex items-center justify-between my-3">
-                        <div className="flex flex-col gap-2 font-bold font-NotoSansKhmer">
-                            <label htmlFor="">ច្រោះតាមចំនួន</label>
-                            <select className="input_text w-[100px]">
-                                <option value="25">25</option>
-                                <option value="50">50</option>
-                                <option value="100">100</option>
-                                <option value="500">500</option>
-                            </select>
+                <div className="p-4 mt-5 bg-white dark:border-gray-700">
+                    <div>
+
+
+                        {successMsg && (
+                            <MessageSuccess
+                                message={successMsg}
+                                onClear={() => setSuccessMsg(null)}
+                            />
+                        )}
+                        <div className="flex items-center justify-between gap-2 mb-3">
+                            <div className="flex items-center gap-2">
+                                <p>
+                                    <FaClipboardList className="text-lg" />
+                                </p>
+                                <p className="text-xl font-bold font-NotoSansKhmer">តារាងបញ្ជីម៉ាកយីហោ</p>
+                            </div>
+                            <button
+                                className="button_only_submit"
+                                onClick={handleOpenModal}
+                            >
+                                + បង្កើតម៉ាកយីហោថ្មី
+                            </button>
                         </div>
-                        <div>
-                            <input type="text" className="input_text w-[300px]" placeholder="ស្វែងរកម៉ាកយីហោ..." />
-                        </div>
-                    </div>
-                    <table className="min-w-full table-auto">
-                        <thead className="text-white bg-blue-600/90">
-                            <tr className="font-bold font-NotoSansKhmer">
-                                <th className="px-4 py-2">លេខរៀង</th>
-                                <th className="px-4 py-2">ឈ្មោះម៉ាកយីហោ</th>
-                                <th className="px-4 py-2">ពិពណ៌នា</th>
-                                <th className="px-4 py-2">កាលបរិច្ឆេតបញ្ចូល</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {category.map((cate, index) => (
-                                <motion.tr
-                                    key={cate.id}
-                                    custom={index}
-                                    initial="closed"
-                                    animate="open"
-                                    exit="closed"
-                                    variants={rowVariants}
-                                    whileHover={{ scale: 1.02 }}
-                                    whileTap={{ scale: 0.95 }}
-                                    className="text-sm cursor-pointer font-NotoSansKhmer"
+
+                        <div className="flex items-center justify-between my-3">
+                            <div className="flex flex-col gap-2 font-bold font-NotoSansKhmer">
+                                <label htmlFor="">ច្រោះតាមចំនួន</label>
+                                <select
+                                    id=""
+                                    className="input_text w-[100px]"
+                                    value={dataPerPage}
+                                    onChange={(e) => setDataPerPage(Number(e.target.value))}
                                 >
-                                    <td className="px-4 py-2">{index + 1}</td>
-                                    <td className="px-4 py-2">{cate.name}</td>
-                                    <td className="px-4 py-2">{cate.description || 'N/A'}</td>
-                                    <td className="px-4 py-2">{cate.datetime || 'N/A'}</td>
-                                </motion.tr>
-                            ))}
-                        </tbody>
-                    </table>
+                                    <option value="15">15</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                    <option value="500">500</option>
+                                </select>
+                            </div>
+                            <Search
+                                placeholder="ស្វែងរកម៉ាកយីហោ..."
+                                value={searchQuery}
+                                onChange={handleSearchChange}
+                            />
+                        </div>
+
+                        <table className="min-w-full xl:table-fixed">
+                            <thead className="w-full text-white bg-blue-600/90">
+                                <tr className="font-bold font-NotoSansKhmer">
+                                    <th className="px-4 py-2 w-[7%]">លេខរៀង</th>
+                                    <th className="px-4 py-2 w-[10%]">ម៉ាកយីហោ</th>
+                                    <th className="px-4 py-2 w-[12.5%]">ពិពណ៌នា</th>
+                                    <th className="px-4 py-2 w-[12.5%]">កាលបរិច្ឆេត</th>
+                                    <th className="px-4 py-2 w-[12.5%]">សកម្មភាព</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {currentData.length > 0 ? (
+                                    currentData.map((item, index) => (
+                                        <tr key={item.brandId || index}>
+                                            <td className="px-4 py-2 w-[12.5%]">{(currentPage - 1) * dataPerPage + index + 1}</td>
+
+                                            <td className="px-4 py-2 w-[12.5%]">{item.bnames}</td>
+                                            <td className="px-4 py-2 w-[12.5%]">{item.description}</td>
+                                            <td className="px-4 py-2 w-[12.5%]">{item.createdAt}</td>
+                                           
+                                            <td className="px-4 py-2 w-[12.5%] space-x-2">
+                                                <button
+                                                    onClick={() => handleDeleteClick({ brandId: item.brandId, bnames: item.bnames })}
+                                                    className="delete_action"
+                                                >
+                                                    <MdDelete />
+                                                </button>
+                                                <button onClick={() => handleUpdate(item)} className="edit_action">
+                                                    <FaUserEdit />
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))
+                                ) : (
+                                    <tr>
+                                        <td colSpan={5} className="py-4 text-center">
+                                            មិនមានទិន្នន័យស្វែងរក!
+                                        </td>
+                                    </tr>
+                                )}
+                            </tbody>
+                        </table>
+
+                        <div className="flex justify-end">
+                            <Pagination
+                                totalPage={totalPage}
+                                page={currentPage}
+                                onPageChange={handlePageChange}
+                            />
+                        </div>
+
+                        <AnimatePresence>
+                            {isDeleteModalOpen && (
+                                <DeleteAction
+                                    isLoading={isLoading}
+                                    onClose={() => setIsDeleteModalOpen(false)}
+                                    onConfirm={handleDelete}
+                                    displayName={dataToDelete?.bnames || "មិនមានឈ្មោះ"}
+                                />
+                            )}
+                        </AnimatePresence>
+
+                        <AnimatePresence>
+                            {isOpenModal && (
+                                <CreateProductBrandModal
+                                    dataUpdate={dataUpdate}
+                                    fetchData={fetchdata}
+                                    onSuccess={handleSuccess}
+                                    onClose={handleClose}
+                                />
+                            )}
+                        </AnimatePresence>
+                    </div>
                 </div>
             </div>
-
-            <AnimatePresence>
-                {isOpen && <CreateProductBrandsModal onClose={handleCloseModal} />}
-            </AnimatePresence>
         </div>
     );
 }
 
-export default Category;
+export default Brand;

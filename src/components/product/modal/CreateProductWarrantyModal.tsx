@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { MdOutlineAddCircle } from "react-icons/md";
 
-function CreateProductUnitModal({ onClose }: { onClose: () => void }) {
+function CreateProductUnitWarrentyModal({ onClose }: { onClose: () => void }) {
   return (
     <div className="fixed inset-0 z-10 flex items-center justify-center bg-black bg-opacity-50">
       <motion.div
@@ -135,4 +135,4 @@ function CreateProductUnitModal({ onClose }: { onClose: () => void }) {
   );
 }
 
-export default CreateProductUnitModal;
+export default CreateProductUnitWarrentyModal;

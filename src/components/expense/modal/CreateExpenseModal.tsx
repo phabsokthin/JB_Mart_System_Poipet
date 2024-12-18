@@ -3,7 +3,7 @@ import { MdOutlineAddCircle } from "react-icons/md";
 
 import { Switch } from "@headlessui/react";
 import { useState } from "react";
-function CreateCategoryModal({ onClose }: { onClose: () => void }) {
+function CreateExpeseModal({ onClose }: { onClose: () => void }) {
   const [enabled, setEnabled] = useState(false);
 
   const [isTypePeriod, setIsTypePeriod] = useState("");
@@ -277,4 +277,4 @@ function CreateCategoryModal({ onClose }: { onClose: () => void }) {
   );
 }
 
-export default CreateCategoryModal;
+export default CreateExpeseModal;

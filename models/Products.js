@@ -12,69 +12,68 @@ const Product = (sequelize) => {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        categoryId:{
+        categoryId: {
             type: DataTypes.INTEGER,
             allowNull: true,
         },
-        unitId:{
+        unitId: {
             type: DataTypes.INTEGER,
             allowNull: true,
         },
-        brandId:{
+        brandId: {
             type: DataTypes.INTEGER,
             allowNull: true,
         },
         pcode: {
             type: DataTypes.STRING,
             allowNull: true,
-           
         },
         status: {
-            type: DataTypes.BOOLEAN,
+            type: DataTypes.INTEGER,
+            defaultValue: 0, 
         },
-        qty:{
+        qty: {
             type: DataTypes.INTEGER,
             allowNull: true,
         },
-        const_price:{
+        const_price: {
             type: DataTypes.INTEGER,
             allowNull: true,
         },
-
-        include_tax:{
+        include_tax: {
             type: DataTypes.INTEGER,
             allowNull: true,
         },
-
-        discount:{
+        discount: {
             type: DataTypes.INTEGER,
             allowNull: true,
         },
-
-        total_amount:{
+        total_amount: {
             type: DataTypes.INTEGER,
             allowNull: true,
         },
-
-        sell_price:{
+        sell_price: {
             type: DataTypes.INTEGER,
             allowNull: true,
         },
-
-        profit:{
+        profit: {
             type: DataTypes.INTEGER,
             allowNull: true,
         },
-        imagee_url:{
+        image: {
             type: DataTypes.TEXT,
             allowNull: true,
         },
-        description:{
+        url: {
+            type: DataTypes.TEXT,
+            allowNull: true,
+          },
+        description: {
             type: DataTypes.STRING,
             allowNull: true,
         },
     }, {
-        timestamps: true, 
+        timestamps: true,
     });
 
     return ProductModel;

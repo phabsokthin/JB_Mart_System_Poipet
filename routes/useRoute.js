@@ -6,6 +6,7 @@ import { createCustomer, deleteCustomer, fetchCutomer, fetchCutomerByID, updateC
 import { createCategory, deleteCategory, fetchCategory, fetchCategoryByID, updateCategory } from '../controller/Category.controller.js';
 import { createUnit, deleteUnit, fetchUnit, fetchUnitByID, updateUnit } from '../controller/Units.controller.js';
 import { createBrand, deleteBrand, fetchBrand, fetchBrandByID, updateBrand } from '../controller/Brand.controller.js';
+import { createProduct, deleteProduct, fetchProduct, updateProduct } from '../controller/Product.controller.js';
 
 const router = express.Router();
 
@@ -60,5 +61,12 @@ router.get('/brand/:id', fetchBrandByID)
 router.delete('/brand/:id', deleteBrand)
 router.put('/brand/:id', updateBrand)
 
+//product 
+
+router.get('/product', fetchProduct)
+router.post('/product', createProduct)
+router.delete('/product/:id', deleteProduct)
+router.put('/product/:id', updateProduct)
 
 export default router;
+

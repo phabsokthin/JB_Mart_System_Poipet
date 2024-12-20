@@ -72,6 +72,7 @@ export const fetchCutomerByID = async(req, res) => {
     }
 }
 
+
 export const deleteCustomer = async(req, res) => {
     try{
         await Customer.destroy({

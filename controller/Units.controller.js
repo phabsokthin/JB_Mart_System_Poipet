@@ -25,7 +25,7 @@ export const createUnit = async (req, res) => {
     try {
         const existName = await Unit.findOne({ where: { unames } });
         if (existName) {
-            return res.status(400).json({ err: `ប្រភេទនេះ​ ${unames} នេះមានម្តងហើយ!` });
+            return res.status(400).json({ err: `ឯកតា​ ${unames} នេះមានម្តងហើយ!` });
         }
 
         await Unit.create({

@@ -25,7 +25,7 @@ const dbuser = process.env.DB_USER;
 const dbpass = process.env.DB_PASS;
 const dbhost = process.env.DB_HOST;
 
-const dbPort = process.env.DB_PORT || 8080; 
+const dbPort = process.env.DB_PORT;
 
 const sequelize = new Sequelize(dbname, dbuser, dbpass, {
     host: dbhost,

@@ -25,7 +25,7 @@ export const createCategory = async (req, res) => {
     try {
         const existName = await Category.findOne({ where: { cnames } });
         if (existName) {
-            return res.status(400).json({ err: `ប្រភេទនេះ​ ${cnames} នេះមានម្តងហើយ!` });
+            return res.status(400).json({ err: `ប្រភេទ ${cnames} នេះមានម្តងហើយ!` });
         }
 
         await Category.create({

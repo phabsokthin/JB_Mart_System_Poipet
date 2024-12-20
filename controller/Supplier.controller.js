@@ -80,6 +80,7 @@ export const deleteSpplier = async(req, res) => {
                 supplierId: req.params.id
             }
         })
+        
 
         res.status(200).json({msg: `បានលុបអ្នកផ្គត់ផ្គង់ដោយជោគជ័យ`})
     }

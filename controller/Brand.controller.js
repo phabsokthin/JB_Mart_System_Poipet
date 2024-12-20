@@ -25,7 +25,7 @@ export const createBrand = async (req, res) => {
     try {
         const existName = await Brand.findOne({ where: { bnames } });
         if (existName) {
-            return res.status(400).json({ err: `ម៉ាក់យីហោនេះ​ ${bnames} នេះមានម្តងហើយ!` });
+            return res.status(400).json({ err: `ម៉ាក់យីហោ ${bnames} នេះមានម្តងហើយ!` });
         }
 
         await Brand.create({

@@ -89,10 +89,12 @@ function CreateProductBrandModal({ onClose, fetchData, onSuccess, dataUpdate }: 
                 exit={{ opacity: 0, scale: 0.8 }}
                 transition={{ duration: 0.2 }}
             >
+                
                 <div className="flex items-center gap-2 my-4 font-NotoSansKhmer">
                     <MdOutlineAddCircle className="text-xl" />
                     <h2 className="text-lg font-bold">{dataUpdate ? 'កែប្រែម៉ាកយីហោ' : 'បង្កើតម៉ាកយីហោថ្មី'}</h2>
                 </div>
+                
                 <form onSubmit={handleSubmit}>
                     <div className="mb-4 space-y-2">
                         <label className="block font-bold text-gray-700 font-NotoSansKhmer ">ឈ្មោះម៉ាក់យីហោ: *</label>

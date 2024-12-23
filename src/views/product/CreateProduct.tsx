@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useEffect, useState } from "react";
 import Sidebar from "../../views/Sidebar";
 import Navbar from "../../views/Navbar";
@@ -5,8 +7,13 @@ import { FaBoxOpen } from "react-icons/fa6";
 import ImageUpload from "../../components/build/uploadImage/UploadImage";
 import KhmerDateInput from "../../components/build/khmerDateInputComponents/KhmerInputDate";
 import { Switch } from "@headlessui/react";
-import { IoMdClose } from "react-icons/io";
-import { FaSearch } from "react-icons/fa";
+import axios from "axios";
+import { url } from "../../api/url";
+import MessageSuccess from "../../components/build/message/MessageSuccess";
+import MessageError from "../../components/build/message/MessageError";
+import sound_success from '../../assets/sound/success.mp3';
+import sound_err from '../../assets/sound/failed.mp3';
+
 
 type Product = {
   id: number;
@@ -20,28 +27,6 @@ type Product = {
 };
 
 // Sample product list
-const productList: Product[] = [
-  {
-    id: 1,
-    name: "Electronics",
-    unit: "can",
-    price: 200,
-    qty: 10,
-    cost: 300,
-    description: "Gadgets and devices",
-    datetime: new Date().toLocaleString(),
-  },
-  {
-    id: 2,
-    name: "ABC",
-    unit: "can",
-    price: 100,
-    qty: 10,
-    cost: 250,
-    description: "Gadgets and devices",
-    datetime: new Date().toLocaleString(),
-  },
-];
 
 function CreateProduct() {
   const [totalAmount, setTotalAmount] = useState(0);
@@ -52,30 +37,47 @@ function CreateProduct() {
   const [sellingPrice, setSellingPrice] = useState(0);
   const [profit, setProfit] = useState(0);
   const [enabled, setEnabled] = useState(false);
-  const [sellingPriceGroup, setSellingPriceGroup] = useState(0)
   const [selectedDate, setSelectedDate] = useState<string>("");
 
-  const [productSearchQuery, setProductSearchQuery] = useState<string>("");
   const [selectedProducts, setSelectedProducts] = useState<Product[]>([]);
 
-  const [typeProduct, setTyeProduct] = useState("");
+
   const [payment, setPayment] = useState<number | undefined>(undefined);
   const [remainingAmount, setRemainingAmount] = useState<number>(totalAmount);
-  
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [pcode, setPcode] = useState("");
+  const [pname, setPname] = useState("");
+  const [unit, setUnit] = useState([]);
+  const [category, setCategory] = useState([]);
+  const [brand, setBrand] = useState([]);
+  const [msgStock, setMsgstock] = useState("");
+  const [selectedBrand, setSelectedBrand] = useState("");
+  const [selectCategory, setSelectCategory] = useState("");
+  const [selectUnit, setSelectUnit] = useState("");
+  const [description, setDescription] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [successMsg, setSuccessMsg] = useState<string | null>(null);
+  const [errMsg, setErrMsg] = useState<string | null>(null);
+
+  const handleCategory = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectCategory(e.target.value);
+    console.log(e.target.value);
+  };
+
+
+  const handleChangeBrand = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedBrand(e.target.value);
+  };
+
+
+
+  const handleChangeUnit = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectUnit(e.target.value);
+  };
 
   //select change product type
-  const handleChangeProductType = (event: any) => {
-    setTyeProduct(event.target.value);
-    setOriginalPrice(0);
-    setPriceWithTax(0);
-    setProfit(0);
-    setSellingPrice(0);
-    setTotalAmount(0);
-    setIsProfitAmount(0)
-    setRemainingAmount(0) 
-    setSelectedProducts([]); 
-  };
-  
+
 
 
   //calculate product
@@ -92,21 +94,8 @@ function CreateProduct() {
     calculateTotalAmount();
   }, [productDetails, selectedProducts, payment, totalAmounts]);
 
-  const [showProductDropdown, setShowProductDropdown] =
-    useState<boolean>(false);
-  const handleProductPriceChange = (productId: number, price: number) => {
-    setProductDetails((prev) => ({
-      ...prev,
-      [productId]: { ...prev[productId], price },
-    }));
-  };
 
-  const handleQtyChange = (productId: number, qty: number) => {
-    setProductDetails((prev) => ({
-      ...prev,
-      [productId]: { ...prev[productId], qty },
-    }));
-  };
+
 
   const [profitAmount, setIsProfitAmount] = useState(0);
 
@@ -127,7 +116,7 @@ function CreateProduct() {
   };
 
   const calculateProfit = () => {
-    const profit =  remainingAmount -totalAmounts; 
+    const profit = remainingAmount - totalAmounts;
     setIsProfitAmount(profit);
   };
 
@@ -135,36 +124,7 @@ function CreateProduct() {
     calculateProfit();
   }, [totalAmounts, remainingAmount]);
 
-//end calc amount
-  
-  const handleAddProduct = (product: Product) => {
-    if (selectedProducts.find((p) => p.id === product.id)) {
-      alert("Product already exists!");
-    } else {
-      setSelectedProducts([...selectedProducts, product]);
-    }
-    setProductSearchQuery("");
-    setShowProductDropdown(false);
-  };
 
-  //remove
-  const handleRemoveProduct = (productId: number) => {
-    setSelectedProducts(
-      selectedProducts.filter((product) => product.id !== productId)
-    );
-  };
-
-  //search product
-  const filteredProducts = productList.filter((product) =>
-    product.name.toLowerCase().includes(productSearchQuery.toLowerCase())
-  );
-
-  const handleProductSearchChange = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setProductSearchQuery(e.target.value);
-    setShowProductDropdown(e.target.value.length > 0);
-  };
 
   const handleDateChange = (date: string) => {
     setSelectedDate(date);
@@ -179,12 +139,157 @@ function CreateProduct() {
     const calculatedProfit = sellingPrice - totalAmount;
     setProfit(calculatedProfit);
   }, [sellingPrice, totalAmount]);
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
+
   useEffect(() => {
     if (imageUrl) {
       console.log("Selected Image URL:", imageUrl.slice(0, 100) + "...");
     }
   }, [imageUrl]);
+
+
+
+  //fetch unit
+
+  const fetchdata = async () => {
+    try {
+      const response = await axios.get(`${url}unit`);
+      if (response.data) {
+        setUnit(response.data);
+      }
+    } catch (error) {
+      console.error("Error fetching customer:", error);
+    }
+  };
+
+
+  //category
+
+  const fetchdataCategory = async () => {
+    try {
+      const response = await axios.get(`${url}category`);
+      if (response.data) {
+        setCategory(response.data);
+      }
+    } catch (error) {
+      console.error("Error fetching customer:", error);
+    }
+  };
+
+  //brand
+
+  const fetchdataBrand = async () => {
+    try {
+      const response = await axios.get(`${url}brand`);
+      if (response.data) {
+        setBrand(response.data);
+      }
+    } catch (error) {
+      console.error("Error fetching customer:", error);
+    }
+  };
+
+
+
+  useEffect(() => {
+    fetchdata();
+    fetchdataCategory();
+    fetchdataBrand();
+  }, [])
+
+
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    setIsLoading(true);
+
+    try {
+      // Create a new FormData instance
+      const formData = new FormData();
+
+      // Append all fields to the FormData object
+      formData.append("pcode", pcode);
+      formData.append("pname", pname);
+      formData.append("selectedDate", selectedDate);
+      formData.append("unitId", selectUnit);
+      formData.append("categoryId", selectCategory);
+      formData.append("brandId", selectedBrand);
+      formData.append("enabled", String(enabled)); // Convert boolean to string
+      formData.append("mg_stock", msgStock);
+      formData.append("description", description);
+      formData.append("const_price", originalPrice.toString()); // Convert number to string
+      formData.append("include_tax", priceWithTax.toString()); // Convert number to string
+      formData.append("sell_price", sellingPrice.toString()); // Convert number to string
+      formData.append("profit", profit.toString()); // Convert number to string
+      formData.append("total_amount", totalAmount.toString()); // Convert number to string
+
+
+      if (imageFile) {
+        formData.append("file", imageFile);
+      }
+
+      // Send the POST request
+      const response = await axios.post(`${url}product`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      // Handle success response
+      if (response.data.msg) {
+     
+      
+        setSuccessMsg(response.data.msg);
+        sound_message()
+        clearData();
+        setIsLoading(false);
+        console.log(response.data);
+      }
+    } catch (err:any) {
+      // Handle errors
+      
+      if (err.response && err.response.data && err.response.data.msg) {
+        setErrMsg(err.response.data.msg); 
+        err_message()
+      } else {
+        setErrMsg("An error occurred while submitting the form."); // Fallback error message
+      }
+    }
+    finally {
+      setIsLoading(false);
+    }
+  };
+
+
+  function clearData() {
+    setPcode("");
+    setPname("");
+    setSelectUnit("");
+    setSelectCategory("");
+    setSelectedBrand("");
+    setMsgstock("");
+    setDescription("");
+    setOriginalPrice(0);
+    setPriceWithTax(0);
+    setSellingPrice(0);
+    setProfit(0);
+    setTotalAmount(0);
+    setImageUrl(null);
+    setImageFile(null);
+  }
+
+
+
+
+  function sound_message() {
+    new Audio(sound_success).play();
+}
+
+
+function err_message() {
+  new Audio(sound_err).play();
+}
+
 
 
 
@@ -206,12 +311,15 @@ function CreateProduct() {
             <p className="text-lg font-bold font-NotoSansKhmer">បង្កើតផលិតផល</p>
           </div>
 
-          <form>
+          <form onSubmit={handleSubmit}>
             <div className="grid grid-cols-4 gap-5 mt-6">
               <div className="space-y-2">
                 <label htmlFor="">កូដផលិតផល: *</label>
                 <input
                   type="text"
+                  required
+                  value={pcode}
+                  onChange={(e) => setPcode(e.target.value)}
                   placeholder="កូដផលិតផល"
                   className="input_text"
                 />
@@ -220,6 +328,9 @@ function CreateProduct() {
               <div className="space-y-2">
                 <label htmlFor="">ឈ្មោះផលិតផល: *</label>
                 <input
+                  value={pname}
+                  required
+                  onChange={(e) => setPname(e.target.value)}
                   type="text"
                   placeholder="ឈ្មោះផលិតផល"
                   className="input_text"
@@ -239,25 +350,37 @@ function CreateProduct() {
 
               <div className="space-y-2">
                 <label htmlFor="">ឯកតា(ខ្នាត): *</label>
-                <select className="input_text">
-                  <option value="">កេស</option>
-                  <option value="">កំប៉ុង</option>
+                <select required value={selectUnit} onChange={handleChangeUnit} className="input_text">
+                  <option value="">ជ្រើសរើស</option>
+                  {unit.map((item: any, index: any) => {
+                    return (
+                      <option key={index} value={item.unitId}>{item.unames}</option>
+                    )
+                  })}
                 </select>
               </div>
 
               <div className="space-y-2">
                 <label htmlFor="">ប្រភេទទំនិញ: *</label>
-                <select className="input_text">
-                  <option value="">ភេស្ជជ:</option>
-                  <option value="">ស្របៀ</option>
+                <select value={selectCategory} onChange={handleCategory} className="input_text">
+                  <option value="">ជ្រើសរើស</option>
+                  {category.map((item: any, index: any) => {
+                    return (
+                      <option key={index} value={item.categoryId}>{item.cnames}</option>
+                    )
+                  })}
                 </select>
               </div>
 
               <div className="space-y-2">
-                <label htmlFor="">អនុប្រភេទទំនិញ: *</label>
-                <select className="input_text">
-                  <option value="">ទឺកក្រូច:</option>
-                  <option value="">ស្រាថ្នាំ</option>
+                <label htmlFor="">ម៉ាកយីហោរ</label>
+                <select value={selectedBrand} onChange={handleChangeBrand} className="input_text">
+                  <option value="">ជ្រើសរើស</option>
+                  {brand.map((item: any, index: any) => {
+                    return (
+                      <option key={index} value={item.brandId}>{item.bnames}</option>
+                    )
+                  })}
                 </select>
               </div>
 
@@ -267,9 +390,12 @@ function CreateProduct() {
                   <div>
                     <ImageUpload
                       maxSizeMB={2}
-                      allowedTypes={["image/jpeg", "image/png"]}
+                      allowedTypes={['image/png', 'image/jpeg']}
+                      imageUrl={imageUrl} // Pass the state
                       setImageUrl={setImageUrl}
+                      setImageFile={setImageFile}
                     />
+
                   </div>
                 </div>
               </div>
@@ -295,7 +421,7 @@ function CreateProduct() {
               {enabled && (
                 <div className="space-y-2">
                   <label htmlFor="">ចំនួនបរិមាណស្តុក: *</label>
-                  <input className="input_text" type="number" placeholder="0" />
+                  <input className="input_text" value={msgStock} onChange={(e)=>setMsgstock(e.target.value)} type="number" placeholder="0" />
                 </div>
               )}
             </div>
@@ -304,324 +430,98 @@ function CreateProduct() {
               <label htmlFor="">ពិព័ណ៌នាពីផលិតផល</label>
               <textarea
                 className="input_text"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
                 rows={5}
                 placeholder="ពិព័ណ៌នាពីផលិតផល"
               />
             </div>
 
-            <div className="space-y-2 w-96">
-              <label htmlFor="">ប្រភេទនៃការលក់ទំនិញ: *</label>
-              <select
-                value={typeProduct}
-                onChange={handleChangeProductType}
-                className="input_text"
-              >
-                <option value="ម្តងមួយ">ម្តងមួយ</option>
-                <option value="កញ្ចប់">កញ្ចប់</option>
-              </select>
+
+
+
+            <div className="">
+              <div className="mt-6">
+                <h3 className="text-lg font-semibold">កំណត់ព័ត៍មានផលិតផល</h3>
+                <div className="relative items-center gap-3 mx-auto my-2"></div>
+                <table className="w-full mt-4 border-collapse ">
+                  <thead className="p-2 text-white bg-blue-600/90">
+                    <tr>
+                      <th className="p-2 border w-[10%]">
+                        តម្លៃដើម(មិនរួមពន្ធ)
+                      </th>
+                      <th className="p-2 border w-[10%]">បូកពន្ធ</th>
+                      <th className="p-2 border w-[15%]">តម្លៃលក់ដើម($)</th>
+                      <th className="p-2 border w-[15%]">ប្រាក់ចំណេញ($)</th>
+                      <th className="p-2 border w-[15%]">សរុប($)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <input
+                          type="number"
+                          required
+                          placeholder="តម្លៃដើម(មិនរួមពន្ធ)"
+                          className="input_text"
+                          value={originalPrice}
+                          onChange={(e) =>
+                            setOriginalPrice(parseFloat(e.target.value) || 0)
+                          }
+                        />
+                      </td>
+                      <td>
+                        <input
+                        required
+                          type="number"
+                          placeholder="តម្លៃដើម(រួមពន្ធ)"
+                          className="input_text"
+                          value={priceWithTax}
+                          onChange={(e) =>
+                            setPriceWithTax(parseFloat(e.target.value) || 0)
+                          }
+                        />
+                      </td>
+                      <td>
+                        <input
+                          required
+                          type="number"
+                          placeholder="តម្លៃលក់ដើម"
+                          className="input_text"
+                          value={sellingPrice}
+                          onChange={(e) =>
+                            setSellingPrice(parseFloat(e.target.value) || 0)
+                          }
+                        />
+                      </td>
+
+                      <td>
+                        <input
+                          type="number"
+                          placeholder="ប្រាក់ចំណេញ"
+                          className="bg-gray-100 input_text"
+                          value={profit}
+                          readOnly
+                        />
+                      </td>
+                      <td>
+                        <input
+                          required
+                          type="number"
+                          placeholder="ប្រាក់សរុប"
+                          className="bg-gray-100 input_text"
+                          value={totalAmount}
+                          readOnly
+                        />
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
 
-            {typeProduct === "កញ្ចប់" ? (
-              <div>
-                <div>
-                  <div className="relative items-center gap-3 mx-auto my-10">
-                    <div className="relative">
-                      <div className="flex justify-center">
-                        <input
-                          type="text"
-                          className="input_text w-[80%]"
-                          placeholder="ស្វែងរកផលិតផល"
-                          value={productSearchQuery}
-                          onChange={handleProductSearchChange}
-                        />
-                 <div className="absolute right-[11%] top-3.5">
-                    <FaSearch className="text-gray-400" />
-                  </div>
-                      </div>
-                    </div>
+            
 
-                    <div className="flex justify-center">
-                      {showProductDropdown && (
-                        <ul className="absolute z-[2] w-[80%] left-[10%] mt-1 overflow-y-auto bg-white border border-gray-300 shadow-md max-h-48">
-                          {filteredProducts.length > 0 ? (
-                            filteredProducts.map((product) => (
-                              <li
-                                key={product.id}
-                                className="p-2 text-gray-700 cursor-pointer hover:bg-gray-200 hover:text-black"
-                                onClick={() => handleAddProduct(product)}
-                              >
-                                {product.name} || ចំនួន {product.qty}
-                              </li>
-                            ))
-                          ) : (
-                            <li className="p-2 text-gray-500 font-NotoSansKhmer">
-                              មិនមានផលិតផល ឈ្មោះនេះ​{" "}
-                              <span className="font-bold">
-                                {productSearchQuery}
-                              </span>{" "}
-                              ទេ!
-                            </li>
-                          )}
-                        </ul>
-                      )}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Display selected products */}
-                <div className="mt-6">
-                  <h3 className="text-lg font-semibold">
-                    កំណត់ប្រភេទទំនិញ
-                  </h3>
-                  <table className="w-full mt-4 border-collapse">
-                    <thead className="p-2 text-white bg-blue-600/90">
-                      <tr>
-                        <th className="p-2 border w-[7%]">លេខរៀង</th>
-                        <th className="p-2 border w-[20%]">ឈ្មោះផលិតផល</th>
-                        <th className="p-2 border w-[10%]">តម្លៃដើម(ឯកតា)</th>
-                        <th className="p-2 border w-[15%]">បរិមាណ</th>
-                        <th className="p-2 border w-[15%]">បរិមាណ</th>
-                        <th className="p-2 border w-[15%]">សរុប</th>
-                        <th className="p-2 border w-[5%]">
-                          <p className="text-center">ស្ថានភាព</p>
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {selectedProducts.length > 0 ? (
-                        selectedProducts.map((product, index) => (
-                          <tr key={product.id}>
-                            <td className="p-2">{index + 1}</td>
-                            <td className="p-2">
-                              {product.name}
-                              <p className="text-xs text-gray-500">
-                                មានស្តុកនៅសល់ {product.qty} {product.unit}
-                                <br />
-                                តម្លៃលក់ {product.cost}
-                              </p>
-                            </td>
-
-                            {/* Price Input */}
-                            <td>
-                              <input
-                                min={0}
-                                disabled
-                                type="number"
-                                placeholder="0.0"
-                                value={
-                                  productDetails[product.id]?.price ||
-                                  product.price ||
-                                  ""
-                                }
-                                onChange={(e) =>
-                                  handleProductPriceChange(
-                                    product.id,
-                                    Number(e.target.value)
-                                  )
-                                }
-                                className="bg-gray-100 input_text"
-                              />
-                            </td>
-
-                            {/* Quantity Input */}
-                            <td>
-                              <input
-                                min={0}
-                                type="number"
-                                placeholder="0.0"
-                                value={productDetails[product.id]?.qty || ""}
-                                onChange={(e) =>
-                                  handleQtyChange(
-                                    product.id,
-                                    Number(e.target.value)
-                                  )
-                                }
-                                className="input_text"
-                              />
-                            </td>
-
-                           
-                            {/* Total Price Calculation */}
-                            <td>
-                              <input
-                                min={0}
-                                type="number"
-                                placeholder="0.0"
-                                value={
-                                  (productDetails[product.id]?.price ||
-                                    product.price ||
-                                    0) *
-                                    (productDetails[product.id]?.qty || 0) -
-                                    (productDetails[product.id]?.discount ||
-                                      0) +
-                                    (productDetails[product.id]?.tax || 0) || 0
-                                }
-                                readOnly
-                                className="bg-gray-100 input_text"
-                              />
-                            </td>
-
-                            {/* Remove Product Button */}
-                            <td className="p-2">
-                              <div className="flex justify-center">
-                                <button
-                                  className="p-2 text-white bg-red-500 hover:text-white hover:bg-red-400"
-                                  onClick={() =>
-                                    handleRemoveProduct(product.id)
-                                  }
-                                >
-                                  <IoMdClose />
-                                </button>
-                              </div>
-                            </td>
-                          </tr>
-                        ))
-                      ) : (
-                        <tr>
-                          <td
-                            colSpan={9}
-                            className="p-2 text-center text-gray-500"
-                          >
-                            សូមបញ្ជូលផលិតផល
-                          </td>
-                        </tr>
-                      )}
-                    </tbody>
-                  </table>
-                </div>
-
-                <div className="flex justify-end mt-3">
-                  {/* <h3 className="text-lg font-semibold">
-                    សរុបចំនួនទូទាត់ប្តូរទំនិញ
-                  </h3> */}
-                  <hr className="my-2" />
-                  <div className="grid gap-3 grid-1-cols-">
-                    <div className="space-y-2">
-                      <label htmlFor="">ចំនួនការទូទាត់សរុប($)</label>
-                      <input
-                        type="number"
-                        placeholder="0.0"
-                        min={0}
-                        value={totalAmounts}
-                        readOnly
-                        className="bg-gray-100 input_text"
-                      />
-                    </div>
-
-                    <div className="space-y-2">
-                      <label htmlFor="">ប្រាក់លក់ដើម($)</label>
-                      <input
-                        type="number"
-                        placeholder="0.0"
-                        value={remainingAmount}
-                        onChange={(e) =>
-                          setRemainingAmount(Number(e.target.value))
-                        }
-                        className=" input_text"
-                      />
-                    </div>
-
-                    <div className="space-y-2">
-                      <label htmlFor="">ប្រាក់ចំណេញ($)</label>
-                      <input
-                        type="number"
-                        placeholder="0.0"
-                        value={profitAmount}
-                        readOnly
-                        className="bg-gray-100 input_text"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <div className="">
-                <div className="mt-6">
-                  <h3 className="text-lg font-semibold">កំណត់ព័ត៍មានផលិតផល</h3>
-                  <div className="relative items-center gap-3 mx-auto my-2"></div>
-                  <table className="w-full mt-4 border-collapse ">
-                    <thead className="p-2 text-white bg-blue-600/90">
-                      <tr>
-                        <th className="p-2 border w-[10%]">
-                          តម្លៃដើម(មិនរួមពន្ធ)
-                        </th>
-                        <th className="p-2 border w-[10%]">បូកពន្ធ</th>
-                        <th className="p-2 border w-[15%]">តម្លៃលក់ដើម($)</th>
-                        <th className="p-2 border w-[15%]">តម្លៃលក់ដុំ</th>
-                        <th className="p-2 border w-[15%]">ប្រាក់ចំណេញ($)</th>
-                        <th className="p-2 border w-[15%]">សរុប($)</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>
-                          <input
-                            type="number"
-                            placeholder="តម្លៃដើម(មិនរួមពន្ធ)"
-                            className="input_text"
-                            value={originalPrice}
-                            onChange={(e) =>
-                              setOriginalPrice(parseFloat(e.target.value) || 0)
-                            }
-                          />
-                        </td>
-                        <td>
-                          <input
-                            type="number"
-                            placeholder="តម្លៃដើម(រួមពន្ធ)"
-                            className="input_text"
-                            value={priceWithTax}
-                            onChange={(e) =>
-                              setPriceWithTax(parseFloat(e.target.value) || 0)
-                            }
-                          />
-                        </td>
-                        <td>
-                          <input
-                            type="number"
-                            placeholder="តម្លៃលក់ដើម"
-                            className="input_text"
-                            value={sellingPrice}
-                            onChange={(e) =>
-                              setSellingPrice(parseFloat(e.target.value) || 0)
-                            }
-                          />
-                        </td>
-                        <td>
-                              <input
-                                min={0}
-                                type="number"
-                                placeholder="0.0"
-                                value={sellingPriceGroup}
-                                onChange={(e:any) => setSellingPriceGroup(e.target.value)}
-                                className="input_text"
-                              />
-                            </td>
-
-                        <td>
-                          <input
-                            type="number"
-                            placeholder="ប្រាក់ចំណេញ"
-                            className="bg-gray-100 input_text"
-                            value={profit}
-                            readOnly
-                          />
-                        </td>
-                        <td>
-                          <input
-                            type="number"
-                            placeholder="ប្រាក់សរុប"
-                            className="bg-gray-100 input_text"
-                            value={totalAmount}
-                            readOnly
-                          />
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            )}
             <div className="flex justify-end mt-5">
               <button
                 type="submit"
@@ -631,8 +531,14 @@ function CreateProduct() {
               </button>
             </div>
           </form>
+             {successMsg && <MessageSuccess message={successMsg} onClear={() => setSuccessMsg(null)} />}
+             {errMsg && <MessageError message={errMsg} onClear={() => setErrMsg(null)} />}
+      
+          {/* <MessageSuccess message="Hello" onClear={null}/> */}
         </div>
       </div>
+
+
     </div>
   );
 }

@@ -1,49 +1,61 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import MessageError from "../message/MessageError";
 
 interface ImageUploadProps {
   maxSizeMB: number;
   allowedTypes: string[];
+  imageUrl: string | null; // Prop to receive the URL from the parent
   setImageUrl: (url: string | null) => void;
+  setImageFile: (file: File | null) => void; // Prop to pass the file
 }
 
 const ImageUpload: React.FC<ImageUploadProps> = ({
   maxSizeMB,
   allowedTypes,
+  imageUrl,
   setImageUrl,
+  setImageFile,
 }) => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
-  const [errMsg, setErrMsg] = useState<string | null>(null); // Holds error message
+  const [errMsg, setErrMsg] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!imageUrl) {
+      setSelectedImage(null); // Clear preview when the parent resets imageUrl
+    }
+  }, [imageUrl]);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    const maxSize = maxSizeMB * 1024 * 1024; // Convert MB to bytes
+    const maxSize = maxSizeMB * 1024 * 1024;
 
     setErrMsg(null);
 
     if (file) {
       if (!allowedTypes.includes(file.type)) {
         setErrMsg("សូមបញ្ចូលរូបភាព PNG, JPG");
-        setSelectedImage(null); // Reset image preview
-        setImageUrl(null); // Reset image URL in parent component
-        return; // Early return on error
-      }
-    
-      // Validate file size
-      if (file.size > maxSize) {
-        setErrMsg(`រូបភាពមិនអាចលើសពី ${maxSizeMB} MB`);
-        setSelectedImage(null); // Reset image preview
-        setImageUrl(null); // Reset image URL in parent component
-        return; // Early return on error
+        setSelectedImage(null);
+        setImageUrl(null);
+        setImageFile(null); // Reset file in parent
+        return;
       }
 
-      // Create a URL for the selected image and update state
+      if (file.size > maxSize) {
+        setErrMsg(`រូបភាពមិនអាចលើសពី ${maxSizeMB} MB`);
+        setSelectedImage(null);
+        setImageUrl(null);
+        setImageFile(null); // Reset file in parent
+        return;
+      }
+
       const objectUrl = URL.createObjectURL(file);
-      setSelectedImage(objectUrl); // Set the local image preview
-      setImageUrl(objectUrl); // Pass the URL to the parent component
+      setSelectedImage(objectUrl);
+      setImageUrl(objectUrl);
+      setImageFile(file); // Pass the file to the parent
     } else {
       setSelectedImage(null);
       setImageUrl(null);
+      setImageFile(null);
     }
   };
 

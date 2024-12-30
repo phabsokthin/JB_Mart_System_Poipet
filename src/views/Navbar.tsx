@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { url } from "../api/url";
 import {jwtDecode} from 'jwt-decode'
 function getDateInKhmer(): string {
@@ -58,6 +58,9 @@ interface DecodedToken {
   iat?: number; 
 }
 function Navbar() {
+  
+  const { id } = useParams(); // Extract dynamic parameter
+
   
   const [currentDate, setCurrentDate] = useState(getDateInKhmer());
   const [token, setToken] = useState("")
@@ -144,11 +147,23 @@ function Navbar() {
                       : ""}
                   </p>
 
+                  
 
+                  <p className="font-bold font-NotoSansKhmer">
+                    {location.pathname === "/productList"
+                      ? "ផលិតផល/បញ្ជីផលិតផល"
+                      : ""}
+                  </p>
 
                   <p className="font-bold font-NotoSansKhmer">
                     {location.pathname === "/createProduct"
                       ? "ផលិតផល/បង្កើតផលិតផល"
+                      : ""}
+                  </p>
+
+                  <p className="font-bold font-NotoSansKhmer">
+                    {location.pathname === `/product/${id}`
+                      ? "ផលិតផល/កែប្រែផលិតផល"
                       : ""}
                   </p>
 
@@ -162,6 +177,7 @@ function Navbar() {
                     {location.pathname === "/brands" ? "ផលិតផល/ម៉ាកយីហោ" : ""}
                   </p>
 
+                 
                   <p className="font-bold font-NotoSansKhmer">
                     {location.pathname === "/category"
                       ? "ផលិតផល/ប្រភេទទំនិញ"

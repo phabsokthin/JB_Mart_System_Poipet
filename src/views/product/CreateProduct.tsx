@@ -10,7 +10,7 @@ import { Switch } from "@headlessui/react";
 import axios from "axios";
 import { url } from "../../api/url";
 import MessageSuccess from "../../components/build/message/MessageSuccess";
-import MessageError from "../../components/build/message/MessageError";
+// import MessageError from "../../components/build/message/MessageError";
 import sound_success from '../../assets/sound/success.mp3';
 import sound_err from '../../assets/sound/failed.mp3';
 
@@ -50,15 +50,15 @@ function CreateProduct() {
   const [unit, setUnit] = useState([]);
   const [category, setCategory] = useState([]);
   const [brand, setBrand] = useState([]);
-  const [msgStock, setMsgstock] = useState("");
-  const [selectedBrand, setSelectedBrand] = useState("");
-  const [selectCategory, setSelectCategory] = useState("");
+  const [qty, setqty] = useState(0);
+  const [selectedBrand, setSelectedBrand] = useState("0");
+  const [selectCategory, setSelectCategory] = useState("0");
   const [selectUnit, setSelectUnit] = useState("");
   const [description, setDescription] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
-  const [errMsg, setErrMsg] = useState<string | null>(null);
+  const [errMsg, setErrMsg] = useState(false);
 
   const handleCategory = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectCategory(e.target.value);
@@ -215,7 +215,7 @@ function CreateProduct() {
       formData.append("categoryId", selectCategory);
       formData.append("brandId", selectedBrand);
       formData.append("enabled", String(enabled)); // Convert boolean to string
-      formData.append("mg_stock", msgStock);
+      formData.append("qty", Number(qty).toString()); // Convert number to string
       formData.append("description", description);
       formData.append("const_price", originalPrice.toString()); // Convert number to string
       formData.append("include_tax", priceWithTax.toString()); // Convert number to string
@@ -237,22 +237,21 @@ function CreateProduct() {
 
       // Handle success response
       if (response.data.msg) {
-     
-      
+
+
         setSuccessMsg(response.data.msg);
         sound_message()
+        handleClose();
         clearData();
         setIsLoading(false);
         console.log(response.data);
       }
-    } catch (err:any) {
+    } catch (err: any) {
       // Handle errors
-      
+
       if (err.response && err.response.data && err.response.data.msg) {
-        setErrMsg(err.response.data.msg); 
+        setErrMsg(err.response.data.msg);
         err_message()
-      } else {
-        setErrMsg("An error occurred while submitting the form."); // Fallback error message
       }
     }
     finally {
@@ -265,9 +264,9 @@ function CreateProduct() {
     setPcode("");
     setPname("");
     setSelectUnit("");
-    setSelectCategory("");
-    setSelectedBrand("");
-    setMsgstock("");
+    setSelectCategory("0");
+    setSelectedBrand("0");
+    setqty(0);
     setDescription("");
     setOriginalPrice(0);
     setPriceWithTax(0);
@@ -283,12 +282,19 @@ function CreateProduct() {
 
   function sound_message() {
     new Audio(sound_success).play();
-}
+  }
 
 
-function err_message() {
-  new Audio(sound_err).play();
-}
+  function err_message() {
+    new Audio(sound_err).play();
+  }
+
+
+
+
+  const handleClose = () => {
+    setErrMsg(false);
+  }
 
 
 
@@ -310,6 +316,17 @@ function err_message() {
             <FaBoxOpen className="text-xl" />
             <p className="text-lg font-bold font-NotoSansKhmer">បង្កើតផលិតផល</p>
           </div>
+
+
+
+          {errMsg && (
+            <div className="flex justify-between p-3 msg_error">
+              <p>{errMsg}</p>
+              <div className="cursor-pointer hover:text-gray-200" onClick={handleClose}>
+                បិទ
+              </div>
+            </div>
+          )}
 
           <form onSubmit={handleSubmit}>
             <div className="grid grid-cols-4 gap-5 mt-6">
@@ -421,7 +438,7 @@ function err_message() {
               {enabled && (
                 <div className="space-y-2">
                   <label htmlFor="">ចំនួនបរិមាណស្តុក: *</label>
-                  <input className="input_text" value={msgStock} onChange={(e)=>setMsgstock(e.target.value)} type="number" placeholder="0" />
+                  <input className="input_text" min={0} value={qty} onChange={(e) => setqty(Number(e.target.value))} type="number" placeholder="0" />
                 </div>
               )}
             </div>
@@ -462,6 +479,7 @@ function err_message() {
                         <input
                           type="number"
                           required
+                          min={0}
                           placeholder="តម្លៃដើម(មិនរួមពន្ធ)"
                           className="input_text"
                           value={originalPrice}
@@ -472,10 +490,11 @@ function err_message() {
                       </td>
                       <td>
                         <input
-                        required
+                          required
                           type="number"
                           placeholder="តម្លៃដើម(រួមពន្ធ)"
                           className="input_text"
+                          min={0}
                           value={priceWithTax}
                           onChange={(e) =>
                             setPriceWithTax(parseFloat(e.target.value) || 0)
@@ -485,6 +504,7 @@ function err_message() {
                       <td>
                         <input
                           required
+                          min={0}
                           type="number"
                           placeholder="តម្លៃលក់ដើម"
                           className="input_text"
@@ -497,6 +517,7 @@ function err_message() {
 
                       <td>
                         <input
+                          min={0}
                           type="number"
                           placeholder="ប្រាក់ចំណេញ"
                           className="bg-gray-100 input_text"
@@ -508,6 +529,7 @@ function err_message() {
                         <input
                           required
                           type="number"
+                          min={0}
                           placeholder="ប្រាក់សរុប"
                           className="bg-gray-100 input_text"
                           value={totalAmount}
@@ -520,20 +542,21 @@ function err_message() {
               </div>
             </div>
 
-            
+
 
             <div className="flex justify-end mt-5">
               <button
                 type="submit"
-                className="flex items-center gap-2 px-4 py-2 font-semibold text-white bg-blue-500 hover:bg-blue-600"
+                className={`button_only_submit font-NotoSansKhmer ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                disabled={isLoading}
               >
-                <p> + បង្កើតផលិតផល</p>
+                {isLoading ? 'កំពុងរក្សា...' : 'រក្សាទុក'}
               </button>
             </div>
           </form>
-             {successMsg && <MessageSuccess message={successMsg} onClear={() => setSuccessMsg(null)} />}
-             {errMsg && <MessageError message={errMsg} onClear={() => setErrMsg(null)} />}
-      
+          {successMsg && <MessageSuccess message={successMsg} onClear={() => setSuccessMsg(null)} />}
+          {/* {errMsg && <MessageError message={errMsg} onClear={() => setErrMsg(null)} />} */}
+
           {/* <MessageSuccess message="Hello" onClear={null}/> */}
         </div>
       </div>

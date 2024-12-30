@@ -11,7 +11,7 @@ function Sidebar() {
     const [isExpenseDropdown, setIsExpenseDropdown] = useState(false);
     const [isAccountDropdown, setIsAccountDropdown] = useState(false);
     const [isPaymentMethodDropdown, setIsPaymentMethodDropdown] = useState(false);
-    const [isUsersDropdown, setIsUsersDropdown] = useState(false);
+    // const [isUsersDropdown, setIsUsersDropdown] = useState(false);
     const [isReportsDropdown, setIsReportsDropdown] = useState(false);
     const [isCurrencyDropdown, setIsCurrencyDropdown] = useState(false);
 
@@ -89,12 +89,12 @@ function Sidebar() {
             setIsPaymentMethodDropdown(false)
         }
 
-        if (isUsersActive) {
-            setIsUsersDropdown(true)
-        }
-        else {
-            setIsUsersDropdown(false)
-        }
+        // if (isUsersActive) {
+        //     setIsUsersDropdown(true)
+        // }
+        // else {
+        //     setIsUsersDropdown(false)
+        // }
 
         if (isReportsActive) {
             setIsReportsDropdown(true)
@@ -238,7 +238,7 @@ function Sidebar() {
                         </button>
 
                         <div className={`overflow-hidden transition-all duration-500 space-y-2 ${isProductDropdown ? "max-h-96 opacity-100" : "max-h-0"}`}>
-                            <NavLink to="/product" className={navLinkStyle}>
+                            <NavLink to="/productList" className={navLinkStyle}>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="ml-3 size-6">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
                                 </svg>

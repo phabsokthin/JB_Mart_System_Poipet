@@ -31,6 +31,8 @@ import PaymentMethodList from "./views/paymentMethod/PaymentMethodList";
 import PaymentMethodType from "./views/paymentMethod/PaymentMethodType";
 import SupplierList from "./components/contact/supplier/SupplierList";
 import CustomerList from "./components/contact/customer/CustomerList";
+import ProductList from "./views/product/ProductList";
+import UpdateProduct from "./views/product/UpdateProduct";
 
 function App() {
   return (
@@ -54,10 +56,13 @@ function App() {
 
           {/* Product Route */}
           <Route path="/product" element={<Product />} />
+          <Route path="/productList" element={<ProductList />} />
           <Route path="/createProduct" element={<CreateProduct/>}/>
           <Route path="/productUnit" element={<ProductUnit />} />
           <Route path="/category" element={<Category />} />
-      
+          <Route path="/product/:id" element={<UpdateProduct />} />
+          
+          {/* Purchase Route */}
           <Route path="/purchase" element={<Purchase />} />
           <Route path="/pos" element={<POS />} />
           <Route path="/brands" element={<Brands />} />

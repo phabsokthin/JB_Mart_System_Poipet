@@ -10,6 +10,10 @@ import { Switch } from "@headlessui/react";
 import axios from "axios";
 import { url } from "../../api/url";
 import MessageSuccess from "../../components/build/message/MessageSuccess";
+import MessageError from "../../components/build/message/MessageError";
+import sound_success from '../../assets/sound/success.mp3';
+import sound_err from '../../assets/sound/failed.mp3';
+
 
 type Product = {
   id: number;
@@ -46,15 +50,15 @@ function CreateProduct() {
   const [unit, setUnit] = useState([]);
   const [category, setCategory] = useState([]);
   const [brand, setBrand] = useState([]);
-  const [msgStock, setMsgstock] = useState("");
-
-  const [selectedBrand, setSelectedBrand] = useState("");
-  const [selectCategory, setSelectCategory] = useState("");
+  const [qty, setqty] = useState(0);
+  const [selectedBrand, setSelectedBrand] = useState("0");
+  const [selectCategory, setSelectCategory] = useState("0");
   const [selectUnit, setSelectUnit] = useState("");
   const [description, setDescription] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
-
+  const [errMessage, seterrMessage] = useState(false);
 
   const handleCategory = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectCategory(e.target.value);
@@ -185,13 +189,13 @@ function CreateProduct() {
   };
 
 
+
   useEffect(() => {
     fetchdata();
     fetchdataCategory();
     fetchdataBrand();
   }, [])
 
-  const [imageFile, setImageFile] = useState<File | null>(null);
 
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -210,8 +214,8 @@ function CreateProduct() {
       formData.append("unitId", selectUnit);
       formData.append("categoryId", selectCategory);
       formData.append("brandId", selectedBrand);
-      formData.append("enabled", String(enabled)); // Convert boolean to string
-      formData.append("mg_stock", msgStock);
+      formData.append("status", String(enabled)); // Convert boolean to string
+      formData.append("qty", Number(qty).toString()); // Convert number to string
       formData.append("description", description);
       formData.append("const_price", originalPrice.toString()); // Convert number to string
       formData.append("include_tax", priceWithTax.toString()); // Convert number to string
@@ -233,16 +237,21 @@ function CreateProduct() {
 
       // Handle success response
       if (response.data.msg) {
-        setSuccessMsg("Save successfully");
-        // alert("បង្កើតផលិតផលបានជោគជ័យ");
+
+        setSuccessMsg(response.data.msg);
+        sound_message()
+        handleClose();
         clearData();
         setIsLoading(false);
         console.log(response.data);
       }
-    } catch (err) {
-      // Handle errors
-      console.error(err);
-      alert("មានបញ្ហាជាមួយការផ្ញើទិន្នន័យ");
+    } catch (err: any) {
+
+      if (err.response && err.response.data && err.response.data.msg) {
+        seterrMessage(err.response.data.msg);
+        console.log(err.response.data.msg);
+        err_message()
+      }
     }
     finally {
       setIsLoading(false);
@@ -256,7 +265,7 @@ function CreateProduct() {
     setSelectUnit("");
     setSelectCategory("");
     setSelectedBrand("");
-    setMsgstock("");
+    setqty(0);
     setDescription("");
     setOriginalPrice(0);
     setPriceWithTax(0);
@@ -267,6 +276,20 @@ function CreateProduct() {
     setImageFile(null);
   }
 
+
+  function sound_message() {
+    new Audio(sound_success).play();
+  }
+
+
+  function err_message() {
+    new Audio(sound_err).play();
+  }
+
+
+  const handleClose = () => {
+    seterrMessage(false);
+  }
 
 
 
@@ -283,19 +306,38 @@ function CreateProduct() {
       <div className="col-span-5 p-4">
         <Navbar />
 
-        <div className="p-4 mt-5 bg-white dark:border-gray-700 ">
+        <div className="p-4 mt-5 bg-white dark:border-gray-700">
           <div className="flex items-center gap-2 ">
             <FaBoxOpen className="text-xl" />
             <p className="text-lg font-bold font-NotoSansKhmer">បង្កើតផលិតផល</p>
           </div>
 
+
+          <div className="mt-2">
+            {/* {errMessage && <div className="flex justify-between p-3 msg_error">
+              <p>{errMessage}</p>
+              <div className="hover:text-red-600" onClick={handleClose}>បិទ</div>
+            </div>} */}
+
+            {errMessage && (
+              <div className="flex justify-between p-3 msg_error">
+                <p>{errMessage}</p>
+                <div className="cursor-pointer hover:text-gray-200" onClick={handleClose}>
+                  បិទ
+                </div>
+              </div>
+            )}
+          </div>
+
+
           <form onSubmit={handleSubmit}>
-            <div className="grid grid-cols-4 gap-5 mt-6">
+            <div className="grid grid-cols-4 gap-5 mt-3">
               <div className="space-y-2">
                 <label htmlFor="">កូដផលិតផល: *</label>
                 <input
                   type="text"
-                  value={pcode} required
+                  required
+                  value={pcode}
                   onChange={(e) => setPcode(e.target.value)}
                   placeholder="កូដផលិតផល"
                   className="input_text"
@@ -305,8 +347,8 @@ function CreateProduct() {
               <div className="space-y-2">
                 <label htmlFor="">ឈ្មោះផលិតផល: *</label>
                 <input
-                  required
                   value={pname}
+                  required
                   onChange={(e) => setPname(e.target.value)}
                   type="text"
                   placeholder="ឈ្មោះផលិតផល"
@@ -368,10 +410,11 @@ function CreateProduct() {
                     <ImageUpload
                       maxSizeMB={2}
                       allowedTypes={['image/png', 'image/jpeg']}
-                      // imageUrl={imageUrl} // Pass the state
+                      imageUrl={imageUrl} // Pass the state
                       setImageUrl={setImageUrl}
-                      // setImageFile={setImageFile}
+                      setImageFile={setImageFile}
                     />
+
                   </div>
                 </div>
               </div>
@@ -397,7 +440,7 @@ function CreateProduct() {
               {enabled && (
                 <div className="space-y-2">
                   <label htmlFor="">ចំនួនបរិមាណស្តុក: *</label>
-                  <input className="input_text" value={msgStock} onChange={(e) => setMsgstock(e.target.value)} type="number" placeholder="0" />
+                  <input className="input_text" value={qty} onChange={(e) => setqty(Number(e.target.value))} type="number" placeholder="0" />
                 </div>
               )}
             </div>
@@ -406,9 +449,9 @@ function CreateProduct() {
               <label htmlFor="">ពិព័ណ៌នាពីផលិតផល</label>
               <textarea
                 className="input_text"
-                rows={5}
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
+                rows={5}
                 placeholder="ពិព័ណ៌នាពីផលិតផល"
               />
             </div>
@@ -448,6 +491,7 @@ function CreateProduct() {
                       </td>
                       <td>
                         <input
+                          required
                           type="number"
                           placeholder="តម្លៃដើម(រួមពន្ធ)"
                           className="input_text"
@@ -495,9 +539,9 @@ function CreateProduct() {
               </div>
             </div>
 
+
+
             <div className="flex justify-end mt-5">
-
-
               <button
                 type="submit"
                 className={`button_only_submit font-NotoSansKhmer ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
@@ -507,13 +551,13 @@ function CreateProduct() {
               </button>
             </div>
           </form>
+          {successMsg && <MessageSuccess message={successMsg} onClear={() => setSuccessMsg(null)} />}
+
         </div>
       </div>
-      {successMsg && <MessageSuccess message={successMsg} onClear={() => setSuccessMsg(null)} />}
+
 
     </div>
-
-    
   );
 }
 export default CreateProduct;

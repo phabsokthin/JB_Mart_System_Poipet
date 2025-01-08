@@ -19,6 +19,7 @@ import ExpenseType from '../models/ExpenseTypes.js';
 import Expense from '../models/Expenses.js';
 import Sell from '../models/Sells.js';
 import SellReturn from '../models/SellReturns.js';
+import PurchaseDetail from '../models/PurchaseDetail.js';
 
 const dbname = process.env.DB_NAME;
 const dbuser = process.env.DB_USER;
@@ -55,7 +56,19 @@ db.ExpenseType = ExpenseType(sequelize)
 db.Expense = Expense(sequelize)
 db.Sell = Sell(sequelize)
 db.SaleReturn = SellReturn(sequelize)
+db.PurchaseDetail = PurchaseDetail(sequelize)
 
+
+//join tables
+db.Category.hasMany(db.Product, { foreignKey: 'categoryId', as: 'cat_id' });
+db.Product.belongsTo(db.Category, { foreignKey: 'categoryId', as: 'cat_id' });
+
+db.Unit.hasMany(db.Product, { foreignKey: 'unitId', as: 'unit_id' });
+db.Product.belongsTo(db.Unit, { foreignKey: 'unitId', as: 'unit_id' });
+
+db.Brand.hasMany(db.Product, { foreignKey: 'brandId', as: 'brand_id' });
+db.Product.belongsTo(db.Brand, { foreignKey: 'brandId', as: 'brand_id' });
+ 
 
 // Check connection success
 // (async () => {

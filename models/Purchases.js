@@ -8,29 +8,37 @@ const Purchase = (sequelize) => {
             autoIncrement: true,
             allowNull: false,
         },
+        purchaseNo: {
+            type: DataTypes.INTEGER,
+            allowNull: true,
+        },
+
         supplierId: {
             type: DataTypes.INTEGER,
             allowNull: false,
         },
+        
         productId: {
             type: DataTypes.INTEGER,
             allowNull: false,
         },
         status_receive: {
-            type: DataTypes.BOOLEAN,
-            allowNull: false,
+            type: DataTypes.INTEGER,
+            allowNull: true,
         },
+
 
         cost_price: {
             type: DataTypes.INTEGER,
             allowNull: false,
         },
 
+
         qty: {
             type: DataTypes.INTEGER,
             allowNull: false,
         },
-
+            
         include_tax: {
             type: DataTypes.INTEGER,
             allowNull: true,
@@ -39,6 +47,11 @@ const Purchase = (sequelize) => {
         total: {
             type: DataTypes.INTEGER,
             allowNull: false,
+        },
+
+        sell_price: {
+            type: DataTypes.INTEGER,
+            allowNull: true,
         },
 
         discount: {
@@ -54,35 +67,35 @@ const Purchase = (sequelize) => {
             type: DataTypes.INTEGER,
             allowNull: false,
         },
-
+        
         balance: {
             type: DataTypes.INTEGER,
             allowNull: false,
         },
         
-        currency_id: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-        },
+        // currency_id: {
+        //     type: DataTypes.INTEGER,
+        //     allowNull: false,
+        // },
 
         date_purchase: {
             type: DataTypes.DATE,
             allowNull: true,
         },
 
-        payment_m_id: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-        },
+        // payment_m_id: {
+        //     type: DataTypes.INTEGER,
+        //     allowNull: true,
+        // },
 
         bankId: {
             type: DataTypes.INTEGER,
-            allowNull: false,
+            allowNull: true,
         },
 
         userId: {
             type: DataTypes.INTEGER,
-            allowNull: false,
+            allowNull: true,
         },
 
     }, {

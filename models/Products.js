@@ -29,9 +29,11 @@ const Product = (sequelize) => {
             allowNull: true,
         },
         status: {
-            type: DataTypes.INTEGER,
-            defaultValue: 0, 
+            type: DataTypes.BOOLEAN,
+            defaultValue: true,
+            allowNull: true,
         },
+    
         qty: {
             type: DataTypes.INTEGER,
             allowNull: true,
@@ -44,10 +46,7 @@ const Product = (sequelize) => {
             type: DataTypes.INTEGER,
             allowNull: true,
         },
-        discount: {
-            type: DataTypes.INTEGER,
-            allowNull: true,
-        },
+    
         total_amount: {
             type: DataTypes.INTEGER,
             allowNull: true,

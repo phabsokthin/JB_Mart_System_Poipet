@@ -25,9 +25,10 @@ const Bank = (sequelize) => {
             allowNull: false,
         },
         status: {
-            type: DataTypes.BOOLEAN,
-            allowNull: false,
+            type: DataTypes.INTEGER,
+            allowNull: true,
         },
+        
         note: {
             type: DataTypes.STRING,
             allowNull: true,

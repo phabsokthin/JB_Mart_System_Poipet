@@ -2,22 +2,84 @@ import db from "../config/config.js";
 
 import path from 'path'
 import fs from 'fs'
-import { Op } from "sequelize";
+import { Op, where } from "sequelize";
 const Product = db.Product;
+
 
 
 export const fetchProduct = async (req, res) => {
     try {
-        await Product.findAll().then(data => {
-            res.send(data)
-        }).catch(err => {
-            console.log(err)
-        })
+       const data = await Product.findAll({
+        attributes: ['productId', 'pname','categoryId','unitId', 'brandId', 'pcode', 'status', 'qty', 'const_price', 'include_tax', 'total_amount', 'sell_price', 'profit', 'image', 'url', 'description'],
+        include: [
+            {
+                model: db.Category,
+                as: 'cat_id',
+                attributes: ['cnames']
+            },
+            {
+                model: db.Unit,
+                as: 'unit_id',
+                attributes: ['unames']
+            },
+            {
+                model: db.Brand,
+                as: 'brand_id',
+                attributes: ['bnames']
+            }
+
+        ],
+
+        order: [["createdAt", "DESC"]]
+
+       });
+
+       res.status(200).json(data)
     }
     catch (err) {
         console.log(err)
     }
 }
+
+
+
+
+export const fetchProductById = async (req, res) => {
+    try {
+       const data = await Product.findOne({
+        attributes: ['productId', 'pname','categoryId','unitId', 'brandId', 'pcode', 'status', 'qty', 'const_price', 'include_tax', 'total_amount', 'sell_price', 'profit', 'image', 'url', 'description'],
+        include: [
+            {
+                model: db.Category,
+                as: 'cat_id',
+                attributes: ['cnames']
+            },
+            {
+                model: db.Unit,
+                as: 'unit_id',
+                attributes: ['unames']
+            },
+            {
+                model: db.Brand,
+                as: 'brand_id',
+                attributes: ['bnames']
+            }
+
+        ],
+
+        where: {
+            productId: req.params.id
+        }
+
+       });
+
+       res.status(200).json(data)
+    }
+    catch (err) {
+        console.log(err)
+    }
+}
+
 
 
 
@@ -52,11 +114,12 @@ export const createProduct = async (req, res) => {
         });
     }
 
+
     // Destructure the product details from the request body
     const {
         pname, categoryId, unitId, brandId, pcode, status, qty,
         const_price, include_tax, discount, total_amount, sell_price,
-        profit, description
+        profit, description,selectedDate,enabled
     } = req.body;
 
     // Check if a product with the same pcode already exists
@@ -65,7 +128,7 @@ export const createProduct = async (req, res) => {
     });
 
     if (existingProduct) {
-        return res.status(400).json({ msg: "Product code already exists" });
+        return res.status(400).json({ msg: `លេខកូដនេះ ${pcode} មានម្តង់ហើយ!` });
     }
 
     // If no file is uploaded, set default values
@@ -78,15 +141,16 @@ export const createProduct = async (req, res) => {
         // Create the new product
         await Product.create({
             pname, categoryId, unitId, brandId, pcode, status, qty, 
-            const_price, include_tax, discount, total_amount, 
-            sell_price, profit, image: fileName, url, description
+            const_price, include_tax, discount, total_amount,
+            sell_price, profit, image: fileName, url, description,selectedDate,enabled
         });
 
-        res.json({ msg: "Product created successfully" });
+        res.json({ msg: `បានរក្សាទុកផលិតផលឈ្មោះ​ ${pname}` });
     } catch (error) {
         console.error("Error saving product details:", error);
         res.status(500).json({ msg: "Error saving product" });
     }
+
 };
 
 export const deleteProduct = async (req, res) => {
@@ -187,7 +251,7 @@ export const updateProduct = async (req, res) => {
             });
 
             if (existingProduct) {
-                return res.status(400).json({ msg: "Product code already exists" });
+                return res.status(400).json({ msg: `ផលិតផលនេះ​ ${pcode} មានម្តងហើយ` });
             }
         }
 
@@ -209,7 +273,7 @@ export const updateProduct = async (req, res) => {
             where: { productId: req.params.id }
         });
 
-        res.json({ msg: "Product updated successfully" });
+        res.json({ msg: "បានកែប្រែផលិតផលដោយជោគជ័យ" });
     } catch (error) {
         console.error("Error updating product details:", error);
         res.status(500).json({ msg: "Error updating product" });

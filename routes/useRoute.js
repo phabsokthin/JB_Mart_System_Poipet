@@ -6,7 +6,8 @@ import { createCustomer, deleteCustomer, fetchCutomer, fetchCutomerByID, updateC
 import { createCategory, deleteCategory, fetchCategory, fetchCategoryByID, updateCategory } from '../controller/Category.controller.js';
 import { createUnit, deleteUnit, fetchUnit, fetchUnitByID, updateUnit } from '../controller/Units.controller.js';
 import { createBrand, deleteBrand, fetchBrand, fetchBrandByID, updateBrand } from '../controller/Brand.controller.js';
-import { createProduct, deleteProduct, fetchProduct, updateProduct } from '../controller/Product.controller.js';
+import { createProduct, deleteProduct, fetchProduct, fetchProductById, updateProduct } from '../controller/Product.controller.js';
+import { createPurchases, deletePurchase, fetchPurchase, updatePurchase } from '../controller/Purchase.controller.js';
 
 const router = express.Router();
 
@@ -18,6 +19,7 @@ router.get("/register", (req, res) =>{
 router.post('/register', register )
 router.post('/login', login)
 router.delete('/logout', logout)
+
  
 //totken 
 router.get('/token', refresh)
@@ -64,9 +66,16 @@ router.put('/brand/:id', updateBrand)
 //product 
 
 router.get('/product', fetchProduct)
+router.get('/product/:id', fetchProductById)
 router.post('/product', createProduct)
 router.delete('/product/:id', deleteProduct)
 router.put('/product/:id', updateProduct)
+
+//Purcahse 
+router.post('/purchase', createPurchases)
+router.get('/purchase/:id', fetchPurchase)
+router.put('/purchase', updatePurchase)
+router.delete('/purchase', deletePurchase)
 
 export default router;
 

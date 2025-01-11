@@ -33,6 +33,9 @@ import SupplierList from "./components/contact/supplier/SupplierList";
 import CustomerList from "./components/contact/customer/CustomerList";
 import ProductList from "./views/product/ProductList";
 import UpdateProduct from "./views/product/UpdateProduct";
+import BankTypeList from "./views/bankType/BankTypeList";
+import BankList from "./views/bank/BankList";
+import BankTransferList from "./views/bankTransfer/BankTransferList";
 
 function App() {
   return (
@@ -67,13 +70,12 @@ function App() {
           <Route path="/pos" element={<POS />} />
           <Route path="/brands" element={<Brands />} />
           <Route path="/warranty" element={<Warranty />} />
-          <Route path="*" element={<PageNotFound />} />
+      
 
            {/* Purchase Route */}
           <Route path="/purchase" element={<Purchase />} />
           <Route path="/createPurchase" element={<CreatePurchase />} />
           <Route path="/puchaseReturn" element={<PurchaseReturn/>}/>
-
 
           {/* top up */}
 
@@ -91,10 +93,17 @@ function App() {
           
            <Route path="/exchangeRate" element={<ExchangeRate />} />
 
+          {/* Bank */}
+           <Route path="/bankTypeList" element={<BankTypeList/>}/>
+           <Route path="/bankList" element={<BankList/>}/>
+           <Route path="/bankTransfer" element={<BankTransferList/>}/>
+
             {/* payment method */}
             <Route path="/paymentMethod" element={<PaymentMethodList/>}/>      
             <Route path="/paymentMethodType" element={<PaymentMethodType/>}/>
             
+
+            <Route path="*" element={<PageNotFound />} />
         </Routes>
       </BrowserRouter>
     </div>

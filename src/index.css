@@ -36,9 +36,26 @@
   .edit_action{
     @apply p-2 text-white bg-blue-500 hover:bg-blue-600;
   }
+
+  .edit_action_warning{
+    @apply p-2 text-white bg-yellow-400 hover:bg-yellow-500;
+  }
+
+  .edit_action_warning_disable{
+    @apply p-2 text-white bg-yellow-500 hover:bg-yellow-600;
+  }
+
+  .transfer_action{
+    @apply p-2 text-white bg-green-500 hover:bg-green-600;
+  }
+  .cancel_action{
+    @apply p-2 px-4 text-white bg-red-500 hover:bg-red-600;
+  }
   .msg_error{
     @apply p-3 mt-4 text-white border bg-red-500/90;
   }
+
+
   
 }
 

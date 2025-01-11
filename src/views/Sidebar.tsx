@@ -9,11 +9,13 @@ function Sidebar() {
     const [isPurchaseDropdown, setIsPurchaseDropdown] = useState(false);
     const [isTopupDropdown, setIsTopupDropdown] = useState(false);
     const [isExpenseDropdown, setIsExpenseDropdown] = useState(false);
-    const [isAccountDropdown, setIsAccountDropdown] = useState(false);
-    const [isPaymentMethodDropdown, setIsPaymentMethodDropdown] = useState(false);
+    // const [isAccountDropdown, setIsAccountDropdown] = useState(false);
+    // const [isPaymentMethodDropdown, setIsPaymentMethodDropdown] = useState(false);
     // const [isUsersDropdown, setIsUsersDropdown] = useState(false);
     const [isReportsDropdown, setIsReportsDropdown] = useState(false);
     const [isCurrencyDropdown, setIsCurrencyDropdown] = useState(false);
+
+    const [isBankDropdown, setBankDropdown] = useState(false);
 
     // Routes
     const contactRoutes = ["/supplier", "/customer", "/contactInfo"];
@@ -26,6 +28,7 @@ function Sidebar() {
     const usersRoutes = ['/payment', '/payment_list']
     const reportsRoutes = ['/reports', '/report_list']
     const currentcyRoutes = ['/exchangeRate', '/currency_list']
+    const bankRoutes = ['/bankTypeList', '/bankList', '/bankTransfer']
 
     // Active route checks
     const isContactActive = contactRoutes.some((route) => location.pathname.startsWith(route));
@@ -38,6 +41,7 @@ function Sidebar() {
     const isUsersActive = usersRoutes.some((route) => location.pathname.startsWith(route))
     const isReportsActive = reportsRoutes.some((route) => location.pathname.startsWith(route))
     const isCurrencyActive = currentcyRoutes.some((route) => location.pathname.startsWith(route))
+    const isBankActive = bankRoutes.some((route) => location.pathname.startsWith(route))
 
     // Dropdown behavior on route change
     useEffect(() => {
@@ -75,19 +79,19 @@ function Sidebar() {
 
         }
 
-        if (isAccountRouteActive) {
-            setIsAccountDropdown(true)
-        }
-        else {
-            setIsAccountDropdown(false)
-        }
+        // if (isAccountRouteActive) {
+        //     setIsAccountDropdown(true)
+        // }
+        // else {
+        //     setIsAccountDropdown(false)
+        // }
 
-        if (isPaymentActive) {
-            setIsPaymentMethodDropdown(true)
-        }
-        else {
-            setIsPaymentMethodDropdown(false)
-        }
+        // if (isPaymentActive) {
+        //     setIsPaymentMethodDropdown(true)
+        // }
+        // else {
+        //     setIsPaymentMethodDropdown(false)
+        // }
 
         // if (isUsersActive) {
         //     setIsUsersDropdown(true)
@@ -95,6 +99,13 @@ function Sidebar() {
         // else {
         //     setIsUsersDropdown(false)
         // }
+
+        if(isBankActive){
+            setBankDropdown(true)
+        }
+        else{
+            setBankDropdown(false)
+        }
 
         if (isReportsActive) {
             setIsReportsDropdown(true)
@@ -110,7 +121,7 @@ function Sidebar() {
             setIsCurrencyDropdown(false)
         }
 
-    }, [isContactActive, isProductsActive, isPurchaseActive, isTopupRouteActive, isExpenseRouteActive, isAccountRouteActive, isPaymentActive, isUsersActive, isReportsActive,isCurrencyActive]);
+    }, [isContactActive, isProductsActive, isPurchaseActive, isTopupRouteActive, isExpenseRouteActive, isAccountRouteActive, isPaymentActive, isUsersActive, isReportsActive,isCurrencyActive, isBankActive]);
 
     const navLinkStyle = ({ isActive }: { isActive: boolean }) => {
         return `flex items-center p-3 gap-2 ${isActive ? "bg-blue-600 dark:bg-blue-500 text-white" : "text-gray-800 dark:text-white "} `;
@@ -136,17 +147,21 @@ function Sidebar() {
         setIsExpenseDropdown(!isExpenseDropdown)
     }
 
-    const handleAccountDropdown = () => {
-        setIsAccountDropdown(!isAccountDropdown)
-    }
+    // const handleAccountDropdown = () => {
+    //     setIsAccountDropdown(!isAccountDropdown)
+    // }
 
-    const handlepaymentDropdown = () => {
-        setIsPaymentMethodDropdown(!isPaymentMethodDropdown)
-    }
+    // const handlepaymentDropdown = () => {
+    //     setIsPaymentMethodDropdown(!isPaymentMethodDropdown)
+    // }
 
     // const handleUsersDropdown = () => {
     //     setIsUsersDropdown(!isUsersDropdown)
     // }
+
+    const handleBankDropdown = () => {
+        setBankDropdown(!isBankDropdown)
+    }
 
     const handleReportDropdown = () => {
         setIsReportsDropdown(!isReportsDropdown)
@@ -433,38 +448,38 @@ function Sidebar() {
 
                     {/*  Account Dropdown */}
                     <li className="space-y-2">
-                        <button onClick={handleAccountDropdown} className={`flex items-center p-3 w-full text-left justify-between ${isAccountDropdown ? "bg-blue-700 dark:bg-blue-500 text-white" : "text-gray-900 dark:text-white"}`}>
+                        <button onClick={handleBankDropdown} className={`flex items-center p-3 w-full text-left justify-between ${isBankDropdown ? "bg-blue-700 dark:bg-blue-500 text-white" : "text-gray-900 dark:text-white"}`}>
                             <div className="flex items-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-credit-card"><rect width="20" height="14" x="2" y="5" rx="2" /><line x1="2" x2="22" y1="10" y2="10" /></svg>
                                 <span className="flex-1 font-bold ms-3 whitespace-nowrap font-NotoSansKhmer">
                                     គណនី
                                 </span>
                             </div>
-                            <svg className={`w-4 h-4 transition-transform duration-300 ${isAccountDropdown ? "transform rotate-90" : ""}`} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <svg className={`w-4 h-4 transition-transform duration-300 ${isBankDropdown ? "transform rotate-90" : ""}`} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                             </svg>
                         </button>
 
-                        <div className={`overflow-hidden transition-all duration-500 space-y-2 ${isAccountDropdown ? "max-h-96 opacity-100" : "max-h-0"}`}>
-                            <NavLink to="/purchase" className={navLinkStyle}>
+                        <div className={`overflow-hidden transition-all duration-500 space-y-2 ${isBankDropdown ? "max-h-96 opacity-100" : "max-h-0"}`}>
+                            <NavLink to="/bankTypeList" className={navLinkStyle}>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="ml-3 size-6">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
                                 </svg>
-                                <p className="font-bold font-NotoSansKhmer">បញ្ជីឈ្មោះគណនី</p>
+                                <p className="font-bold font-NotoSansKhmer">ប្រភេទគណនី</p>
                             </NavLink>
-                            <NavLink to="/purchase-list" className={navLinkStyle}>
+                            <NavLink to="/bankList" className={navLinkStyle}>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="ml-3 size-6">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
                                 </svg>
-                                <p className="font-bold font-NotoSansKhmer">តុល្យការ</p>
+                                <p className="font-bold font-NotoSansKhmer">បញ្ជីគណនី</p>
                             </NavLink>
-                            <NavLink to="/purchase" className={navLinkStyle}>
+                            <NavLink to="/bankTransfer" className={navLinkStyle}>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="ml-3 size-6">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
                                 </svg>
-                                <p className="font-bold font-NotoSansKhmer">តារាងតុល្យភាព</p>
+                                <p className="font-bold font-NotoSansKhmer">ផ្ទេរលុយ</p>
                             </NavLink>
-                            <NavLink to="/purchase-list" className={navLinkStyle}>
+                            {/* <NavLink to="/purchase-list" className={navLinkStyle}>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="ml-3 size-6">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
                                 </svg>
@@ -475,13 +490,13 @@ function Sidebar() {
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
                                 </svg>
                                 <p className="font-bold font-NotoSansKhmer">របាយការណ៍គណនីចំណាយ</p>
-                            </NavLink>
+                            </NavLink> */}
                         </div>
                     </li>
 
                   
                     {/*  Payment method dropdown */}
-                    <li className="space-y-2">
+                    {/* <li className="space-y-2">
                         <button onClick={handlepaymentDropdown} className={`flex items-center p-3 w-full text-left justify-between ${isPaymentMethodDropdown ? "bg-blue-700 dark:bg-blue-500 text-white" : "text-gray-900 dark:text-white"}`}>
                             <div className="flex items-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-hand-coins"><path d="M11 15h2a2 2 0 1 0 0-4h-3c-.6 0-1.1.2-1.4.6L3 17" /><path d="m7 21 1.6-1.4c.3-.4.8-.6 1.4-.6h4c1.1 0 2.1-.4 2.8-1.2l4.6-4.4a2 2 0 0 0-2.75-2.91l-4.2 3.9" /><path d="m2 16 6 6" /><circle cx="16" cy="9" r="2.9" /><circle cx="6" cy="5" r="3" /></svg>                                    <span className="flex-1 font-bold ms-3 whitespace-nowrap font-NotoSansKhmer">
@@ -507,7 +522,7 @@ function Sidebar() {
                                 <p className="font-bold font-NotoSansKhmer">បញ្ជីប្រភេទបង់ប្រាក់</p>
                             </NavLink>
                         </div>
-                    </li>
+                    </li> */}
 
             
                     {/*  Report dropdown */}

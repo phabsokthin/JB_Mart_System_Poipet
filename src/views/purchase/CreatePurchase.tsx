@@ -5,11 +5,16 @@ import { BiPurchaseTag } from "react-icons/bi";
 import { FaSearch } from "react-icons/fa";
 import { IoMdClose } from "react-icons/io";
 import DateInputFormat from "../../components/build/EnglishDateInputComponents/InputFormateDateComponent";
+import SelectDropdown from "../../components/build/selectDropdown/SelectDropdown";
+import axios from "axios";
+import { url } from "../../api/url";
+import MessageError from "../../components/build/message/MessageError";
+import sound_err from '../../assets/sound/failed.mp3';
 
 type Product = {
-  id: number;
-  name: string;
-  price: number;
+  productId: number;
+  pname: string;
+  const_price: number;
   qty: number;
   cost: number;
   unit: string;
@@ -17,60 +22,10 @@ type Product = {
   datetime: string;
 };
 
-const suppliers = [
-  { id: 1, name: "Supplier A" },
-  { id: 2, name: "Supplier B" },
-  { id: 3, name: "Supplier C" },
-  { id: 4, name: "Supplier D" },
-];
 
-// Sample product list
-const productList: Product[] = [
-  {
-    id: 1,
-    name: "Electronics",
-    unit: "can",
-    price: 200,
-    qty: 10,
-    cost: 300,
-    description: "Gadgets and devices",
-    datetime: new Date().toLocaleString(),
-  },
-  {
-    id: 2,
-    name: "ABC",
-    unit: "can",
-    price: 100,
-    qty: 10,
-    cost: 250,
-    description: "Gadgets and devices",
-    datetime: new Date().toLocaleString(),
-  },
-  {
-    id: 3,
-    name: "ស្រាបៀAngo",
-    unit: "កេស",
-    price: 600,
-    qty: 5,
-    cost: 700,
-    description: "Gadgets and devices",
-    datetime: new Date().toLocaleString(),
-  },
-  {
-    id: 4,
-    name: "Genberce Beer",
-    unit: "កេស",
-    price: 600,
-    qty: 5,
-    cost: 700,
-    description: "Gadgets",
-    datetime: new Date().toLocaleString(),
-  },
-];
 
 function CreatePurchase() {
   const [productSearchQuery, setProductSearchQuery] = useState<string>("");
-  const [supplierSearchQuery, setSupplierSearchQuery] = useState<string>("");
   const [selectedProducts, setSelectedProducts] = useState<Product[]>([]);
 
   const [totalAmount, setTotalAmount] = useState(0);
@@ -78,11 +33,16 @@ function CreatePurchase() {
   const [remainingAmount, setRemainingAmount] = useState<number>(totalAmount);
   const [discount, setDiscount] = useState<number>(0);
   const [selectedDate, setSelectedDate] = useState<string>("");
+  const [suppliers, setSupplier] = useState([])
+
+  const [productList, setProduList] = useState<Product[]>([]);
+  const [errMsg, setErrMsg] = useState<string | null>(null);
+
 
   //calculate Proeduct
   const [productDetails, setProductDetails] = useState<{
     [key: number]: {
-      price: number;
+      const_price: number;
       qty: number;
       discount: number;
       tax: number;
@@ -96,16 +56,16 @@ function CreatePurchase() {
 
   const [showProductDropdown, setShowProductDropdown] =
     useState<boolean>(false);
+
   const [selectedSupplier, setSelectedSupplier] = useState<{
-    id: number;
-    name: string;
+    supplierId: number;
+    full_Name: string;
   } | null>(null);
-  const [showSupplierDropdown, setShowSupplierDropdown] =
-    useState<boolean>(false);
 
   const handleAddProduct = (product: Product) => {
-    if (selectedProducts.find((p) => p.id === product.id)) {
-      alert("Product already exists!");
+    if (selectedProducts.find((p) => p.productId === product.productId)) {
+      setErrMsg(`ផលិតផលនេះ ${product.pname} មានហើយ`);
+      err_message()
     } else {
       setSelectedProducts([...selectedProducts, product]);
     }
@@ -116,13 +76,13 @@ function CreatePurchase() {
   //remove
   const handleRemoveProduct = (productId: number) => {
     setSelectedProducts(
-      selectedProducts.filter((product) => product.id !== productId)
+      selectedProducts.filter((product) => product.productId !== productId)
     );
   };
 
   //search product
   const filteredProducts = productList.filter((product) =>
-    product.name.toLowerCase().includes(productSearchQuery.toLowerCase())
+    product.pname.toLowerCase().includes(productSearchQuery.toLowerCase())
   );
 
   const handleProductSearchChange = (
@@ -133,29 +93,12 @@ function CreatePurchase() {
   };
 
   //filter supplier
-  const filteredSuppliers = suppliers.filter((supplier) =>
-    supplier.name.toLowerCase().includes(supplierSearchQuery.toLowerCase())
-  );
 
-  const handleSelectSupplier = (supplier: { id: number; name: string }) => {
-    setSelectedSupplier(supplier);
-    setSupplierSearchQuery(supplier.name);
-    setShowSupplierDropdown(false);
-  };
-  const toggleSupplierDropdown = () => {
-    setShowSupplierDropdown((prev) => {
-      const newState = !prev;
-      if (newState) {
-        setSupplierSearchQuery("");
-      }
-      return newState;
-    });
-  };
 
-  const handleProductPriceChange = (productId: number, price: number) => {
+  const handleProductconst_priceChange = (productId: number, const_price: number) => {
     setProductDetails((prev) => ({
       ...prev,
-      [productId]: { ...prev[productId], price },
+      [productId]: { ...prev[productId], const_price },
     }));
   };
 
@@ -179,15 +122,16 @@ function CreatePurchase() {
     }));
   };
 
+
   const calculateTotalAmount = () => {
     const total = selectedProducts.reduce((sum, product) => {
-      const productDetail = productDetails[product.id] || {};
-      const price = productDetail.price || product.price || 0;
+      const productDetail = productDetails[product.productId] || {};
+      const const_price = productDetail.const_price || product.const_price || 0;
       const qty = productDetail.qty || 0;
       const discount = productDetail.discount || 0;
       const tax = productDetail.tax || 0;
 
-      return sum + (price * qty - discount + tax);
+      return sum + (const_price * qty - discount + tax);
     }, 0);
 
     setTotalAmount(total);
@@ -210,37 +154,77 @@ function CreatePurchase() {
     setDiscount(value);
   };
 
-  //submit
+
+  //fetch supplier
+
+  const fetchdata = async () => {
+    try {
+      const response = await axios.get(`${url}supplier`);
+      if (response.data) {
+        setSupplier(response.data);
+      }
+    } catch (error) {
+      console.error("Error fetching customer:", error);
+    }
+  };
+
+
+  //fetch product
+  const fetchProduct = async () => {
+    try {
+      const response = await axios.get(`${url}product`);
+      if (response.data) {
+        setProduList(response.data);
+      }
+    } catch (error) {
+      console.error("Error fetching customer:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchdata();
+    fetchProduct();
+  }, []);
+
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    // Default date fallback
     const dateToSubmit = selectedDate || new Date().toISOString().split("T")[0];
     console.log("Submitting date:", dateToSubmit);
-
-    // Validation
-    if (selectedProducts.length === 0 || !selectedSupplier) {
-      alert("Please select at least one product and a supplier.");
+    
+    if (!selectedSupplier) {
+      setErrMsg("សូមជ្រើសរើសអ្នកផ្គត់ផ្គង់");
+      err_message()
       return;
     }
 
+    // Validation
+    if (selectedProducts.length === 0) {
+      setErrMsg("សូមបញ្ចូលផលិតផល ឬ​ ស្កែនកូដផលិតផល");
+      err_message()
+      return;
+    }
+   
     // Prepare the data object
     const data = {
-      supplier: {
-        id: selectedSupplier.id,
-        name: selectedSupplier.name,
-      },
+
+      supplierId: selectedSupplier.supplierId,
+      full_Name: selectedSupplier.full_Name,
+
       products: selectedProducts.map((product) => {
-        const productDetail = productDetails[product.id] || {};
+        const productDetail = productDetails[product.productId] || {};
         return {
-          id: product.id,
-          name: product.name,
-          price: productDetail.price || product.price,
+          productId: product.productId,
+          name: product.pname,
+          const_price: productDetail.const_price || product.const_price || 0,
           qty: productDetail.qty || 0,
           discount: productDetail.discount || 0,
           tax: productDetail.tax || 0,
           total:
-            (productDetail.price || product.price || 0) *
-              (productDetail.qty || 0) -
+            (productDetail.const_price || product.const_price || 0) *
+            (productDetail.qty || 0) -
             (productDetail.discount || 0) +
             (productDetail.tax || 0),
         };
@@ -250,6 +234,7 @@ function CreatePurchase() {
       totalAmount,
       remainingAmount,
       dateToSubmit,
+      
     };
 
     console.log("Submitting data:", data);
@@ -261,8 +246,15 @@ function CreatePurchase() {
     setSelectedSupplier(null);
     setPayment(0); // Reset payment
     setDiscount(0); // Reset discount
-    setRemainingAmount(totalAmount); // Reset remaining amount to default
+    setRemainingAmount(totalAmount); // Reset remaining amount
   };
+
+  //fetch data supplier
+  const handleSelectdata = (data: { supplierId: number; full_Name: string }) => {
+    console.log("Selected supplier:", data);
+    setSelectedSupplier(data);
+  };
+
 
   const resetProductDetails = () => {
     setProductDetails({});
@@ -274,6 +266,11 @@ function CreatePurchase() {
   };
 
   const currentDate = new Date().toISOString().split("T")[0];
+
+  function err_message() {
+    new Audio(sound_err).play();
+  }
+
 
   return (
     <div className="grid min-h-screen grid-cols-6 select-none">
@@ -290,52 +287,15 @@ function CreatePurchase() {
             <BiPurchaseTag className="text-xl" />
             <p className="text-lg font-bold font-NotoSansKhmer">ការទិញផលិតផល</p>
           </div>
+          {errMsg && <MessageError message={errMsg} onClear={() => setErrMsg(null)} />}
 
           <form onSubmit={handleSubmit}>
             <div className="grid grid-cols-3 gap-2 mt-6">
-              <div className="relative">
-                <div className="space-y-2">
-                  <label htmlFor="" className="font-bold font-NotoSansKhmer">
-                    អ្នកផ្គត់ផ្គង់: *
-                  </label>
-                  <div className="input_text" onClick={toggleSupplierDropdown}>
-                    {selectedSupplier
-                      ? `${selectedSupplier.id}: ${selectedSupplier.name}`
-                      : "ជ្រើសរើសអ្នកផ្គត់ផ្គង់"}
-                  </div>
-                </div>
-                {showSupplierDropdown && (
-                  <div className="absolute left-0 z-10 w-full p-3 mt-1 bg-white border border-gray-300 shadow-md">
-                    <input
-                      type="text"
-                      placeholder="ស្វែងរកអ្នកផ្គត់ផ្គង់"
-                      className="w-full p-2 input_text"
-                      value={supplierSearchQuery}
-                      onChange={(e) => {
-                        setSupplierSearchQuery(e.target.value);
-                        setShowSupplierDropdown(true);
-                      }}
-                      onFocus={() => setShowSupplierDropdown(true)}
-                    />
-                    <ul className="overflow-y-auto max-h-48">
-                      {filteredSuppliers.length > 0 ? (
-                        filteredSuppliers.map((supplier) => (
-                          <li
-                            key={supplier.id}
-                            className="p-2 text-gray-700 cursor-pointer hover:bg-gray-200 hover:text-black"
-                            onClick={() => handleSelectSupplier(supplier)}
-                          >
-                            {`${supplier.id}: ${supplier.name}`}
-                          </li>
-                        ))
-                      ) : (
-                        <li className="p-2 text-gray-500">
-                          មិនអ្នកផ្គត់ផ្គង់ឈ្មោះ <b>{supplierSearchQuery}</b> ទេ
-                        </li>
-                      )}
-                    </ul>
-                  </div>
-                )}
+              <div className="relative space-y-2">
+                <label htmlFor="supplierDropdown" className="font-bold font-NotoSansKhmer">
+                  អ្នកផ្គត់ផ្គង់: *
+                </label>
+                <SelectDropdown data={suppliers} onSelectdata={handleSelectdata} placeholder="ស្វែងរកអ្នកផ្គត់ផ្គង់" />
               </div>
 
               <div className="space-y-2 ">
@@ -349,7 +309,6 @@ function CreatePurchase() {
                   />
                 </div>
 
-                {/* <input type="date" required className="input_text  p-[7px]" /> */}
               </div>
               <div className="space-y-2">
                 <label htmlFor="" className="font-bold font-NotoSansKhmer">
@@ -359,9 +318,8 @@ function CreatePurchase() {
                   <option value="" selected disabled>
                     --ជ្រើសរើស--
                   </option>
-                  <option value={1}>បានទទួល</option>
-                  <option value={2}>រងចាំ</option>
-                  <option value={3}>បានបញ្ជាទិញ</option>
+                  <option value={1}>ទទួល</option>
+                  <option value={2}>បានបញ្ជាទិញ</option>
                 </select>
               </div>
             </div>
@@ -393,16 +351,16 @@ function CreatePurchase() {
                     {filteredProducts.length > 0 ? (
                       filteredProducts.map((product) => (
                         <li
-                          key={product.id}
+                          key={product.productId}
                           className="p-2 text-gray-700 cursor-pointer hover:bg-gray-200 hover:text-black"
                           onClick={() => handleAddProduct(product)}
                         >
-                          {product.name} || ចំនួន {product.qty}
+                          {product.pname} || ចំនួន {product.qty}
                         </li>
                       ))
                     ) : (
                       <li className="p-2 text-gray-500 font-NotoSansKhmer">
-                        មិនមានផលិតផល ឈ្មោះនេះ​{" "}
+                        មិនមានផលិតផល ឈ្មោះនេះ {" "}
                         <span className="font-bold">{productSearchQuery}</span>{" "}
                         ទេ!
                       </li>
@@ -433,36 +391,36 @@ function CreatePurchase() {
                 <tbody>
                   {selectedProducts.length > 0 ? (
                     selectedProducts.map((product, index) => (
-                      <tr key={product.id}>
+                      <tr key={product.productId}>
                         <td className="p-2">{index + 1}</td>
                         <td className="p-2">
-                          {product.name}
+                          {product.pname}
                           <p className="text-xs text-gray-500">
                             មានស្តុកនៅសល់ {product.qty} {product.unit}
                             <br />
-                            តម្លៃលក់ {product.cost}
+                            តម្លៃលក់ {product.const_price}
                           </p>
                         </td>
 
-                        {/* Price Input */}
+                        {/* const_price Input */}
                         <td>
                           <input
                             min={0}
-                            disabled
+                            // disabled
                             type="number"
                             placeholder="0.0"
                             value={
-                              productDetails[product.id]?.price ||
-                              product.price ||
+                              productDetails[product.productId]?.const_price ||
+                              product.const_price ||
                               ""
                             }
                             onChange={(e) =>
-                              handleProductPriceChange(
-                                product.id,
+                              handleProductconst_priceChange(
+                                product.productId,
                                 Number(e.target.value)
                               )
                             }
-                            className="bg-gray-100 input_text"
+                            className="bg-gray-0 input_text"
                           />
                         </td>
 
@@ -472,10 +430,10 @@ function CreatePurchase() {
                             min={0}
                             type="number"
                             placeholder="0.0"
-                            value={productDetails[product.id]?.qty || ""}
+                            value={productDetails[product.productId]?.qty || ""}
                             onChange={(e) =>
                               handleQtyChange(
-                                product.id,
+                                product.productId,
                                 Number(e.target.value)
                               )
                             }
@@ -489,10 +447,10 @@ function CreatePurchase() {
                             min={0}
                             type="number"
                             placeholder="0.0"
-                            value={productDetails[product.id]?.discount || ""}
+                            value={productDetails[product.productId]?.discount || ""}
                             onChange={(e) =>
                               handleDiscountChange(
-                                product.id,
+                                product.productId,
                                 Number(e.target.value)
                               )
                             }
@@ -506,10 +464,10 @@ function CreatePurchase() {
                             min={0}
                             type="number"
                             placeholder="0.0"
-                            value={productDetails[product.id]?.tax || ""}
+                            value={productDetails[product.productId]?.tax || ""}
                             onChange={(e) =>
                               handleTaxChange(
-                                product.id,
+                                product.productId,
                                 Number(e.target.value)
                               )
                             }
@@ -517,19 +475,19 @@ function CreatePurchase() {
                           />
                         </td>
 
-                        {/* Total Price Calculation */}
+                        {/* Total const_price Calculation */}
                         <td>
                           <input
                             min={0}
                             type="number"
                             placeholder="0.0"
                             value={
-                              (productDetails[product.id]?.price ||
-                                product.price ||
+                              (productDetails[product.productId]?.const_price ||
+                                product.const_price ||
                                 0) *
-                                (productDetails[product.id]?.qty || 0) -
-                                (productDetails[product.id]?.discount || 0) +
-                                (productDetails[product.id]?.tax || 0) || 0
+                              (productDetails[product.productId]?.qty || 0) -
+                              (productDetails[product.productId]?.discount || 0) +
+                              (productDetails[product.productId]?.tax || 0) || 0
                             }
                             readOnly
                             className="bg-gray-100 input_text"
@@ -541,7 +499,7 @@ function CreatePurchase() {
                           <div className="flex justify-center">
                             <button
                               className="p-2 text-white bg-red-500 hover:text-white hover:bg-red-400"
-                              onClick={() => handleRemoveProduct(product.id)}
+                              onClick={() => handleRemoveProduct(product.productId)}
                             >
                               <IoMdClose />
                             </button>
@@ -552,7 +510,7 @@ function CreatePurchase() {
                   ) : (
                     <tr>
                       <td colSpan={9} className="p-2 text-center text-gray-500">
-                        សូមបញ្ជូលផលិតផល
+                      មិនមានផលិតផលនៅក្នុងការបញ្ជាទិញ
                       </td>
                     </tr>
                   )}
@@ -642,7 +600,10 @@ function CreatePurchase() {
           </form>
         </div>
       </div>
+
     </div>
+
+    
   );
 }
 export default CreatePurchase;

@@ -14,7 +14,7 @@ import MessageSuccess from "../../components/build/message/MessageSuccess";
 // import MessageError from "../../components/build/message/MessageError";
 import sound_success from '../../assets/sound/success.mp3';
 import sound_err from '../../assets/sound/failed.mp3';
-import { useParams } from "react-router-dom";
+import {  useNavigate, useParams } from "react-router-dom";
 
 
 type Product = {
@@ -33,6 +33,7 @@ type Product = {
 function CreateProduct() {
 
     const { id } = useParams();
+    const navigate = useNavigate();
     const [totalAmount, setTotalAmount] = useState(0);
     const [totalAmounts, setTotalAmounts] = useState(0);
 
@@ -247,7 +248,7 @@ function CreateProduct() {
 
 
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleUpdate = async (e: React.FormEvent) => {
         e.preventDefault();
 
         setIsLoading(true);
@@ -291,9 +292,10 @@ function CreateProduct() {
                 setSuccessMsg(response.data.msg);
                 sound_message()
                 handleClose();
-                clearData();
+                // clearData();
                 setIsLoading(false);
-                console.log(response.data);
+                // navigate('/productList')
+                
             }
         } catch (err: any) {
             // Handle errors
@@ -341,6 +343,11 @@ function CreateProduct() {
     }
 
 
+    const handleCancel = () => {
+        navigate('/productList')
+    }
+
+
 
     return (
         <div className="grid min-h-screen grid-cols-6 select-none">
@@ -370,7 +377,7 @@ function CreateProduct() {
                         </div>
                     )}
 
-                    <form onSubmit={handleSubmit}>
+                    <form onSubmit={handleUpdate}>
                         <div className="grid grid-cols-4 gap-5 mt-6">
                             <div className="space-y-2">
                                 <label htmlFor="">កូដផលិតផល: *</label>
@@ -601,7 +608,8 @@ function CreateProduct() {
 
 
 
-                        <div className="flex justify-end mt-5">
+                        <div className="flex justify-end gap-2 mt-5">
+                            <button onClick={handleCancel} type="button" className="cancel_action">បោះបង់</button>
                             <button
                                 type="submit"
                                 className={`button_only_submit font-NotoSansKhmer ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}

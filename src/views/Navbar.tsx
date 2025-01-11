@@ -242,6 +242,19 @@ function Navbar() {
                     {location.pathname === "/expense" ? "ចំណាយ/បញ្ជីចំណាយ" : ""}
                   </p>
 
+
+                  <p className="font-bold font-NotoSansKhmer">
+                    {location.pathname === "/bankTypeList" ? "គណនី/ប្រភេទគណនី" : ""}
+                  </p>
+
+                  <p className="font-bold font-NotoSansKhmer">
+                    {location.pathname === "/bankList" ? "គណនី/បញ្ជីគណនី" : ""}
+                  </p>
+
+                  <p className="font-bold font-NotoSansKhmer">
+                    {location.pathname === "/bankTransfer" ? "គណនី/ផ្ទេរលុយ" : ""}
+                  </p>
+
                   <p className="font-bold font-NotoSansKhmer">
                     {location.pathname === "/expense_type"
                       ? "ចំណាយ/ប្រភេទការចំណាយ"

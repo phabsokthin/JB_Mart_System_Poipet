@@ -1,19 +1,28 @@
 import { useEffect, useState } from "react";
 
 interface MessageSuccessProps {
-  message: string; // Define the prop type
+  message: string;
+  onClear: () => void;
 }
 
-function MessagWarning({ message }: MessageSuccessProps) {
-  const [visible, setVisible] = useState(true);
+
+function MessagWarning({ message, onClear }: MessageSuccessProps) {
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
+    if (!message) return;
+
+    // Show the toast
+    setVisible(true);
+
+    // Hide the toast after 4 seconds and call onClear
     const timer = setTimeout(() => {
       setVisible(false);
-    }, 5000);
+      onClear();
+    }, 4000);
 
     return () => clearTimeout(timer);
-  }, []);
+  }, [message, onClear]);
 
   if (!visible) {
     return null;
@@ -28,7 +37,7 @@ function MessagWarning({ message }: MessageSuccessProps) {
         >
           <div className="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-black bg-yellow-500 rounded-full dark:bg-blue-800 dark:text-blue-200">
             <div>
-             !
+              !
             </div>
           </div>
           <div className="text-lg font-NotoSansKhmer ms-3">{message}</div>

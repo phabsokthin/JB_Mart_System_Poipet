@@ -8,6 +8,7 @@ const BankTransfer = (sequelize) => {
             autoIncrement: true,
             allowNull: false,
         },
+        
         bankId: {
             type: DataTypes.INTEGER,
             allowNull: false,

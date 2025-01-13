@@ -16,8 +16,7 @@ const BankType = (sequelize) => {
         discription: {
             type: DataTypes.STRING,
             allowNull: true,
-        },
-     
+        }, 
     }, {
         timestamps: true, 
     });

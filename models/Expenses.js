@@ -24,7 +24,6 @@ const Expense = (sequelize) => {
         },
 
 
-
         totalAmount: {
             type: DataTypes.INTEGER,
             allowNull: false,
@@ -37,10 +36,10 @@ const Expense = (sequelize) => {
         },
 
 
-        paymentMId: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-        },
+        // paymentMId: {
+        //     type: DataTypes.INTEGER,
+        //     allowNull: false,
+        // },
 
 
         bankId: {
@@ -48,10 +47,16 @@ const Expense = (sequelize) => {
             allowNull: false,
         },
 
-        currencyId: {
+        balance: {
             type: DataTypes.INTEGER,
             allowNull: false,
         },
+
+        
+        // currencyId: {
+        //     type: DataTypes.INTEGER,
+        //     allowNull: false,
+        // },
 
         description: {
             type: DataTypes.STRING,

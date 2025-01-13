@@ -68,6 +68,21 @@ db.Product.belongsTo(db.Unit, { foreignKey: 'unitId', as: 'unit_id' });
 
 db.Brand.hasMany(db.Product, { foreignKey: 'brandId', as: 'brand_id' });
 db.Product.belongsTo(db.Brand, { foreignKey: 'brandId', as: 'brand_id' });
+
+
+//fetch bank
+db.BankType.hasMany(db.Bank, { foreignKey: 'bankTypeId', as: 'bank_type_id' });
+db.Bank.belongsTo(db.BankType, { foreignKey: 'bankTypeId', as: 'bank_type_id' });
+
+//bank transfer
+
+db.Bank.hasMany(db.BankTransfer, { foreignKey: 'bankId', as: 'bank_transfers_id' });
+db.BankTransfer.belongsTo(db.Bank, { foreignKey: 'bankId', as: 'bank_transfers_id' });
+
+//expense
+
+db.Bank.hasMany(db.Expense, {foreignKey: 'bankId', as: 'bankId_for_expense' })
+db.Expense.belongsTo(db.Bank, { foreignKey: 'bankId', as: 'bankId_for_expense' });
  
 
 // Check connection success

@@ -8,6 +8,11 @@ import { createUnit, deleteUnit, fetchUnit, fetchUnitByID, updateUnit } from '..
 import { createBrand, deleteBrand, fetchBrand, fetchBrandByID, updateBrand } from '../controller/Brand.controller.js';
 import { createProduct, deleteProduct, fetchProduct, fetchProductById, updateProduct } from '../controller/Product.controller.js';
 import { createPurchases, deletePurchase, fetchPurchase, updatePurchase } from '../controller/Purchase.controller.js';
+import { createBankType, deleteBankType, fetchBankType, updateBankType } from '../controller/BankType.controller.js';
+import { createBank, deleteBank, fetchBank, updateBank, updateStatus, updateStatusEnabled } from '../controller/Bank.controller.js';
+import { createBankTransfer, deleteBankTransfer, fetchBankTransfers } from '../controller/BankTransfer.controller.js';
+import { createExpenseType, deleteExpenseType, fetchExpenseType, updateExpenseType } from '../controller/ExpenseType.controller.js';
+import { createExpense, deleteExpense, fetchExpense, updateExpense } from '../controller/Expense.controller.js';
 
 const router = express.Router();
 
@@ -76,6 +81,41 @@ router.post('/purchase', createPurchases)
 router.get('/purchase/:id', fetchPurchase)
 router.put('/purchase', updatePurchase)
 router.delete('/purchase', deletePurchase)
+
+//bank type
+router.get('/banktype', fetchBankType)
+router.post('/banktype', createBankType)
+router.put('/banktype/:id', updateBankType)
+router.delete('/banktype/:id', deleteBankType)
+
+//bank
+router.post('/bank', createBank)
+router.get('/bank', fetchBank)
+router.put('/bank/:id', updateBank)
+router.delete('/bank/:id', deleteBank)
+router.put('/bankStatus/:id', updateStatus )
+router.put('/bankStatusEnabled/:id', updateStatusEnabled)
+
+//bank transfer
+router.post('/banktransfer', createBankTransfer)
+router.get('/banktransfer', fetchBankTransfers)
+router.delete('/banktransfer/:id', deleteBankTransfer)
+
+//Expense Type
+
+router.post('/expenseType', createExpenseType)
+router.get('/expenseType', fetchExpenseType)
+router.put('/expenseType/:id', updateExpenseType)
+router.delete('/expenseType/:id', deleteExpenseType)
+
+
+//expense
+
+router.post('/expense', createExpense)
+router.get('/expense', fetchExpense)
+router.delete('/expense/:id', deleteExpense)
+router.put('/expense/:id',updateExpense)
+
 
 export default router;
 

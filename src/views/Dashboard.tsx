@@ -1,4 +1,5 @@
 // import { useEffect, useState } from 'react'
+import Chart from './Chart'
 import Navbar from './Navbar'
 import Sidebar from './Sidebar'
 
@@ -70,6 +71,11 @@ function Dashboard() {
                                 </div>
                             </div>
                         </div>
+                    </div>
+
+                    <div>
+
+                        <Chart/>
                     </div>
 
                 </div>

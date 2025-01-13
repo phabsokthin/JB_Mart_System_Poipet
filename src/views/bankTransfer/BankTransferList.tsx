@@ -18,15 +18,15 @@ import Sidebar from "../Sidebar";
 import MessageSuccess from "../../components/build/message/MessageSuccess";
 import Navbar from "../Navbar";
 import { url } from "../../api/url";
-import CreateTransferBank from "../../components/bank/CreateTransferBank";
+import CreateTransferBankList from "../../components/bank/CreateTransferBankList";
 
 function BankTransferList() {
-    const [unit, setUnit] = useState<any[]>([]);
+    const [bank, setBank] = useState<any[]>([]);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [dataPerPage, setDataPerPage] = useState<number>(15);
     const [searchQuery, setSearchQuery] = useState<string>("");
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-    const [dataToDelete, setdataToDelete] = useState<{ unitId: number; unames: string } | null>(null);
+    const [dataToDelete, setdataToDelete] = useState<{ bankTransId: number; bankName: string } | null>(null);
     const [isOpenModal, setIsOpenModal] = useState(false);
     const [successMsg, setSuccessMsg] = useState<string | null>(null); // State for success message
 
@@ -35,9 +35,9 @@ function BankTransferList() {
 
     const fetchdata = async () => {
         try {
-            const response = await axios.get(`${url}unit`);
+            const response = await axios.get(`${url}bankTransfer`);
             if (response.data) {
-                setUnit(response.data);
+                setBank(response.data);
             }
         } catch (error) {
             console.error("Error fetching customer:", error);
@@ -48,9 +48,9 @@ function BankTransferList() {
         fetchdata();
     }, []);
 
-    const filtereData = unit.filter((unit) =>
-        unit.unames.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        unit.description.includes(searchQuery) 
+    const filtereData = bank.filter((bank) =>
+        bank.bank_transfers_id?.bankName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        bank.bank_transfers_id?.bankName.includes(searchQuery) 
     );
 
     const totalPage = Math.ceil(filtereData.length / dataPerPage);
@@ -71,9 +71,9 @@ function BankTransferList() {
     );
 
     // Delete handling
-    const handleDeleteClick = (unames: { unitId: number; unames: string }) => {
-        setdataToDelete(unames);
-        console.log(unames)
+    const handleDeleteClick = (bankName: { bankTransId: number; bankName: string }) => {
+        setdataToDelete(bankName);
+        console.log(bankName)
         setIsDeleteModalOpen(true);
     };
 
@@ -81,14 +81,12 @@ function BankTransferList() {
     const handleDelete = async () => {
         if (dataToDelete !== null) {
             try {
-                await axios.delete(`${url}unit/${dataToDelete.unitId}`);
-                setUnit(unit.filter(data => data.unitId !== dataToDelete.unitId));
+                await axios.delete(`${url}bankTransfer/${dataToDelete.bankTransId}`);
+                setBank(bank.filter(data => data.bankTransId !== dataToDelete.bankTransId));
                 setIsDeleteModalOpen(false);
                 setIsLoading(true)
                 handleSuccess("បានលុបទុកដោយជោគជ័យ!");
                 sound_message();
-    
-
             } catch (error) {
                 console.error("Error deleting customer:", error);
             }
@@ -155,7 +153,7 @@ function BankTransferList() {
                                 <p>
                                     <FaClipboardList className="text-lg" />
                                 </p>
-                                <p className="text-xl font-bold font-NotoSansKhmer">តារាងបញ្ជីឯកតា</p>
+                                <p className="text-xl font-bold font-NotoSansKhmer">តារាងបញ្ជីគណនីផ្ទេរ</p>
                             </div>
                             <button
                                 className="button_only_submit"
@@ -181,7 +179,7 @@ function BankTransferList() {
                                 </select>
                             </div>
                             <Search
-                                placeholder="ស្វែងរកឯកតា..."
+                                placeholder="ស្វែងរកគណនីផ្ទេរ..."
                                 value={searchQuery}
                                 onChange={handleSearchChange}
                             />
@@ -191,8 +189,9 @@ function BankTransferList() {
                             <thead className="w-full text-white bg-blue-600/90">
                                 <tr className="font-bold font-NotoSansKhmer">
                                     <th className="px-4 py-2 w-[7%]">លេខរៀង</th>
-                                    <th className="px-4 py-2 w-[10%]">ឈ្មោះឯកតា</th>
-                                    <th className="px-4 py-2 w-[12.5%]">ពិពណ៌នា</th>
+                                    <th className="px-4 py-2 w-[10%]">ឈ្មោះគណនី</th>
+                                    <th className="px-4 py-2 w-[12.5%]">កំណត់សម្គាល់</th>
+                                    <th className="px-4 py-2 w-[12.5%]">ចំនួន($)</th>
                                     <th className="px-4 py-2 w-[12.5%]">កាលបរិច្ឆេត</th>
                                     <th className="px-4 py-2 w-[12.5%]">សកម្មភាព</th>
                                 </tr>
@@ -200,16 +199,17 @@ function BankTransferList() {
                             <tbody>
                                 {currentData.length > 0 ? (
                                     currentData.map((item, index) => (
-                                        <tr key={item.unitId || index}>
+                                        <tr key={item.bankTransId || index}>
                                             <td className="px-4 py-2 w-[12.5%]">{(currentPage - 1) * dataPerPage + index + 1}</td>
 
-                                            <td className="px-4 py-2 w-[12.5%]">{item.unames}</td>
-                                            <td className="px-4 py-2 w-[12.5%]">{item.description}</td>
+                                            <td className="px-4 py-2 w-[12.5%]">{item.bank_transfers_id?.bankName}</td>
+                                            <td className="px-4 py-2 w-[12.5%]">{item.note}</td>
+                                            <td className="px-4 py-2 w-[12.5%]">{item.balance}</td>
                                             <td className="px-4 py-2 w-[12.5%]">{item.createdAt}</td>
                                            
                                             <td className="px-4 py-2 w-[12.5%] space-x-2">
                                                 <button
-                                                    onClick={() => handleDeleteClick({ unitId: item.unitId, unames: item.unames })}
+                                                    onClick={() => handleDeleteClick({ bankTransId: item.bankTransId, bankName: item.bank_transfers_id?.bankName })}
                                                     className="delete_action"
                                                 >
                                                     <MdDelete />
@@ -222,7 +222,7 @@ function BankTransferList() {
                                     ))
                                 ) : (
                                     <tr>
-                                        <td colSpan={5} className="py-4 text-center">
+                                        <td colSpan={6} className="py-4 text-center">
                                             មិនមានទិន្នន័យស្វែងរក!
                                         </td>
                                     </tr>
@@ -244,14 +244,14 @@ function BankTransferList() {
                                     isLoading={isLoading}
                                     onClose={() => setIsDeleteModalOpen(false)}
                                     onConfirm={handleDelete}
-                                    displayName={dataToDelete?.unames || "មិនមានឈ្មោះ"}
+                                    displayName={dataToDelete?.bankName || "មិនមានឈ្មោះ"}
                                 />
                             )}
                         </AnimatePresence>
 
                         <AnimatePresence>
                             {isOpenModal && (
-                                <CreateTransferBank
+                                <CreateTransferBankList
                                     dataUpdate={dataUpdate}
                                     fetchData={fetchdata}
                                     onSuccess={handleSuccess}

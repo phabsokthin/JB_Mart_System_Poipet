@@ -14,7 +14,7 @@ interface dataUpdate {
     note: string
 }
 
-function CreateTransferBank({ onClose, fetchData, onSuccess, dataUpdate }: { onClose: () => void, fetchData: () => void, onSuccess: (message: string) => void, dataUpdate: dataUpdate | any }) {
+function CreateTransferBankList({ onClose, fetchData, onSuccess, dataUpdate }: { onClose: () => void, fetchData: () => void, onSuccess: (message: string) => void, dataUpdate: dataUpdate | any }) {
 
 
     const [bank, setBank] = useState([])
@@ -22,7 +22,7 @@ function CreateTransferBank({ onClose, fetchData, onSuccess, dataUpdate }: { onC
     // const [bankName, setBankName] = useState("")
     // const [bankNumber, setBankNumber] = useState("")
     const [balance, setBalance] = useState(0)
-    // const [note, setNote] = useState("")
+    const [note, setNote] = useState("")
     const [loading, setIsLoading] = useState(false)
     const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
@@ -74,7 +74,7 @@ function CreateTransferBank({ onClose, fetchData, onSuccess, dataUpdate }: { onC
                 fromBankId: selectFromBank,
                 toBankId: selectToBank,
                 amount: balance,
-                // note: note
+                note: note
             }
 
             const response = await axios.post(`${url}banktransfer`, data);
@@ -150,7 +150,7 @@ function CreateTransferBank({ onClose, fetchData, onSuccess, dataUpdate }: { onC
                 <form onSubmit={handleSubmit}>
                     <div className="mb-4 space-y-2">
                         <label className="block font-bold text-gray-700 font-NotoSansKhmer ">ផ្ទេរពីគណនី: *</label>
-                        <select required disabled value={selectFromBank} onChange={handleChnageFromBank} className="bg-gray-100 input_text">
+                        <select required  value={selectFromBank} onChange={handleChnageFromBank} className=" input_text">
                             <option value="" selected disabled>--ជ្រើសរើសគណនី--</option>
                             {bank.map((bank: any) => (
                                 <option key={bank.bankId} value={bank.bankId}>{bank.bankName}</option>
@@ -183,7 +183,7 @@ function CreateTransferBank({ onClose, fetchData, onSuccess, dataUpdate }: { onC
                         />
                     </div>
 
-                    {/* <div className="mb-4 space-y-2">
+                    <div className="mb-4 space-y-2">
                         <label htmlFor="productnote" className="block font-bold text-gray-700 font-NotoSansKhmer">ពិពណ៌នា</label>
                         <textarea placeholder="ពិពណ៌នា"
                             value={note}
@@ -191,7 +191,7 @@ function CreateTransferBank({ onClose, fetchData, onSuccess, dataUpdate }: { onC
                             className="input_text"
                             rows={5}
                         />
-                    </div> */}
+                    </div>
 
                     {errorMsg && (
                         <div className="msg_error">
@@ -219,4 +219,4 @@ function CreateTransferBank({ onClose, fetchData, onSuccess, dataUpdate }: { onC
     );
 }
 
-export default CreateTransferBank;
+export default CreateTransferBankList;

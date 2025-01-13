@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { motion } from "framer-motion";
 import { MdOutlineAddCircle } from "react-icons/md";
 
@@ -213,17 +214,15 @@ function CreateExpeseModal({ onClose }: { onClose: () => void }) {
 
             <div className="mb-4 space-y-2 ">
               <label className="block font-bold text-gray-700 font-NotoSansKhmer ">
-             វិធីសាស្រ្តបង់ប្រាក់
+             សម្យតុលសាច់ប្រាក់
               </label>
-              <select
-                
-                className="input_text">
-                  <option value="">--ជ្រើសរើស--</option>
-                  <option value="">QR Code</option>
-                  <option value="">បង់ផ្ទាល់</option>
-              </select>
+              <input disabled
+                type="number"
+                className="input_text"
+                placeholder="0.00"
+              />
             </div>
-
+            
             <div className="mb-4 space-y-2 ">
               <label className="block font-bold text-gray-700 font-NotoSansKhmer ">
              គណនីបង់ប្រាក់
@@ -238,16 +237,7 @@ function CreateExpeseModal({ onClose }: { onClose: () => void }) {
             </div>
           
           </div>
-          <div className="mb-4 space-y-2 ">
-              <label className="block font-bold text-gray-700 font-NotoSansKhmer ">
-             សម្យតុលសាច់ប្រាក់
-              </label>
-              <input disabled
-                type="number"
-                className="input_text"
-                placeholder="0.00"
-              />
-            </div>
+         
 
           <div className="col-span-2">
             <label className="font-bold font-NotoSansKhmer">ការណិពណ័នា</label>

@@ -7,7 +7,7 @@ function Sidebar() {
     const [isContactDropdown, setIsContactDropdown] = useState(false);
     const [isProductDropdown, setIsProductDropdown] = useState(false);
     const [isPurchaseDropdown, setIsPurchaseDropdown] = useState(false);
-    const [isTopupDropdown, setIsTopupDropdown] = useState(false);
+    // const [isTopupDropdown, setIsTopupDropdown] = useState(false);
     const [isExpenseDropdown, setIsExpenseDropdown] = useState(false);
     // const [isAccountDropdown, setIsAccountDropdown] = useState(false);
     // const [isPaymentMethodDropdown, setIsPaymentMethodDropdown] = useState(false);
@@ -63,13 +63,13 @@ function Sidebar() {
             setIsPurchaseDropdown(false);
         }
 
-        if (isTopupRouteActive) {
-            setIsTopupDropdown(true)
-        }
-        else {
-            setIsTopupDropdown(false)
+        // if (isTopupRouteActive) {
+        //     setIsTopupDropdown(true)
+        // }
+        // else {
+        //     setIsTopupDropdown(false)
 
-        }
+        // }
 
         if (isExpenseRouteActive) {
             setIsExpenseDropdown(true)
@@ -139,9 +139,9 @@ function Sidebar() {
         setIsPurchaseDropdown(!isPurchaseDropdown);
     };
 
-    const handleTopupDropDown = () => {
-        setIsTopupDropdown(!isTopupDropdown)
-    }
+    // const handleTopupDropDown = () => {
+    //     setIsTopupDropdown(!isTopupDropdown)
+    // }
 
     const handleExspenseDropdown = () => {
         setIsExpenseDropdown(!isExpenseDropdown)
@@ -348,7 +348,7 @@ function Sidebar() {
                     </li>
 
                     {/* Topup Phone dropdown */}
-                    <li className="space-y-2">
+                    {/* <li className="space-y-2">
                         <button onClick={handleTopupDropDown} className={`flex items-center p-3 w-full text-left justify-between ${isTopupDropdown ? "bg-blue-700 dark:bg-blue-500 text-white" : "text-gray-900 dark:text-white"}`}>
                             <div className="flex items-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-receipt-text"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z" /><path d="M14 8H8" /><path d="M16 12H8" /><path d="M13 16H8" /></svg>
@@ -387,7 +387,7 @@ function Sidebar() {
                                 <p className="font-bold font-NotoSansKhmer">ទិញចូល</p>
                             </NavLink>
                         </div>
-                    </li>
+                    </li> */}
                     {/*  Currency Dropdown */}
                     <li className="space-y-2">
                         <button onClick={handleCurrencyDropdown} className={`flex items-center p-3 w-full text-left justify-between ${isCurrencyDropdown ? "bg-blue-700 dark:bg-blue-500 text-white" : "text-gray-900 dark:text-white"}`}>
@@ -473,12 +473,12 @@ function Sidebar() {
                                 </svg>
                                 <p className="font-bold font-NotoSansKhmer">បញ្ជីគណនី</p>
                             </NavLink>
-                            <NavLink to="/bankTransfer" className={navLinkStyle}>
+                            {/* <NavLink to="/bankTransfer" className={navLinkStyle}>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="ml-3 size-6">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
                                 </svg>
-                                <p className="font-bold font-NotoSansKhmer">ផ្ទេរលុយ</p>
-                            </NavLink>
+                                <p className="font-bold font-NotoSansKhmer">ផ្ទេរលុយទៅធនាគា</p>
+                            </NavLink> */}
                             {/* <NavLink to="/purchase-list" className={navLinkStyle}>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="ml-3 size-6">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />

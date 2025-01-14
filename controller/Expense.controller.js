@@ -51,7 +51,7 @@ export const createExpense = async (req, res) => {
         }, { transaction });
 
         // Update the bank balance
-        bank.balance += totalAmount;
+        bank.balance -= totalAmount;
         await bank.save({ transaction });
 
         await transaction.commit();
@@ -65,6 +65,7 @@ export const createExpense = async (req, res) => {
             },
         });
     } catch (error) {
+
         if (transaction) await transaction.rollback();
         res.status(500).json({
             message: "Failed to create expense and update bank balance.",
@@ -82,6 +83,12 @@ export const fetchExpense = async(req, res) => {
                     model: db.Bank,
                     as: 'bankId_for_expense',
                     attributes: ['bankName']
+                },
+                {
+                    model: db.ExpenseType,
+                    as: 'expenseId_for_expense',
+                    attributes: ['names']
+                    
                 }
             ],
             order: [["createdAt", "DESC"]]
@@ -112,7 +119,7 @@ export const deleteExpense = async (req, res) => {
         }
 
         // Update the bank balance by subtracting the expense total amount
-        bank.balance -= expense.totalAmount;
+        bank.balance += expense.totalAmount;
         await bank.save({ transaction });
 
         // Delete the expense record
@@ -135,6 +142,7 @@ export const deleteExpense = async (req, res) => {
         });
     }
 };
+
 
 
 export const updateExpense = async (req, res) => {
@@ -170,6 +178,9 @@ export const updateExpense = async (req, res) => {
             return res.status(404).json({ message: `Bank with ID ${bankId} not found.` });
         }
 
+        // Save the previous totalAmount to calculate the difference later
+        const previousTotalAmount = expense.totalAmount;
+
         // Calculate balance if not provided
         const calculatedBalance = balance ?? totalAmount - paymentAmount;
 
@@ -186,7 +197,7 @@ export const updateExpense = async (req, res) => {
         await expense.save({ transaction });
 
         // Calculate the difference in totalAmount
-        const difference = totalAmount - expense.totalAmount;
+        const difference = totalAmount - previousTotalAmount;
 
         // Update bank balance based on the difference
         if (difference > 0) {
@@ -202,7 +213,9 @@ export const updateExpense = async (req, res) => {
         await transaction.commit();
 
         res.status(200).json({
-            message: "Expense updated successfully, and bank balance updated.",
+            message: `Expense updated successfully. Bank balance ${
+                difference > 0 ? "increased" : "decreased"
+            } by ${Math.abs(difference)}.`,
             expense,
             bank: {
                 bankId: bank.bankId,

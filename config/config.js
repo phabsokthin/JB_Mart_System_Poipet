@@ -83,6 +83,9 @@ db.BankTransfer.belongsTo(db.Bank, { foreignKey: 'bankId', as: 'bank_transfers_i
 
 db.Bank.hasMany(db.Expense, {foreignKey: 'bankId', as: 'bankId_for_expense' })
 db.Expense.belongsTo(db.Bank, { foreignKey: 'bankId', as: 'bankId_for_expense' });
+
+db.ExpenseType.hasMany(db.Expense, {foreignKey: 'expenseTypeId', as: 'expenseId_for_expense' })
+db.Expense.belongsTo(db.ExpenseType, { foreignKey: 'expenseTypeId', as: 'expenseId_for_expense' });
  
 
 // Check connection success

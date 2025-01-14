@@ -1,22 +1,14 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { motion } from "framer-motion";
 import { MdOutlineAddCircle } from "react-icons/md";
 
-import { Switch } from "@headlessui/react";
-import { useState } from "react";
 function CreateExpeseModal({ onClose }: { onClose: () => void }) {
-  const [enabled, setEnabled] = useState(false);
 
-  const [isTypePeriod, setIsTypePeriod] = useState("");
 
-  const handleChange = (e: any) => {
-    setIsTypePeriod(e.target.value);
-  };
 
   return (
     <div className="fixed inset-0 z-10 flex justify-center bg-black bg-opacity-50 ">
       <motion.div
-        className="bg-white w-[90%] md:w-[80%] mt-10 lg:w-[60%] overflow-hidden overflow-y-auto h-[900px] shadow-lg p-4 "
+        className="bg-white w-[90%] md:w-[80%] mt-10 lg:w-[60%] overflow-hidden overflow-y-auto h-[700px] shadow-lg p-4 "
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.8 }}
@@ -78,123 +70,11 @@ function CreateExpeseModal({ onClose }: { onClose: () => void }) {
               />
             </div>
 
-            <div className="flex items-center gap-1">
-              <Switch
-                checked={enabled}
-                onChange={setEnabled}
-                className={`${
-                  enabled ? "bg-blue-600" : "bg-gray-200"
-                } relative inline-flex h-6 w-11 items-center rounded-full my-2`}
-              >
-                <span className="sr-only">Enable notifications</span>
-                <span
-                  className={`${
-                    enabled ? "translate-x-6" : "translate-x-1"
-                  } inline-block h-4 w-4 transform rounded-full bg-white transition`}
-                />
-              </Switch>
-              <p>ម្តងទៀត</p>
-            </div>
+           
           </div>
 
-          <div className="grid grid-cols-2 gap-5 mt-3">
-            <div className="mb-4 space-y-2">
-              {/* <label className="block font-bold text-gray-700 font-NotoSansKhmer">
-                បង់ម្តងទៀត: *
-              </label>
-              <select required className="input_text font-NotoSansKhmer">
-                <option selected disabled value="">
-                  --ជ្រើសរើសរយ:ពេលបង់ម្តងទៀត--
-                </option>
-                {Array.from({ length: 31 }, (_, index) => {
-                  const khmerNumerals = [
-                    "០",
-                    "១",
-                    "២",
-                    "៣",
-                    "៤",
-                    "៥",
-                    "៦",
-                    "៧",
-                    "៨",
-                    "៩",
-                  ];
-                  const numInKhmer = (index + 1)
-                    .toString()
-                    .split("")
-                    .map((digit) => khmerNumerals[+digit])
-                    .join("");
-                  return (
-                    <option
-                      key={index + 1}
-                      value={index + 1}
-                      className="font-bold"
-                    >
-                      {numInKhmer}
-                    </option>
-                  );
-                })}
-              </select> */}
-            </div>
-            <div className="mb-4 space-y-2">
-              <label className="block font-bold text-gray-700 font-NotoSansKhmer">
-                រយ:ពេល: *
-              </label>
-              <select
-                onChange={(e) => handleChange(e)}
-                value={isTypePeriod}
-                className="input_text"
-              >
-                <option value="">ជ្រើសរើស</option>
-                <option value="ថ្ងៃ">ថ្ងៃ</option>
-                <option value="ខែ">ខែ</option>
-                <option value="ឆ្នាំ">ឆ្នាំ</option>
-              </select>
-            </div>
-          </div>
 
-          <div className="grid grid-cols-2 gap-5">
-            <p></p>
-            {(isTypePeriod === "ថ្ងៃ" || isTypePeriod === "ឆ្នាំ") && (
-              <input type="text" className="input_text" placeholder="រយ:ពេល" />
-            )}
-
-            {isTypePeriod === "ខែ" && (
-              <select required className="input_text font-NotoSansKhmer">
-                <option selected disabled value="">
-                  --ជ្រើសរើសរយ:ពេលបង់ម្តងទៀត--
-                </option>
-                {Array.from({ length: 31 }, (_, index) => {
-                  const khmerNumerals = [
-                    "០",
-                    "១",
-                    "២",
-                    "៣",
-                    "៤",
-                    "៥",
-                    "៦",
-                    "៧",
-                    "៨",
-                    "៩",
-                  ];
-                  const numInKhmer = (index + 1)
-                    .toString()
-                    .split("")
-                    .map((digit) => khmerNumerals[+digit])
-                    .join("");
-                  return (
-                    <option
-                      key={index + 1}
-                      value={index + 1}
-                      className="font-bold"
-                    >
-                      នៅថ្ងៃទី {numInKhmer}
-                    </option>
-                  );
-                })}
-              </select>
-            )}
-          </div>
+         
 
           <div className="py-2 mb-3 border-b-2 ">
             <h3 className="font-bold font-NotoSansKhmer">ការទូទាត់</h3>

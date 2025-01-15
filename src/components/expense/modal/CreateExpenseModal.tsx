@@ -1,8 +1,79 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { MdOutlineAddCircle } from "react-icons/md";
+import axios from "axios";
+import { url } from "../../../api/url";
 
-function CreateExpeseModal({ onClose }: { onClose: () => void }) {
+function CreateExpenseModal({ onClose }: { onClose: () => void }) {
+  const [totalAmount, setTotalAmount] = useState<number | "">("");
+  const [paymentAmount, setPaymentAmount] = useState<number | "">("");
+  const [balance, setBalance] = useState<number | "">(0);
 
+  const [expenseType, setExpenseType] = useState([]);
+  const [selectExpenseType, setSelectExpenseType] = useState("");
+
+  const [bank, setBank] = useState([]);
+  const [selectBank, setSelectBank] = useState("");
+
+
+  const handleTotalAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = parseFloat(e.target.value) || 0;
+    setTotalAmount(value);
+    updateBalance(value, paymentAmount);
+  };
+
+  const handlePaymentAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = parseFloat(e.target.value) || 0;
+    setPaymentAmount(value);
+    updateBalance(totalAmount, value);
+  };
+
+  const updateBalance = (total: number | "", payment: number | "") => {
+    const calculatedBalance = total && payment ? total - payment : 0;
+    setBalance(calculatedBalance);
+  };
+
+
+  //fetch expense type
+  const fetchdata = async () => {
+    try {
+      const response = await axios.get(`${url}expenseType`);
+      if (response.data) {
+        setExpenseType(response.data);
+      }
+    } catch (error) {
+      console.error("Error fetching customer:", error);
+    }
+  };
+
+  const handleChangeSelectExpenseType = (e:any) => {
+    setSelectExpenseType(e.target.value)
+  }
+
+
+
+  const fetchBank = async () => {
+    try {
+      const response = await axios.get(`${url}bank`);
+      if (response.data) {
+        setBank(response.data);
+      }
+    } catch (error) {
+      console.error("Error fetching customer:", error);
+    }
+  };
+
+  const handleChangeSelectBank = (e:any) => {
+    setSelectBank(e.target.value)
+  }
+  
+  
+
+  useEffect(() => {
+    fetchdata();
+    fetchBank();
+  }, [])
 
 
   return (
@@ -21,7 +92,7 @@ function CreateExpeseModal({ onClose }: { onClose: () => void }) {
         <form>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4">
             <div className="mb-4 space-y-2">
-              <label className="block font-bold text-gray-700 font-NotoSansKhmer ">
+              <label className="block font-bold text-gray-700 font-NotoSansKhmer">
                 ឈ្មោះចំណាយ: *
               </label>
               <input
@@ -31,23 +102,26 @@ function CreateExpeseModal({ onClose }: { onClose: () => void }) {
                 placeholder="ឈ្មោះចំណាយ"
               />
             </div>
-
             <div className="mb-4 space-y-2">
-              <label className="block font-bold text-gray-700 font-NotoSansKhmer ">
-                ឈ្មោះចំណាយ: *
+              <label className="block font-bold text-gray-700 font-NotoSansKhmer">
+                ប្រភេទចំណាយ: *
               </label>
-              <select className="input_text" required>
+              <select value={selectExpenseType} onChange={handleChangeSelectExpenseType} className="input_text" required>
                 <option selected disabled value="">
-                  --ជ្រើសរើសប្រភេទទំចំណាយ--
+                  --ជ្រើសរើសប្រភេទចំណាយ--
                 </option>
-                <option value="សាប៊ូកក់សក់">បង់ទឺក</option>
-                <option value="ទឹកក្រូច">បង់ភ្លើង</option>
-                <option value="ស្របៀរ">អាហារ</option>
+                <option value="0">មិនមាន</option>
+                {expenseType.map((item: any, index) => {
+                  return (
+                    <option key={index} value={item.expenseTypeId}>{item.names}</option>
+                  )
+                })}
+
+
               </select>
             </div>
-
             <div className="mb-4 space-y-2">
-              <label className="block font-bold text-gray-700 font-NotoSansKhmer ">
+              <label className="block font-bold text-gray-700 font-NotoSansKhmer">
                 ចំនួនសរុប: *
               </label>
               <input
@@ -56,69 +130,66 @@ function CreateExpeseModal({ onClose }: { onClose: () => void }) {
                 min={0}
                 className="input_text"
                 placeholder="ចំនួនសរុប"
+                value={totalAmount}
+                onChange={handleTotalAmountChange}
               />
             </div>
             <div className="mb-4 space-y-2">
-              <label className="block font-bold text-gray-700 font-NotoSansKhmer ">
+              <label className="block font-bold text-gray-700 font-NotoSansKhmer">
                 កាលបរិច្ឆេត: *
               </label>
               <input
                 type="date"
                 required
                 className="input_text p-[7px]"
-                placeholder="ឈ្មោះប្រភេទទំនិញ"
+                placeholder="កាលបរិច្ឆេត"
               />
             </div>
-
-           
           </div>
-
-
-         
-
-          <div className="py-2 mb-3 border-b-2 ">
+          <div className="py-2 mb-3 border-b-2">
             <h3 className="font-bold font-NotoSansKhmer">ការទូទាត់</h3>
           </div>
-
           <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-            <div className="mb-4 space-y-2 ">
-              <label className="block font-bold text-gray-700 font-NotoSansKhmer ">
-             ចំនួនទូទាត់: *
+            <div className="mb-4 space-y-2">
+              <label className="block font-bold text-gray-700 font-NotoSansKhmer">
+                ចំនួនទូទាត់: *
               </label>
               <input
                 type="number"
                 className="input_text"
                 placeholder="0.00"
+                value={paymentAmount}
+                onChange={handlePaymentAmountChange}
               />
             </div>
-
-            <div className="mb-4 space-y-2 ">
-              <label className="block font-bold text-gray-700 font-NotoSansKhmer ">
-             សម្យតុលសាច់ប្រាក់
+            <div className="mb-4 space-y-2">
+              <label className="block font-bold text-gray-700 font-NotoSansKhmer">
+                សម្យតុលសាច់ប្រាក់:
               </label>
-              <input disabled
+              <input
+                disabled
                 type="number"
                 className="input_text"
                 placeholder="0.00"
+                value={balance || 0}
               />
             </div>
-            
-            <div className="mb-4 space-y-2 ">
-              <label className="block font-bold text-gray-700 font-NotoSansKhmer ">
-             គណនីបង់ប្រាក់
+            <div className="mb-4 space-y-2">
+              <label className="block font-bold text-gray-700 font-NotoSansKhmer">
+                គណនីបង់ប្រាក់:
               </label>
-              <select
-                
-                className="input_text">
-                  <option value="">--ជ្រើសរើស--</option>
-                  <option value="">ABA</option>
-                  <option value="">AC Lida</option>
+              <select value={selectBank} onChange={handleChangeSelectBank} className="input_text">
+                <option value="">--ជ្រើសរើស--</option>
+                <option value="0">បង់ផ្ទាល់</option>
+                {bank.map((item:any, index) => {
+                  return(
+                    <option key={index} value={item.bankId}>{item.bankName}</option>
+                  )
+                })}
+             
               </select>
             </div>
-          
           </div>
-         
-
           <div className="col-span-2">
             <label className="font-bold font-NotoSansKhmer">ការណិពណ័នា</label>
             <textarea
@@ -128,7 +199,6 @@ function CreateExpeseModal({ onClose }: { onClose: () => void }) {
               placeholder="ការណិពណ័នា"
             ></textarea>
           </div>
-
           <div className="flex justify-end mt-2 space-x-3">
             <button
               type="button"
@@ -147,4 +217,4 @@ function CreateExpeseModal({ onClose }: { onClose: () => void }) {
   );
 }
 
-export default CreateExpeseModal;
+export default CreateExpenseModal;

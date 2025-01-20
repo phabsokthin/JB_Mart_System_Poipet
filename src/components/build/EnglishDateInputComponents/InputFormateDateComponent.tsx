@@ -28,12 +28,16 @@ const DateInputFormat: React.FC<DateInputProps> = ({
     }
   };
 
+  const today = new Date().toISOString().split('T')[0];
+
+
   return (
     <input
       type="date"
       className="input_text "
       value={currentDate}
       onChange={handleChange}
+      max={today}
     />
   );
 };

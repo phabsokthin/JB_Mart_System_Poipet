@@ -203,9 +203,14 @@ function ProductList() {
                                             <td className="px-4 py-2 w-[12.5%]">{item.const_price}</td>
                                             <td className="px-4 py-2 w-[12.5%]">{item.include_tax}</td>
                                             <td className="px-4 py-2 w-[12.5%]">{item.sell_price}</td>
-                                            <td className="px-4 py-2 w-[12.5%]">{item.profit}</td>
-                                            <td className="px-4 py-2 w-[12.5%]">{item.total_amount}</td>
+                                            {/* <td className="px-4 py-2 w-[12.5%]">{item.profit}</td> */}
+                                            <td className="px-4 py-2 w-[12.5%]">{item.sell_price - item.const_price}</td>
+                                            {/* <td className="px-4 py-2 w-[12.5%]">{item.total_amount}</td> */}
 
+                                            {/* <td className="px-4 py-2 w-[12.5%]">{item.const_price * item.qty * item.include_tax}</td> */}
+
+                                            {/* include tax */}
+                                            <td className="px-4 py-2 w-[12.5%]">{item.const_price * item.qty + item.include_tax }</td>
                                             <td className="px-4 py-2 w-[12.5%]">
                                                 {item.url ? (
                                                     <img src={item.url} alt="Dynamic Image" className="w-full h-auto" />

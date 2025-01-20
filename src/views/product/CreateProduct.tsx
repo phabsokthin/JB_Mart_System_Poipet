@@ -214,7 +214,7 @@ function CreateProduct() {
       formData.append("unitId", selectUnit);
       formData.append("categoryId", selectCategory);
       formData.append("brandId", selectedBrand);
-      formData.append("enabled", String(enabled)); // Convert boolean to string
+      formData.append("status", String(enabled)); // Convert boolean to string
       formData.append("qty", Number(qty).toString()); // Convert number to string
       formData.append("description", description);
       formData.append("const_price", originalPrice.toString()); // Convert number to string

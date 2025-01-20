@@ -4,17 +4,36 @@ import { motion } from "framer-motion";
 import { MdOutlineAddCircle } from "react-icons/md";
 import axios from "axios";
 import { url } from "../../../api/url";
+import sound_success from '../../../assets/sound/success.mp3'
 
-function CreateExpenseModal({ onClose }: { onClose: () => void }) {
-  const [totalAmount, setTotalAmount] = useState<number | "">("");
-  const [paymentAmount, setPaymentAmount] = useState<number | "">("");
-  const [balance, setBalance] = useState<number | "">(0);
+
+interface dataUpdate {
+  select: string,
+  bank: string,
+  totalAmount: number,
+  paymentAmount: number,
+  balance: number,
+  expenseDate: string,
+  description: string
+}
+
+function CreateExpenseModal({ onClose, fetchData, onSuccess, dataUpdate }: { onClose: () => void, fetchData: () => void, onSuccess: (message: string) => void, dataUpdate: dataUpdate | any }) {
+  const [totalAmount, setTotalAmount] = useState(0);
+  const [paymentAmount, setPaymentAmount] = useState(0);
+  const [balance, setBalance] = useState(0);
 
   const [expenseType, setExpenseType] = useState([]);
   const [selectExpenseType, setSelectExpenseType] = useState("");
 
   const [bank, setBank] = useState([]);
   const [selectBank, setSelectBank] = useState("");
+
+  const [loading, setIsLoading] = useState(false)
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+
+  const [expenseDate, setExpenseDate] = useState("")
+  const [description, setDescription] = useState("");
+
 
 
   const handleTotalAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -47,11 +66,9 @@ function CreateExpenseModal({ onClose }: { onClose: () => void }) {
     }
   };
 
-  const handleChangeSelectExpenseType = (e:any) => {
+  const handleChangeSelectExpenseType = (e: any) => {
     setSelectExpenseType(e.target.value)
   }
-
-
 
   const fetchBank = async () => {
     try {
@@ -64,16 +81,103 @@ function CreateExpenseModal({ onClose }: { onClose: () => void }) {
     }
   };
 
-  const handleChangeSelectBank = (e:any) => {
+  const handleChangeSelectBank = (e: any) => {
     setSelectBank(e.target.value)
   }
-  
-  
+
+
+
+
+  const handleSubmit = async (event: any) => {
+    event.preventDefault();
+    setIsLoading(true)
+    try {
+      const data = {
+        expenseTypeId: selectExpenseType,
+        total: totalAmount,
+        paymentAmount: paymentAmount,
+        totalAmount: balance || 0,
+        expenseDate: new Date(expenseDate).toISOString(),
+        description: description,
+        bankId: selectBank,
+      }
+
+      if (!dataUpdate) {
+
+        const response = await axios.post(`${url}expense`, data);
+        if (response.data.msg) {
+          onSuccess("បានរក្សាទុកជោគជ័យ");
+          sound_message();
+          setIsLoading(false);
+          onClose();
+          fetchData();
+        }
+
+        console.log(data)
+
+      }
+      else {
+        const response = await axios.put(`${url}expense/${dataUpdate.expenseId}`, data);
+        if (response.data.msg) {
+          onSuccess("បានកែប្រែជោគជ័យ");
+          sound_message();
+          setIsLoading(false);
+          onClose();
+          fetchData();
+        }
+
+      }
+    }
+    catch (err: any) {
+      setIsLoading(false);
+      if (err.response && err.response.data.msg) {
+        setErrorMsg(err.response.data.msg);
+      } else {
+        setErrorMsg("An error occurred. Please try again.");
+      }
+    }
+    finally {
+      setIsLoading(false)
+    }
+
+  };
+
+  function sound_message() {
+    new Audio(sound_success).play();
+  }
+
+  //disabled date
+
+  const handleDateChange = (e: any) => {
+    const selectedDate = e.target.value;
+    // Set the date
+    setExpenseDate(selectedDate);
+  };
+
+  const today = new Date().toISOString().split('T')[0];
 
   useEffect(() => {
+
     fetchdata();
     fetchBank();
-  }, [])
+
+    if (dataUpdate) {
+      setSelectExpenseType(dataUpdate.expenseTypeId || "");
+      setTotalAmount(dataUpdate.total || 0);
+      setPaymentAmount(dataUpdate.paymentAmount || "");
+      setBalance(dataUpdate.totalAmount || 0);
+      setExpenseDate(dataUpdate.expenseDate || "");
+      setDescription(dataUpdate.description || "");
+      setSelectBank(dataUpdate.bankId || "");
+    }
+
+
+    const today = new Date().toISOString().split('T')[0]; // Get current date in YYYY-MM-DD format
+    setExpenseDate(today);
+  }, [dataUpdate])
+
+
+
 
 
   return (
@@ -89,19 +193,10 @@ function CreateExpenseModal({ onClose }: { onClose: () => void }) {
           <MdOutlineAddCircle className="text-xl" />
           <h2 className="text-lg font-bold">បង្កើតប្រភេទចំណាយថ្មី</h2>
         </div>
-        <form>
+
+        <form onSubmit={handleSubmit}>
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4">
-            <div className="mb-4 space-y-2">
-              <label className="block font-bold text-gray-700 font-NotoSansKhmer">
-                ឈ្មោះចំណាយ: *
-              </label>
-              <input
-                type="text"
-                required
-                className="input_text"
-                placeholder="ឈ្មោះចំណាយ"
-              />
-            </div>
             <div className="mb-4 space-y-2">
               <label className="block font-bold text-gray-700 font-NotoSansKhmer">
                 ប្រភេទចំណាយ: *
@@ -116,8 +211,6 @@ function CreateExpenseModal({ onClose }: { onClose: () => void }) {
                     <option key={index} value={item.expenseTypeId}>{item.names}</option>
                   )
                 })}
-
-
               </select>
             </div>
             <div className="mb-4 space-y-2">
@@ -131,20 +224,19 @@ function CreateExpenseModal({ onClose }: { onClose: () => void }) {
                 className="input_text"
                 placeholder="ចំនួនសរុប"
                 value={totalAmount}
+
                 onChange={handleTotalAmountChange}
               />
             </div>
-            <div className="mb-4 space-y-2">
-              <label className="block font-bold text-gray-700 font-NotoSansKhmer">
-                កាលបរិច្ឆេត: *
-              </label>
-              <input
-                type="date"
-                required
-                className="input_text p-[7px]"
-                placeholder="កាលបរិច្ឆេត"
-              />
-            </div>
+            <input
+              type="date"
+              value={expenseDate}
+              onChange={handleDateChange}
+              required
+              className="input_text p-[7px]"
+              placeholder="កាលបរិច្ឆេត"
+              max={today}
+            />
           </div>
           <div className="py-2 mb-3 border-b-2">
             <h3 className="font-bold font-NotoSansKhmer">ការទូទាត់</h3>
@@ -158,6 +250,7 @@ function CreateExpenseModal({ onClose }: { onClose: () => void }) {
                 type="number"
                 className="input_text"
                 placeholder="0.00"
+
                 value={paymentAmount}
                 onChange={handlePaymentAmountChange}
               />
@@ -168,8 +261,9 @@ function CreateExpenseModal({ onClose }: { onClose: () => void }) {
               </label>
               <input
                 disabled
+
                 type="number"
-                className="input_text"
+                className="bg-gray-200 cursor-not-allowed input_text"
                 placeholder="0.00"
                 value={balance || 0}
               />
@@ -178,40 +272,64 @@ function CreateExpenseModal({ onClose }: { onClose: () => void }) {
               <label className="block font-bold text-gray-700 font-NotoSansKhmer">
                 គណនីបង់ប្រាក់:
               </label>
-              <select value={selectBank} onChange={handleChangeSelectBank} className="input_text">
-                <option value="">--ជ្រើសរើស--</option>
-                <option value="0">បង់ផ្ទាល់</option>
-                {bank.map((item:any, index) => {
-                  return(
-                    <option key={index} value={item.bankId}>{item.bankName}</option>
-                  )
-                })}
-             
-              </select>
+
+              {dataUpdate ? (
+                <select required value={selectBank} onChange={handleChangeSelectBank} className="bg-gray-200 cursor-not-allowed input_text" disabled>
+                  <option value="">--ជ្រើសរើស--</option>
+                  <option value="0">បង់ផ្ទាល់</option>
+                  {bank.map((item: any, index) => {
+                    return (
+                      <option key={index} value={item.bankId}>{item.bankName}</option>
+                    )
+                  })}
+
+                </select>
+              ) : (
+                <select required value={selectBank} onChange={handleChangeSelectBank} className="input_text">
+                  <option value="">--ជ្រើសរើស--</option>
+                  <option value="0">បង់ផ្ទាល់</option>
+                  {bank.map((item: any, index) => {
+                    return (
+                      <option key={index} value={item.bankId}>{item.bankName}</option>
+                    )
+                  })}
+
+                </select>
+              )}
+
             </div>
           </div>
           <div className="col-span-2">
             <label className="font-bold font-NotoSansKhmer">ការណិពណ័នា</label>
             <textarea
-              id="description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
               rows={5}
               className="input_text"
               placeholder="ការណិពណ័នា"
             ></textarea>
           </div>
-          <div className="flex justify-end mt-2 space-x-3">
-            <button
-              type="button"
-              onClick={onClose}
-              className="button_only_close"
-            >
+
+          <div className="flex justify-end gap-2 my-2">
+            <button type="button" onClick={onClose} className="button_only_close">
               បោះបង់
             </button>
-            <button type="submit" className="button_only_submit">
-              រក្សាទុក
+            <button
+              type="submit"
+              className={`button_only_submit font-NotoSansKhmer ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+              disabled={loading}
+            >
+              {loading ? 'កំពុងរក្សា...' : 'រក្សាទុក'}
             </button>
           </div>
         </form>
+
+        {errorMsg && (
+          <div className="msg_error">
+            <strong></strong> {errorMsg}
+          </div>
+        )}
+
       </motion.div>
     </div>
   );

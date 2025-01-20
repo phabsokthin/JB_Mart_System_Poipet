@@ -50,7 +50,7 @@ function Expense() {
 
     const filtereData = expense.filter((expense) =>
         expense.expenseId_for_expense?.names.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        expense.bankId_for_expense.bankName.includes(searchQuery) 
+        expense.bankId_for_expense.bankName.includes(searchQuery)
     );
 
     const totalPage = Math.ceil(filtereData.length / dataPerPage);
@@ -87,7 +87,7 @@ function Expense() {
                 setIsLoading(true)
                 handleSuccess("បានលុបទុកដោយជោគជ័យ!");
                 sound_message();
-    
+
 
             } catch (error) {
                 console.error("Error deleting customer:", error);
@@ -191,10 +191,11 @@ function Expense() {
                             <thead className="w-full text-white bg-blue-600/90">
                                 <tr className="font-bold font-NotoSansKhmer">
                                     <th className="px-4 py-2 w-[7%]">លេខរៀង</th>
-                                    <th className="px-4 py-2 w-[10%]">ចំណាយ</th>
+                                    <th className="px-4 py-2 w-[10%]">ចំណាយសម្រាប់</th>
                                     <th className="px-4 py-2 w-[12.5%]">សរុប</th>
-                                    <th className="px-4 py-2 w-[12.5%]">សរុបទាំងអស់</th>
+                                    {/* <th className="px-4 py-2 w-[12.5%]">សរុបទាំងអស់</th> */}
                                     <th className="px-4 py-2 w-[12.5%]">ចំនួនទូទាត់</th>
+                                    <th className="px-4 py-2 w-[12.5%]">ស្ថានភាព</th>
                                     <th className="px-4 py-2 w-[12.5%]">សម្យតុលសាច់ប្រាក់</th>
                                     <th className="px-4 py-2 w-[10%]">គណនីបង់ប្រាក់</th>
                                     <th className="px-4 py-2 w-[12.5%]">កត់ចំណាំ</th>
@@ -207,17 +208,27 @@ function Expense() {
                                 {currentData.length > 0 ? (
                                     currentData.map((item, index) => (
                                         <tr key={item.expenseId || index}>
-                                          
+
                                             <td className="px-4 py-2 w-[12.5%]">{(currentPage - 1) * dataPerPage + index + 1}</td>
                                             <td className="px-4 py-2 w-[12.5%]">{item.expenseId_for_expense?.names}</td>
                                             <td className="px-4 py-2 w-[12.5%]">{item.total}</td>
-                                            <td className="px-4 py-2 w-[12.5%]">{item.totalAmount}</td>
+                                            {/* <td className="px-4 py-2 w-[12.5%]">{item.totalAmount}</td> */}
                                             <td className="px-4 py-2 w-[12.5%]">{item.paymentAmount}</td>
-                                            <td className="px-4 py-2 w-[12.5%]">{item.balance}</td>
+
+                                            <td className="px-4 py-2 w-[12.5%]">
+                                                {item.totalAmount === 0 ? (
+                                                    <button className="px-2 text-xs text-white bg-green-500 rounded-full">បានបង់</button>
+                                                ) : item.paymentAmount >= item.totalAmount * 0.5 ? (  
+                                                    <button onClick={() => handleUpdate(item)} className="px-2 text-xs text-white bg-orange-500 rounded-full hover:bg-orange-600">បានបង់ខ្លះ</button>
+                                                ) : (
+                                                    <button onClick={() => handleUpdate(item)} className="px-2 text-xs text-white bg-red-500 rounded-full hover:bg-red-600">ជំពាក់</button>
+                                                )}
+                                            </td>
+                                            <td className="px-4 py-2 w-[12.5%]">{item.totalAmount}</td>
                                             <td className="px-4 py-2 w-[12.5%]">{item.bankId_for_expense?.bankName}</td>
                                             <td className="px-4 py-2 w-[12.5%]">{item.description}</td>
-                                            <td className="px-4 py-2 w-[12.5%]">{item.createdAt}</td>
-                                           
+                                            <td className="px-4 py-2 w-[12.5%]">{item.expenseDate}</td>
+
                                             <td className="px-4 py-2 w-[12.5%] space-x-2">
                                                 <button
                                                     onClick={() => handleDeleteClick({ expenseId: item.expenseId, names: item.bankId_for_expense?.bankName })}

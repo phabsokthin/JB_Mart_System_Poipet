@@ -12,7 +12,7 @@ import { createBankType, deleteBankType, fetchBankType, updateBankType } from '.
 import { createBank, deleteBank, fetchBank, updateBank, updateStatus, updateStatusEnabled } from '../controller/Bank.controller.js';
 import { createBankTransfer, deleteBankTransfer, fetchBankTransfers } from '../controller/BankTransfer.controller.js';
 import { createExpenseType, deleteExpenseType, fetchExpenseType, updateExpenseType } from '../controller/ExpenseType.controller.js';
-import { createExpense, deleteExpense, fetchExpense, updateExpense } from '../controller/Expense.controller.js';
+import { createExpense, deleteExpense, fetchExpense, fetchExpenseById, updateExpense } from '../controller/Expense.controller.js';
 
 const router = express.Router();
 
@@ -46,6 +46,8 @@ router.put('/customer/:id', updateCustomer)
 
 //category
 
+
+
 router.get('/category', fetchCategory)
 router.post('/category', createCategory)
 router.get('/category/:id', fetchCategoryByID)
@@ -70,6 +72,7 @@ router.put('/brand/:id', updateBrand)
 
 //product 
 
+
 router.get('/product', fetchProduct)
 router.get('/product/:id', fetchProductById)
 router.post('/product', createProduct)
@@ -78,7 +81,7 @@ router.put('/product/:id', updateProduct)
 
 //Purcahse 
 router.post('/purchase', createPurchases)
-router.get('/purchase/:id', fetchPurchase)
+router.get('/purchase', fetchPurchase)
 router.put('/purchase', updatePurchase)
 router.delete('/purchase', deletePurchase)
 
@@ -91,6 +94,8 @@ router.delete('/banktype/:id', deleteBankType)
 //bank
 router.post('/bank', createBank)
 router.get('/bank', fetchBank)
+
+
 router.put('/bank/:id', updateBank)
 router.delete('/bank/:id', deleteBank)
 router.put('/bankStatus/:id', updateStatus )
@@ -110,9 +115,9 @@ router.delete('/expenseType/:id', deleteExpenseType)
 
 
 //expense
-
 router.post('/expense', createExpense)
 router.get('/expense', fetchExpense)
+router.get('/expense/:id', fetchExpenseById)
 router.delete('/expense/:id', deleteExpense)
 router.put('/expense/:id',updateExpense)
 

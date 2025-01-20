@@ -13,6 +13,7 @@ const Purchase = (sequelize) => {
             allowNull: true,
         },
 
+        
         supplierId: {
             type: DataTypes.INTEGER,
             allowNull: false,
@@ -30,13 +31,13 @@ const Purchase = (sequelize) => {
 
         cost_price: {
             type: DataTypes.INTEGER,
-            allowNull: false,
+            allowNull: true,
         },
 
 
         qty: {
             type: DataTypes.INTEGER,
-            allowNull: false,
+            allowNull: true,
         },
             
         include_tax: {
@@ -46,7 +47,7 @@ const Purchase = (sequelize) => {
 
         total: {
             type: DataTypes.INTEGER,
-            allowNull: false,
+            allowNull: true,
         },
 
         sell_price: {
@@ -60,17 +61,17 @@ const Purchase = (sequelize) => {
         },
         total_amount: {
             type: DataTypes.INTEGER,
-            allowNull: false,
+            allowNull: true,
         },
 
         payment_amount: {
             type: DataTypes.INTEGER,
-            allowNull: false,
+            allowNull: true,
         },
         
         balance: {
             type: DataTypes.INTEGER,
-            allowNull: false,
+            allowNull: true,
         },
         
         // currency_id: {

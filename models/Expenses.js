@@ -8,6 +8,7 @@ const Expense = (sequelize) => {
             autoIncrement: true,
             allowNull: false,
         },
+        
         expenseTypeId: {
             type: DataTypes.INTEGER,
             allowNull: false,
@@ -15,7 +16,7 @@ const Expense = (sequelize) => {
 
         total: {
             type: DataTypes.INTEGER,
-            allowNull: false,
+            allowNull: true,
         },
 
         paymentAmount: {
@@ -26,9 +27,10 @@ const Expense = (sequelize) => {
 
         totalAmount: {
             type: DataTypes.INTEGER,
-            allowNull: false,
+            allowNull: true,
         },
 
+        
 
         expenseDate: {
             type: DataTypes.DATEONLY,

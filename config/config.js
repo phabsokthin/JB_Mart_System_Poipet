@@ -86,7 +86,21 @@ db.Expense.belongsTo(db.Bank, { foreignKey: 'bankId', as: 'bankId_for_expense' }
 
 db.ExpenseType.hasMany(db.Expense, {foreignKey: 'expenseTypeId', as: 'expenseId_for_expense' })
 db.Expense.belongsTo(db.ExpenseType, { foreignKey: 'expenseTypeId', as: 'expenseId_for_expense' });
- 
+
+
+//purchase
+
+db.Bank.hasMany(db.Purchase, {foreignKey: 'bankId', as: 'bankId_for_purchase' })
+db.Purchase.belongsTo(db.Bank, { foreignKey: 'bankId', as: 'bankId_for_purchase' });
+
+db.Supplier.hasMany(db.Purchase, {foreignKey: 'supplierId', as: 'supplierId_for_purchase' })
+db.Purchase.belongsTo(db.Supplier, { foreignKey: 'supplierId', as: 'supplierId_for_purchase' });
+
+db.Product.hasMany(db.Purchase, {foreignKey: 'productId', as: 'productId_for_purchase' })
+db.Purchase.belongsTo(db.Product, { foreignKey: 'productId', as: 'productId_for_purchase' });
+
+db.User.hasMany(db.Purchase, {foreignKey: 'userId', as: 'userId_for_purchase' })
+db.Purchase.belongsTo(db.User, { foreignKey: 'userId', as: 'userId_for_purchase' });
 
 // Check connection success
 // (async () => {

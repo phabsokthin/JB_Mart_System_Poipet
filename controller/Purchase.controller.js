@@ -5,171 +5,47 @@ const Purchase = db.Purchase;
 const Product = db.Product;
 const Bank = db.Bank;
 
+
 export const fetchPurchase = async (req, res) => {
-    const { id } = req.params; // Get supplierId from request parameters
-
     try {
-        // Fetch all purchases for the specific supplier
-        const purchases = await Purchase.findAll({
-            where: {
-                purchaseNo: id,
-            },
-        });
+        const data = await Purchase.findAll({
 
-        if (!purchases || purchases.length === 0) {
-            return res.status(404).json({
-                success: false,
-                message: `No purchases found for supplier with ID ${supplierId}`,
-            });
-        }
+            include: [
+                {
+                    model: db.Bank,
+                    as: 'bankId_for_purchase',
+                    attributes: ['bankName']
+                },
+                {
+                    model: db.Supplier,
+                    as: 'supplierId_for_purchase',
+                    attributes: ['full_Name']
+                },
+                {
+                    model: db.Product,
+                    as: 'productId_for_purchase',
+                    attributes: ['pname']
+                },
+                {
+                    model: db.User,
+                    as: 'userId_for_purchase',
+                    attributes: ['userName']
+                }
+            ],
+            order: [["createdAt", "DESC"]]
 
-        res.status(200).json(purchases);
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: error.message || 'Error retrieving purchases',
         });
+        return res.status(200).json(data)
+    }
+    catch (err) {
+        console.log(err)
     }
 };
 
 
-// export const createPurchases = async (req, res) => {
-//     const purchases = req.body.purchases; // Assuming 'purchases' is an array of purchase objects
-//     const { bankId } = req.body; // Bank ID remains the same for all purchases
-
-//     try {
-//         // Start a transaction to ensure atomicity
-//         const transaction = await db.sequelize.transaction();
-
-//         let totalPaymentAmount = 0;
-
-//         try {
-//             // Step 1: Generate a new purchaseNo for all purchases
-//             const latestPurchase = await Purchase.findOne({
-//                 order: [['purchaseNo', 'DESC']],
-//                 attributes: ['purchaseNo'],
-//                 transaction,
-//             });
-
-//             const purchaseNo = latestPurchase ? latestPurchase.purchaseNo + 1 : 1; // Start with 1 if no previous purchase found
-
-//             // Step 2: Process each purchase item in the array
-//             for (let i = 0; i < purchases.length; i++) {
-//                 const {
-//                     supplierId,
-//                     productId,
-//                     cost_price,
-//                     qty,
-//                     include_tax,
-//                     discount,
-//                     payment_amount,
-//                     sell_price, // New sell_price field
-//                 } = purchases[i];
-
-//                 // Step 3: Check the product's status before processing
-//                 const product = await Product.findByPk(productId, { transaction });
-
-//                 if (!product) {
-//                     throw new Error(`Product with ID ${productId} not found`);
-//                 }
-
-//                 // Check if the product's status is 0 (not managed in stock)
-//                 if (product.status === false) {
-//                     throw new Error(
-//                         `Product with ID ${productId} cannot be added to purchases as it is not managed in stock.`
-//                     );
-//                 }
-
-//                 // Calculate total and balance for the current purchase
-//                 const total = cost_price * qty + (include_tax || 0);
-//                 const total_amount = total - (discount || 0);
-//                 const balance = total_amount - payment_amount;
-
-//                 // Step 4: Create the purchase record (use the same purchaseNo for all items)
-//                 await Purchase.create(
-//                     {
-//                         purchaseNo, // Use the generated purchaseNo
-//                         supplierId,
-//                         productId,
-//                         cost_price,
-//                         qty,
-//                         include_tax,
-//                         total,
-//                         discount,
-//                         total_amount,
-//                         payment_amount,
-//                         balance,
-//                         bankId,
-//                         date_purchase: new Date(),
-//                         userId: req.user?.id || null,
-//                     },
-//                     { transaction }
-//                 );
-
-//                 // Step 5: Update the product details and stock
-//                 const newQty = (product.qty || 0) + qty;
-
-//                 const newSellPrice = sell_price;
-//                 const newTotalAmount = total_amount; // Set total_amount to the purchase total_amount
-
-//                 const newProfit = Math.max(newSellPrice - newTotalAmount, 0); // Recalculate profit
-
-//                 // Update the product with the new stock and calculate profit
-//                 await product.update(
-//                     {
-//                         qty: newQty, // Update the product quantity
-//                         const_price: cost_price, // Update the cost_price to match the purchase
-//                         include_tax, // Update include_tax to match the purchase
-//                         total_amount: newTotalAmount, // Update total_amount
-//                         sell_price: newSellPrice, // Update sell_price from the purchase request
-//                         profit: newProfit, // Recalculate profit based on total_amount - sell_price
-//                     },
-//                     { transaction }
-//                 );
-
-//                 totalPaymentAmount += payment_amount;
-//             }
-
-//             // Step 6: Deduct money from the bank balance for all purchases
-//             const bank = await Bank.findByPk(bankId, { transaction });
-
-//             if (!bank) {
-//                 throw new Error('Bank not found');
-//             }
-
-//             if (bank.balance < totalPaymentAmount) {
-//                 throw new Error('Insufficient bank balance');
-//             }
-
-//             const newBalance = bank.balance - totalPaymentAmount;
-//             await bank.update({ balance: newBalance }, { transaction });
-
-//             // Commit the transaction
-//             await transaction.commit();
-
-//             res.status(201).json({
-//                 success: true,
-//                 message: 'Multiple purchases created successfully and products updated dynamically',
-//                 purchases,
-//             });
-//         } catch (error) {
-//             // Rollback the transaction in case of error
-//             await transaction.rollback();
-//             throw error;
-//         }
-//     } catch (error) {
-//         res.status(500).json({
-//             success: false,
-//             message: error.message || 'Something went wrong',
-//         });
-//     }
-// };
-
-
-
 export const createPurchases = async (req, res) => {
     const purchases = req.body.purchases; // Assuming 'purchases' is an array of purchase objects
-    const { bankId } = req.body; // Bank ID remains the same for all purchases
+    const { bankId, userId } = req.body;
 
     try {
         // Start a transaction to ensure atomicity
@@ -186,7 +62,7 @@ export const createPurchases = async (req, res) => {
             }
 
             if (bank.status === 0) {
-                throw new Error('Cannot create purchases. The bank is disabled.');
+                throw new Error('គណនីនេះបានបិទបណ្តោះអាសន្នហើយ។');
             }
 
             // Step 2: Generate a new purchaseNo for all purchases
@@ -218,10 +94,10 @@ export const createPurchases = async (req, res) => {
                     throw new Error(`Product with ID ${productId} not found`);
                 }
 
-                // Check if the product's status is 0 (not managed in stock)
+                // Prevent creating purchases if product.status === false
                 if (product.status === false) {
                     throw new Error(
-                        `Product with ID ${productId} cannot be added to purchases as it is not managed in stock.`
+                        `មិនអាចទិញផលិតផល ${product.pname} ទេ។ ដោយសារផលិតផលនេះមិនគ្រប់គ្រងស្តុកទេ។`
                     );
                 }
 
@@ -241,12 +117,12 @@ export const createPurchases = async (req, res) => {
                         include_tax,
                         total,
                         discount,
-                        total_amount,
                         payment_amount,
                         balance,
                         bankId,
+                        sell_price,
                         date_purchase: new Date(),
-                        userId: req.user?.id || null,
+                        userId
                     },
                     { transaction }
                 );
@@ -277,7 +153,7 @@ export const createPurchases = async (req, res) => {
 
             // Step 7: Deduct money from the bank balance for all purchases
             if (bank.balance < totalPaymentAmount) {
-                throw new Error('Insufficient bank balance');
+                throw new Error('មិនមានសាច់ប្រាក់គ្រប់គ្រាន់សម្រាប់ការទូរទាត់ទេ');
             }
 
             const newBalance = bank.balance - totalPaymentAmount;
@@ -287,7 +163,6 @@ export const createPurchases = async (req, res) => {
             await transaction.commit();
 
             res.status(201).json({
-                success: true,
                 message: 'Multiple purchases created successfully and products updated dynamically',
                 purchases,
             });
@@ -303,6 +178,7 @@ export const createPurchases = async (req, res) => {
         });
     }
 };
+
 
 
 

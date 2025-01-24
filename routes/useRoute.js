@@ -113,7 +113,6 @@ router.get('/expenseType', fetchExpenseType)
 router.put('/expenseType/:id', updateExpenseType)
 router.delete('/expenseType/:id', deleteExpenseType)
 
-
 //expense
 router.post('/expense', createExpense)
 router.get('/expense', fetchExpense)

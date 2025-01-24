@@ -26,7 +26,10 @@ function Purchase() {
     const [dataPerPage, setDataPerPage] = useState<number>(15);
     const [searchQuery, setSearchQuery] = useState<string>("");
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-    const [dataToDelete, setdataToDelete] = useState<{ purchaseId: number; pname: string } | null>(null);
+    const [dataToDelete, setdataToDelete] = useState<{
+        purchaseNo: any;
+        bankId: any; purchaseId: number; pname: string
+    } | null>(null);
     const [successMsg, setSuccessMsg] = useState<string | null>(null); // State for success message
 
     const [isLoading, setIsLoading] = useState(false);
@@ -69,33 +72,38 @@ function Purchase() {
     );
 
     // Delete handling
-    const handleDeleteClick = (pname: { purchaseId: number; pname: string }) => {
-        setdataToDelete(pname);
+    const handleDeleteClick = (purchase: { purchaseNo: string; bankId: number; purchaseId: number; pname: string }) => {
+        setdataToDelete(purchase);
         setIsDeleteModalOpen(true);
     };
+
+
 
 
     const handleDelete = async () => {
         if (dataToDelete !== null) {
             try {
-                await axios.delete(`${url}purchase/${dataToDelete.purchaseId}`);
-                setPurchase(purchase.filter(data => data.purchaseId !== dataToDelete.purchaseId));
+                await axios.delete(`${url}purchase`, {
+                    data: {
+                        purchaseNo: dataToDelete.purchaseNo,
+                        bankId: dataToDelete.bankId,
+                    },
+                });
+                setPurchase(purchase.filter(
+                    (data) =>
+                        data.purchaseNo !== dataToDelete.purchaseNo || data.bankId !== dataToDelete.bankId
+                ));
                 setIsDeleteModalOpen(false);
-                setIsLoading(true)
+                setIsLoading(true);
                 handleSuccess("បានលុបទុកដោយជោគជ័យ!");
                 sound_message();
-
-
             } catch (error) {
-                console.error("Error deleting customer:", error);
-            }
-
-            finally {
-                setIsLoading(false)
+                console.error("Error deleting purchase:", error);
+            } finally {
+                setIsLoading(false);
             }
         }
     };
-
     // Open modal
 
 
@@ -169,63 +177,70 @@ function Purchase() {
                             />
                         </div>
 
+                        <div>
+
+                        </div>
+
                         <table className="min-w-full xl:table-fixed">
                             <thead className="text-white bg-blue-600/90">
                                 <tr className="font-bold font-NotoSansKhmer">
-                                    <th className="px-4 py-2 w-[7%]">ល.រ</th>
+
+                                    <th className="px-4 py-2 w-[12.5%]">លេខយោង</th>
                                     <th className="px-4 py-2 w-[10%]">អ្នកផ្គត់ផ្គង់</th>
-                                    <th className="px-4 py-2 w-[12.5%]">ផលិតផល</th>
-                                    <th className="px-4 py-2 w-[12.5%]">តម្លៃដើម</th>
-                                    <th className="px-4 py-2 w-[10%]">បរិមាណ</th>
-                                    <th className="px-4 py-2 w-[12.5%]">បញ្ចុះតម្លៃ</th>
-                                    <th className="px-4 py-2 w-[12.5%]">ពន្ធ</th>
-                                    <th className="px-4 py-2 w-[12.5%]">តម្លៃលក់</th>
                                     <th className="px-4 py-2 w-[10%]">ចំនួនសរុប</th>
-                            
                                     <th className="px-4 py-2 w-[10%]">ចំនួនទូទាត់</th>
+                                    <th className="px-4 py-2 w-[12.5%]">ស្ថានភាព</th>
                                     <th className="px-4 py-2 w-[12.5%]">នៅសស់</th>
+                                    <th className="px-4 py-2 w-[12.5%]">គណនី</th>
                                     <th className="px-4 py-2 w-[12.5%]">អ្នកប្រើប្រាស់</th>
-                                 
+                                    <th className="px-4 py-2 w-[12.5%]">កាលបរិច្ឆេតទិញ</th>
                                     <th className="px-4 py-2 w-[12.5%]">សកម្មភាព</th>
                                 </tr>
                             </thead>
                             <tbody>
+
                                 {currentData.length > 0 ? (
                                     currentData.map((item, index) => (
-                                        <tr key={item.purchaseId || index}>
-                                            <td className="px-4 py-2 w-[12.5%]">{(currentPage - 1) * dataPerPage + index + 1}</td>
+                                        <tr key={index}>
+
+                                            <td className="px-4 py-2 w-[12.5%]">000{item.purchaseNo}</td>
                                             <td className="px-4 py-2 w-[12.5%]">{item.supplierId_for_purchase?.full_Name}</td>
-                                            <td className="px-4 py-2 w-[12.5%]">{item.productId_for_purchase?.pname}</td>
-                                            <td className="px-4 py-2 w-[12.5%]">{item.cost_price}</td>
-                                            <td className="px-4 py-2 w-[12.5%]">{item.qty}</td>
-                                            <td className="px-4 py-2 w-[12.5%]">{item.discount}</td>
-                                            <td className="px-4 py-2 w-[12.5%]">{item.include_tax}</td>
-                                            <td className="px-4 py-2 w-[12.5%]">{item.sell_price}</td>
-                                            <td className="px-4 py-2 w-[12.5%]">{item.total}</td>
-                                          
-                                       
-                                           
-                                            <td className="px-4 py-2 w-[12.5%]">{item.payment_amount}</td>
+                                            <td className="px-4 py-2 w-[12.5%]">${item.total_amount}</td>
+                                            <td className="px-4 py-2 w-[12.5%]">${item.payment_amount}</td>
+                                            <td className="px-4 py-2 w-[12.5%]">
 
-                                            {/* <td className="px-4 py-2 w-[12.5%]">{item.const_price * item.qty * item.include_tax}</td> */}
+                                            {Math.abs(parseFloat(item.balance)) < 0.0001 ? (
+                                                <button className="px-1 text-xs text-white bg-green-500 rounded-full ">បានបង់</button>
+                                            ) : parseFloat(item.payment_amount) / parseFloat(item.total_amount) > 0.5 ? (
+                                                <button className="px-1 text-xs bg-yellow-400 rounded-full">បានបង់ខ្លះ</button>
+                                            ) : (
+                                                <button className="px-1 text-xs text-white bg-red-500 rounded-full">ជំពាក់</button>
+                                            )}
+                                            </td>
 
-                                            {/* include tax */}
-                                     
-                                            <td className="px-4 py-2 w-[12.5%]">{item.balance}</td>
+                                         
+
+
+
+                                            <td className="px-4 py-2 w-[12.5%]">${item.balance}</td>
+                                            <td className="px-4 py-2 w-[12.5%]">{item.bankId_for_purchase?.bankName}</td>
                                             <td className="px-4 py-2 w-[12.5%]">{item.userId_for_purchase?.userName}</td>
+                                            <td className="px-4 py-2 w-[12.5%]">{new Date(item.date_purchase).toLocaleDateString()}</td>
                                             <td className="px-4 py-2 w-[12.5%] space-x-2">
                                                 <button
-                                                    onClick={() => handleDeleteClick({ purchaseId: item.purchaseId, pname: item.pname })}
+                                                    onClick={() => handleDeleteClick({
+                                                        purchaseNo: item.purchaseNo, bankId: item.bankId,
+                                                        purchaseId: 0,
+                                                        pname: item.supplierId_for_purchase?.full_Name
+                                                    })}
                                                     className="delete_action"
                                                 >
                                                     <MdDelete />
                                                 </button>
                                                 <Link to={`/purchase/${item.purchaseId}`} >
-                                                <button className="edit_action">
-                                                
-                                                    <FaUserEdit />
-                                              
-                                                </button>
+                                                    <button className="edit_action">
+                                                        <FaUserEdit />
+                                                    </button>
                                                 </Link>
                                             </td>
                                         </tr>

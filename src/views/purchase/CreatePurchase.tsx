@@ -208,6 +208,8 @@ function CreatePurchase() {
     setPayment(value);
   };
 
+  
+
   const handleDiscountChanges = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value =
       e.target.value === "" ? 0 : Math.max(1, Number(e.target.value));
@@ -326,6 +328,7 @@ function CreatePurchase() {
     const data = {
       bankId: selectBank,
       userId: userId,
+
       purchases: selectedProducts.map((product) => ({
         supplierId: selectedSupplier.supplierId,
         productId: product.productId,
@@ -333,14 +336,16 @@ function CreatePurchase() {
         qty: productDetails[product.productId]?.qty || 0,
         include_tax: productDetails[product.productId]?.tax || 0,
         sell_price: productDetails[product.productId]?.sellPrice,
-        // balance: totalAmount,
         date_purchase: dateToSubmit,
-        discount: discount,
-        payment_amount: payment,
-        balance: remainingAmount
+        
+        
+        
+        // balance: remainingAmount
       })),
-
-
+      total_amount: totalAmount,
+      balance: remainingAmount,
+      payment_amount: payment,
+      discount: discount,
     };
 
     try {

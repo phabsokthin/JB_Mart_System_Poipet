@@ -6,40 +6,47 @@ const Product = db.Product;
 const Bank = db.Bank;
 
 
-// export const fetchPurchase = async (req, res) => {
-//     try {
-//         const data = await Purchase.findAll({
-//             include: [
-//                 {
-//                     model: db.Bank,
-//                     as: 'bankId_for_purchase',
-//                     attributes: ['bankName']
-//                 },
-//                 {
-//                     model: db.Supplier,
-//                     as: 'supplierId_for_purchase',
-//                     attributes: ['full_Name']
-//                 },
-//                 {
-//                     model: db.Product,
-//                     as: 'productId_for_purchase',
-//                     attributes: ['pname']
-//                 },
-//                 {
-//                     model: db.User,
-//                     as: 'userId_for_purchase',
-//                     attributes: ['userName']
-//                 }
-//             ],
-//             order: [["createdAt", "DESC"]]
+export const fetchPurchaseByPurchaseNo = async (req, res) => {
+    try {
+        const data = await Purchase.findAll({
+            where: {
+                purchaseNo: req.params.id, // Ensure this matches your parameter name
+            },
+            include: [
+                {
+                    model: db.Bank,
+                    as: 'bankId_for_purchase',
+                    attributes: ['bankName']
+                },
+                {
+                    model: db.Supplier,
+                    as: 'supplierId_for_purchase',
+                    attributes: ['full_Name']
+                },
+                {
+                    model: db.Product,
+                    as: 'productId_for_purchase',
+                    attributes: ['pname']
+                },
+                {
+                    model: db.User,
+                    as: 'userId_for_purchase',
+                    attributes: ['userName']
+                }
+            ],
+            order: [["createdAt", "DESC"]]
+        });
 
-//         });
-//         return res.status(200).json(data)
-//     }
-//     catch (err) {
-//         console.log(err)
-//     }
-// };
+        if (!data) {
+            return res.status(404).json({ message: 'Purchase not found' });
+        }
+
+        return res.status(200).json(data);
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({ error: 'An error occurred while fetching the purchase' });
+    }
+};
 
 
 

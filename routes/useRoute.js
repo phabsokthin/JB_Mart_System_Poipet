@@ -7,7 +7,7 @@ import { createCategory, deleteCategory, fetchCategory, fetchCategoryByID, updat
 import { createUnit, deleteUnit, fetchUnit, fetchUnitByID, updateUnit } from '../controller/Units.controller.js';
 import { createBrand, deleteBrand, fetchBrand, fetchBrandByID, updateBrand } from '../controller/Brand.controller.js';
 import { createProduct, deleteProduct, fetchProduct, fetchProductById, updateProduct } from '../controller/Product.controller.js';
-import { createPurchases, deletePurchase, fetchPurchase, updatePurchase } from '../controller/Purchase.controller.js';
+import { createPurchases, deletePurchase, fetchPurchase, fetchPurchaseByPurchaseNo, updatePurchase } from '../controller/Purchase.controller.js';
 import { createBankType, deleteBankType, fetchBankType, updateBankType } from '../controller/BankType.controller.js';
 import { createBank, deleteBank, fetchBank, updateBank, updateStatus, updateStatusEnabled } from '../controller/Bank.controller.js';
 import { createBankTransfer, deleteBankTransfer, fetchBankTransfers } from '../controller/BankTransfer.controller.js';
@@ -83,7 +83,9 @@ router.put('/product/:id', updateProduct)
 router.post('/purchase', createPurchases)
 router.get('/purchase', fetchPurchase)
 router.put('/purchase', updatePurchase)
+router.get('/purchase/:id', fetchPurchaseByPurchaseNo)
 router.delete('/purchase', deletePurchase)
+
 
 //bank type
 router.get('/banktype', fetchBankType)

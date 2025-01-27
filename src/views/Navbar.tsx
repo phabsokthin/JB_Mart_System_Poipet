@@ -209,6 +209,14 @@ function Navbar() {
                   </p>
 
                   <p className="font-bold font-NotoSansKhmer">
+                    {location.pathname === `/updatePurchase/${id}`
+                      ? "បញ្ជាទិញទំនិញ/កែប្រែការទិញទំនិញ"
+                      : ""}
+                  </p>
+
+                  
+
+                  <p className="font-bold font-NotoSansKhmer">
                     {location.pathname === "/topup"
                       ? "កាតទូរស័ព្ទ/បញ្ជីកាតទូរស័ព្ទ"
                       : ""}
@@ -229,6 +237,16 @@ function Navbar() {
                   <p className="font-bold font-NotoSansKhmer">
                     {location.pathname === "/puchaseTopup"
                       ? "កាតទូរស័ព្ទ/ទិញកាតចូល"
+                      : ""}
+                  </p>
+
+
+                  
+
+
+                  <p className="font-bold font-NotoSansKhmer">
+                    {location.pathname === `/viewPurchaseDetail/${id}`
+                      ? "កាទិញ/មើលការទិញ"
                       : ""}
                   </p>
 

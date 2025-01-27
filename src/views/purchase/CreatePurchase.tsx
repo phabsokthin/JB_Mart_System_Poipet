@@ -418,7 +418,7 @@ function CreatePurchase() {
 
           <div className="flex items-center gap-2 ">
             <BiPurchaseTag className="text-xl" />
-            <p className="text-lg font-bold font-NotoSansKhmer">ការទិញផលិតផល {userId}</p>
+            <p className="text-lg font-bold font-NotoSansKhmer">ការទិញផលិតផល </p>
           </div>
           {errMsg && <MessageError message={errMsg} onClear={() => setErrMsg(null)} />}
 
@@ -521,7 +521,7 @@ function CreatePurchase() {
                     <th className="p-2 border w-[20%]">ឈ្មោះផលិតផល</th>
                     <th className="p-2 border w-[10%]">តម្លៃដើម(ឯកតា)</th>
                     <th className="p-2 border w-[12%]">បរិមាណទិញចូល</th>
-                    <th className="p-2 border w-[12%]">បញ្ចុះតម្លៃ</th>
+                    {/* <th className="p-2 border w-[12%]">បញ្ចុះតម្លៃ</th> */}
                     <th className="p-2 border w-[12%]">ពន្ធសរុប</th>
                     <th className="p-2 border w-[12%]">តម្លៃលក់</th>
                     <th className="p-2 border w-[15%]">សរុប</th>
@@ -584,7 +584,7 @@ function CreatePurchase() {
                         </td>
 
                         {/* Discount Input */}
-                        <td>
+                        {/* <td>
                           <input
                             min={0}
                             type="number"
@@ -598,7 +598,7 @@ function CreatePurchase() {
                             }
                             className="input_text"
                           />
-                        </td>
+                        </td> */}
 
                         {/* Tax Input */}
                         <td>

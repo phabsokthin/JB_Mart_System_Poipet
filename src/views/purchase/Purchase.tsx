@@ -19,6 +19,8 @@ import MessageSuccess from "../../components/build/message/MessageSuccess";
 import Navbar from "../Navbar";
 import { url } from "../../api/url";
 import { Link } from "react-router-dom";
+import { FaEye } from "react-icons/fa";
+
 
 function Purchase() {
     const [purchase, setPurchase] = useState<any[]>([]);
@@ -209,16 +211,14 @@ function Purchase() {
                                             <td className="px-4 py-2 w-[12.5%]">${item.payment_amount}</td>
                                             <td className="px-4 py-2 w-[12.5%]">
 
-                                            {Math.abs(parseFloat(item.balance)) < 0.0001 ? (
-                                                <button className="px-1 text-xs text-white bg-green-500 rounded-full ">បានបង់</button>
-                                            ) : parseFloat(item.payment_amount) / parseFloat(item.total_amount) > 0.5 ? (
-                                                <button className="px-1 text-xs bg-yellow-400 rounded-full">បានបង់ខ្លះ</button>
-                                            ) : (
-                                                <button className="px-1 text-xs text-white bg-red-500 rounded-full">ជំពាក់</button>
-                                            )}
+                                                {Math.abs(parseFloat(item.balance)) < 0.0001 ? (
+                                                    <button className="px-1 text-xs text-white bg-green-500 rounded-full ">បានបង់</button>
+                                                ) : parseFloat(item.payment_amount) / parseFloat(item.total_amount) > 0.5 ? (
+                                                    <button className="px-1 text-xs bg-yellow-400 rounded-full">បានបង់ខ្លះ</button>
+                                                ) : (
+                                                    <button className="px-1 text-xs text-white bg-red-500 rounded-full">ជំពាក់</button>
+                                                )}
                                             </td>
-
-                                         
 
 
 
@@ -227,6 +227,11 @@ function Purchase() {
                                             <td className="px-4 py-2 w-[12.5%]">{item.userId_for_purchase?.userName}</td>
                                             <td className="px-4 py-2 w-[12.5%]">{new Date(item.date_purchase).toLocaleDateString()}</td>
                                             <td className="px-4 py-2 w-[12.5%] space-x-2">
+                                                <Link to={`/viewPurchaseDetail/${item.purchaseNo}`} >
+                                                    <button className="edit_action_warning">
+                                                        <FaEye />
+                                                    </button>
+                                                </Link>
                                                 <button
                                                     onClick={() => handleDeleteClick({
                                                         purchaseNo: item.purchaseNo, bankId: item.bankId,
@@ -237,7 +242,7 @@ function Purchase() {
                                                 >
                                                     <MdDelete />
                                                 </button>
-                                                <Link to={`/purchase/${item.purchaseId}`} >
+                                                <Link to={`/updatePurchase/${item.purchaseNo}`} >
                                                     <button className="edit_action">
                                                         <FaUserEdit />
                                                     </button>

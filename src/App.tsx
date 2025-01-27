@@ -36,6 +36,9 @@ import UpdateProduct from "./views/product/UpdateProduct";
 import BankTypeList from "./views/bankType/BankTypeList";
 import BankList from "./views/bank/BankList";
 import BankTransferList from "./views/bankTransfer/BankTransferList";
+import ViewPurchaseDetail from "./views/purchase/ViewPurchaseDetail";
+import UpdatePurchase from "./views/purchase/UpdatePurchase";
+
 
 function App() {
   return (
@@ -75,7 +78,9 @@ function App() {
            {/* Purchase Route */}
           <Route path="/purchase" element={<Purchase />} />
           <Route path="/createPurchase" element={<CreatePurchase />} />
+          <Route path="/viewPurchaseDetail/:id" element={<ViewPurchaseDetail/>} />
           <Route path="/puchaseReturn" element={<PurchaseReturn/>}/>
+          <Route path="/updatePurchase/:id" element={<UpdatePurchase />} />
 
           {/* top up */}
 

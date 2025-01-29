@@ -16,7 +16,6 @@ import MessageSuccess from "../../components/build/message/MessageSuccess";
 import sound_success from '../../assets/sound/success.mp3';
 import { jwtDecode } from 'jwt-decode'
 import { useParams } from "react-router-dom";
-import { p } from "framer-motion/client";
 
 type Product = {
     productId: number;
@@ -143,7 +142,54 @@ function UpdatePurchase() {
 
 
     useEffect(() => {
+        const calculateTotalAmount = () => {
+            console.log('selectedProducts:', selectedProducts);
+            console.log('productDetails:', productDetails);
+            console.log('viewPurchase:', viewPurchase);
+    
+            // Calculate the total for selected products
+            const selectedProductsTotal = selectedProducts.reduce((sum, product) => {
+                const productDetail = productDetails[product.productId] || {};
+                const const_price = productDetail.const_price || product.const_price || 1;
+                const qty = productDetail.qty || 1;
+                const discount = productDetail.discount || 0;
+                const tax = productDetail.tax || 0;
+    
+                return sum + (const_price * qty - discount + tax);
+            }, 0);
+    
+            // Calculate the total for viewPurchase
+            const viewPurchaseTotal = viewPurchase?.reduce((sum, purchase:any) => {
+                const totalFromDB = purchase[0]?.total_amount || 0; // Use total_amount from the database if available
+                const qty = purchase[0]?.qty || 1;  // Ensure qty is always considered
+                const discount = purchase[0]?.discount || 0;
+    
+                // If total_amount is available and it already includes quantity, don't multiply by qty
+                if (totalFromDB) {
+                    return sum + totalFromDB; // Add total_amount directly, as it already includes quantity
+                }
+    
+                // Fallback calculation if total_amount is not available
+                const total = purchase?.total || 0;  // Use the base price if no total_amount
+                return sum + (total * qty - discount); // Multiply total price by qty and subtract discount
+            }, 0) || 0;
+    
+            // Combine the totals from selected products and viewPurchase
+            console.log('selectedProductsTotal:', selectedProductsTotal);
+            console.log('viewPurchaseTotal:', viewPurchaseTotal);
+            
+            setTotalAmount(selectedProductsTotal + viewPurchaseTotal);
+        };
+    
         calculateTotalAmount();
+    }, [selectedProducts, productDetails, viewPurchase]);
+    
+    
+
+    
+
+    useEffect(() => {
+        // calculateTotalAmount();
         handlecalculatedRemainingAmount();
         fetchBank();
     }, [productDetails, selectedProducts, payment, discount, totalAmount]);
@@ -217,19 +263,36 @@ function UpdatePurchase() {
     };
 
 
-    const calculateTotalAmount = () => {
-        const total = selectedProducts.reduce((sum, product) => {
-            const productDetail = productDetails[product.productId] || {};
-            const const_price = productDetail.const_price || product.const_price || 1;
-            const qty = productDetail.qty || 1;
-            const discount = productDetail.discount || 0;
-            const tax = productDetail.tax || 0;
-
-            return sum + (const_price * qty - discount + tax);
-        }, 0);
-
-        setTotalAmount(total);
-    };
+    // const calculateTotalAmount = () => {
+    //     // Calculate the total from selectedProducts
+    //     const selectedProductsTotal = selectedProducts.reduce((sum, product) => {
+    //         const productDetail = productDetails[product.productId] || {};
+    //         const const_price = productDetail.const_price || product.const_price || 1;
+    //         const qty = productDetail.qty || 1;
+    //         const discount = productDetail.discount || 0;
+    //         const tax = productDetail.tax || 0;
+    
+    //         return sum + (const_price * qty - discount + tax);
+    //     }, 0);
+    
+    //     // Calculate the total from viewPurchase
+    //     const viewPurchaseTotal = viewPurchase?.reduce((sum, purchase) => {
+    //         // Safely access the properties of `purchase[0]` with default values
+    //         const total = purchase.total_amount || 0; // Default to 0 if `total` is not present
+    //         const qty = purchase.qty || 1; // Default to 1 for quantity
+    //         const discount = purchase.discount || 0; // Default to 0 for discount
+        
+    //         // Calculate total with default values
+    //         return sum + (total * qty - discount);
+    //     }, 0) || 0;
+        
+    //     // Combine the totals
+    //     const total = selectedProductsTotal + viewPurchaseTotal;
+    
+    //     // Set the total amount
+    //     setTotalAmount(total);
+    // };
+    
 
 
 
@@ -450,6 +513,13 @@ function UpdatePurchase() {
 
 
 
+    useEffect(() => {
+        if (viewPurchase?.[0]?.total_amount && !totalAmount) {
+            setTotalAmount(viewPurchase[0].total_amount);
+        }
+    }, [viewPurchase, totalAmount]);
+    
+
 
     return (
         <div className="grid min-h-screen grid-cols-6 select-none">
@@ -461,6 +531,8 @@ function UpdatePurchase() {
 
             <div className="col-span-5 p-4">
                 <Navbar />
+
+
                 <div>
                     {
                         errMsg2 && (
@@ -557,270 +629,286 @@ function UpdatePurchase() {
                         </div>
 
                         {/* Display selected products */}
-                        <div className="mt-6">
-                            <h3 className="text-lg font-semibold">កំណត់ការបញ្ជាទិញ</h3>
-                            <table className="w-full mt-4 border-collapse">
-                                <thead className="p-2 text-white bg-blue-600/90">
-                                    <tr>
-                                        <th className="p-2 border w-[7%]">លេខរៀង</th>
-                                        <th className="p-2 border w-[20%]">ឈ្មោះផលិតផល</th>
-                                        <th className="p-2 border w-[10%]">តម្លៃដើម(ឯកតា)</th>
-                                        <th className="p-2 border w-[12%]">បរិមាណទិញចូល</th>
-                                        {/* <th className="p-2 border w-[12%]">បញ្ចុះតម្លៃ</th> */}
-                                        <th className="p-2 border w-[12%]">ពន្ធសរុប</th>
-                                        <th className="p-2 border w-[12%]">តម្លៃលក់</th>
-                                        <th className="p-2 border w-[15%]">សរុប</th>
-                                        <th className="p-2 border w-[5%]">
-                                            <p className="text-center">ស្ថានភាព</p>
-                                        </th>
-                                    </tr>
-                                </thead>
-
-
-                                <tbody>
-                                    {selectedProducts.length > 0 && selectedProducts.map((product, index) => (
-                                        <tr key={product.productId}>
-                                            <td className="p-2">{index + 1}</td>
-                                            <td className="p-2">
-                                                {product.pname}
-                                                <p className="text-xs text-gray-500">
-                                                    មានស្តុកនៅសល់ {productDetails[product.productId]?.qty}
-                                                    <br />
-                                                    តម្លៃលក់ {product.const_price}
-                                                </p>
-                                            </td>
-
-                                            {/* const_price Input */}
-                                            <td>
-                                                <input
-                                                    min={0}
-                                                    type="number"
-                                                    placeholder="0.0"
-                                                    value={productDetails[product.productId]?.const_price || product.const_price || ""}
-                                                    onChange={(e) => handleProductconst_priceChange(product.productId, Number(e.target.value))}
-                                                    className="bg-gray-0 input_text"
-                                                />
-                                            </td>
-
-                                            {/* Quantity Input */}
-                                            <td>
-                                                <input
-                                                    min={0}
-                                                    type="number"
-                                                    placeholder="0.0"
-                                                    value={productDetails[product.productId]?.qty || product.qty || ""}
-                                                    onChange={(e) => handleQtyChange(product.productId, Number(e.target.value))}
-                                                    className="input_text"
-                                                />
-                                            </td>
-
-                                            {/* Tax Input */}
-                                            <td>
-                                                <input
-                                                    min={0}
-                                                    type="number"
-                                                    placeholder="0.0"
-                                                    value={productDetails[product.productId]?.tax || ""}
-                                                    onChange={(e) => handleTaxChange(product.productId, Number(e.target.value))}
-                                                    className="input_text"
-                                                />
-                                            </td>
-
-                                            <td>
-                                                <input
-                                                    min={0}
-                                                    type="number"
-                                                    placeholder="0.0"
-                                                    value={productDetails[product.productId]?.sellPrice || ""}
-                                                    onChange={(e) => handleSellPriceChange(product.productId, Number(e.target.value))}
-                                                    className="input_text"
-                                                />
-                                            </td>
-
-                                            {/* Total const_price Calculation */}
-                                            <td>
-                                                <input
-                                                    min={0}
-                                                    type="number"
-                                                    placeholder="0.0"
-                                                    value={((productDetails[product.productId]?.const_price || 0) *
-                                                        (productDetails[product.productId]?.qty || 1) -
-                                                        (productDetails[product.productId]?.discount || 0) +
-                                                        (productDetails[product.productId]?.tax || 0)) || 0}
-                                                    readOnly
-                                                    className="bg-gray-100 input_text"
-                                                />
-                                            </td>
-
-                                            {/* Remove Product Button */}
-                                            <td className="p-2">
-                                                <div className="flex justify-center">
-                                                    <button
-                                                        className="p-2 text-white bg-red-500 hover:text-white hover:bg-red-400"
-                                                        onClick={() => handleRemoveProduct(product.productId)}
-                                                    >
-                                                        <IoMdClose />
-                                                    </button>
-                                                </div>
-                                            </td>
+                        <div>
+                            <div className="mt-6">
+                                <h3 className="text-lg font-semibold">កំណត់ការបញ្ជាទិញ</h3>
+                                <table className="w-full mt-4 border-collapse">
+                                    <thead className="p-2 text-white bg-blue-600/90">
+                                        <tr>
+                                            <th className="p-2 border w-[7%]">លេខរៀង</th>
+                                            <th className="p-2 border w-[20%]">ឈ្មោះផលិតផល</th>
+                                            <th className="p-2 border w-[10%]">តម្លៃដើម(ឯកតា)</th>
+                                            <th className="p-2 border w-[12%]">បរិមាណទិញចូល</th>
+                                            {/* <th className="p-2 border w-[12%]">បញ្ចុះតម្លៃ</th> */}
+                                            <th className="p-2 border w-[12%]">ពន្ធសរុប</th>
+                                            <th className="p-2 border w-[12%]">តម្លៃលក់</th>
+                                            <th className="p-2 border w-[15%]">សរុប</th>
+                                            <th className="p-2 border w-[5%]">
+                                                <p className="text-center">ស្ថានភាព</p>
+                                            </th>
                                         </tr>
-                                    ))}
-
-                                    {/* Store for Update */}
-                                    {viewPurchase.length > 0 && viewPurchase.map((product, index) => (
-                                        <tr key={product.productId}>
-                                            <td className="p-2">{index + 1}</td>
-                                            <td className="p-2">
-                                                {product.productId_for_purchase?.pname}
-                                                <p className="text-xs text-gray-500">
-                                                    {/* Assuming viewPurchase contains qty info */}
-                                                    <br />
-                                                    តម្លៃលក់ {product.cost_price}
-                                                </p>
-                                            </td>
-
-                                            {/* const_price Input (for update) */}
-                                            <td>
-                                                <input
-                                                    min={0}
-                                                    type="number"
-                                                    placeholder="0.0"
-                                                    value={productDetails[product.productId]?.const_price || product.cost_price || ""}
-                                                    onChange={(e) => handleProductconst_priceChange(product.productId, Number(e.target.value))}
-                                                    className="bg-gray-0 input_text"
-                                                />
-                                            </td>
-
-                                            {/* Quantity Input (for update) */}
-                                            <td>
-                                                <input
-                                                    min={0}
-                                                    type="number"
-                                                    placeholder="0.0"
-                                                    value={productDetails[product.productId]?.qty || product.qty || ""}
-                                                    onChange={(e) => handleQtyChange(product.productId, Number(e.target.value))}
-                                                    className="input_text"
-                                                />
-                                            </td>
-
-                                            {/* Tax Input (for update) */}
-                                            <td>
-                                                <input
-                                                    min={0}
-                                                    type="number"
-                                                    placeholder="0.0"
-                                                    value={productDetails[product.productId]?.tax || product.include_tax || ""}
-                                                    onChange={(e) => handleTaxChange(product.productId, Number(e.target.value))}
-                                                    className="input_text"
-                                                />
-                                            </td>
-
-                                            <td>
-                                                <input
-                                                    min={0}
-                                                    type="number"
-                                                    placeholder="0.0"
-                                                    value={productDetails[product.productId]?.sellPrice || product.sell_price || ""}
-                                                    onChange={(e) => handleSellPriceChange(product.productId, Number(e.target.value))}
-                                                    className="input_text"
-                                                />
-                                            </td>
-
-                                            {/* Total const_price Calculation (for update) */}
-                                            <td>
-                                                <input
-                                                    min={0}
-                                                    type="number"
-                                                    placeholder="0.0"
-                                                    value={((productDetails[product.productId]?.const_price || product.total || 0) *
-                                                        (productDetails[product.productId]?.qty || 1) -
-                                                        (productDetails[product.productId]?.discount || 0) +
-                                                        (productDetails[product.productId]?.tax || 0)) || 0}
-                                                    readOnly
-                                                    className="bg-gray-100 input_text"
-                                                />
-                                            </td>
-
-                                            {/* Remove Product Button */}
-                                            <td className="p-2">
-                                                <div className="flex justify-center">
-                                                    <button
-                                                        className="p-2 text-white bg-red-500 hover:text-white hover:bg-red-400"
-                                                        onClick={() => handleRemoveProduct(product.productId)}
-                                                    >
-                                                        <IoMdClose />
-                                                    </button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
+                                    </thead>
 
 
-                            </table>
-                        </div>
+                                    <tbody>
+                                        {/* Render selectedProducts if available */}
+                                        {selectedProducts.length > 0 && selectedProducts.map((product, index) => (
+                                            <tr key={product.productId}>
+                                                <td className="p-2">{index + 1}</td>
+                                                <td className="p-2">
+                                                    {product.pname}
+                                                    <p className="text-xs text-gray-500">
+                                                        មានស្តុកនៅសល់ {productDetails[product.productId]?.qty}
+                                                        <br />
+                                                        តម្លៃលក់ {product.const_price}
+                                                    </p>
+                                                </td>
 
-                        <div className="mt-3">
-                            <h3 className="text-lg font-semibold">បន្ថែមការទូទាត់</h3>
-                            <hr className="my-2" />
-                            <div className="grid grid-cols-3 gap-3">
-                                <div className="space-y-2">
-                                    <label htmlFor="">ចំនួនការទូទាត់សរុប($)</label>
-                                    <input
-                                        type="number"
-                                        placeholder="0.0"
-                                        min={0}
-                                        value={totalAmount || (viewPurchase[0]?.total_amount || 0)}
-                                        readOnly
-                                        className="bg-gray-100 input_text"
-                                    />
-                                </div>
+                                                {/* const_price Input */}
+                                                <td>
+                                                    <input
+                                                        min={0}
+                                                        type="number"
+                                                        placeholder="0.0"
+                                                        value={productDetails[product.productId]?.const_price || product.const_price || ""}
+                                                        onChange={(e) => handleProductconst_priceChange(product.productId, Number(e.target.value))}
+                                                        className="bg-gray-0 input_text"
+                                                    />
+                                                </td>
 
-                                <div className="space-y-2">
-                                    <label htmlFor="">ចំនួនទឹកប្រាក់បញ្ចុះតម្លៃ</label>
-                                    <input
-                                        type="number"
-                                        placeholder="0.0"
-                                        value={discount || (viewPurchase?.[0]?.discount || 0)}
-                                        onChange={handleDiscountChanges}
-                                        className="input_text"
-                                    />
-                                </div>
-                                <div className="space-y-2">
-                                    <label htmlFor="">ទូទាត់សាច់ប្រាក់($): * </label>
-                                    <input
-                                        value={payment || (viewPurchase?.[0]?.payment_amount || 0)}
-                                        onChange={handlePaymentChange}
-                                        type="number"
-                                        placeholder="0.0"
-                                        className="input_text"
-                                    />
-                                </div>
+                                                {/* Quantity Input */}
+                                                <td>
+                                                    <input
+                                                        min={0}
+                                                        type="number"
+                                                        placeholder="0.0"
+                                                        value={productDetails[product.productId]?.qty || product.qty || ""}
+                                                        onChange={(e) => handleQtyChange(product.productId, Number(e.target.value))}
+                                                        className="input_text"
+                                                    />
+                                                </td>
+
+                                                {/* Tax Input */}
+                                                <td>
+                                                    <input
+                                                        min={0}
+                                                        type="number"
+                                                        placeholder="0.0"
+                                                        value={productDetails[product.productId]?.tax || ""}
+                                                        onChange={(e) => handleTaxChange(product.productId, Number(e.target.value))}
+                                                        className="input_text"
+                                                    />
+                                                </td>
+
+                                                <td>
+                                                    <input
+                                                        min={0}
+                                                        type="number"
+                                                        placeholder="0.0"
+                                                        value={productDetails[product.productId]?.sellPrice || ""}
+                                                        onChange={(e) => handleSellPriceChange(product.productId, Number(e.target.value))}
+                                                        className="input_text"
+                                                    />
+                                                </td>
+
+                                                {/* Total const_price Calculation */}
+                                                <td>
+                                                    <input
+                                                        min={0}
+                                                        type="number"
+                                                        placeholder="0.0"
+                                                        value={((productDetails[product.productId]?.const_price || 0) *
+                                                            (productDetails[product.productId]?.qty || 1) -
+                                                            (productDetails[product.productId]?.discount || 0) +
+                                                            (productDetails[product.productId]?.tax || 0)) || 0}
+                                                        readOnly
+                                                        className="bg-gray-100 input_text"
+                                                    />
+                                                </td>
+
+                                                {/* Remove Product Button */}
+                                                <td className="p-2">
+                                                    <div className="flex justify-center">
+                                                        <button
+                                                            className="p-2 text-white bg-red-500 hover:text-white hover:bg-red-400"
+                                                            onClick={() => handleRemoveProduct(product.productId)}
+                                                        >
+                                                            <IoMdClose />
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        ))}
+
+                                        {/* Render viewPurchase if available and selectedProducts exists */}
+
+                                        {/* Store for Update */}
+                                        {viewPurchase.length > 0 && viewPurchase.map((product, index) => (
+                                            <tr key={product.purchaseId}>
+                                                <td className="p-2">{index + 1}</td>
+                                                <td className="p-2">
+                                                    {product.productId_for_purchase?.pname}
+                                                    <p className="text-xs text-gray-500">
+                                                        {/* Assuming viewPurchase contains qty info */}
+                                                        <br />
+                                                        តម្លៃលក់ {product.cost_price}
+                                                    </p>
+                                                </td>
+
+                                                {/* const_price Input (for update) */}
+                                                <td>
+                                                    <input
+                                                        min={0}
+                                                        type="number"
+                                                        placeholder="0.0"
+                                                        value={productDetails[product.productId]?.const_price || product.cost_price || ""}
+                                                        onChange={(e) => handleProductconst_priceChange(product.productId, Number(e.target.value))}
+                                                        className="bg-gray-0 input_text"
+                                                    />
+                                                </td>
+
+                                                {/* Quantity Input (for update) */}
+                                                <td>
+                                                    <input
+                                                        min={0}
+                                                        type="number"
+                                                        placeholder="0.0"
+                                                        value={productDetails[product.productId]?.qty || product.qty || ""}
+                                                        onChange={(e) => handleQtyChange(product.productId, Number(e.target.value))}
+                                                        className="input_text"
+                                                    />
+                                                </td>
+
+                                                {/* Tax Input (for update) */}
+                                                <td>
+                                                    <input
+                                                        min={0}
+                                                        type="number"
+                                                        placeholder="0.0"
+                                                        value={productDetails[product.productId]?.tax || product.include_tax || ""}
+                                                        onChange={(e) => handleTaxChange(product.productId, Number(e.target.value))}
+                                                        className="input_text"
+                                                    />
+                                                </td>
+
+                                                <td>
+                                                    <input
+                                                        min={0}
+                                                        type="number"
+                                                        placeholder="0.0"
+                                                        value={productDetails[product.productId]?.sellPrice || product.sell_price || ""}
+                                                        onChange={(e) => handleSellPriceChange(product.productId, Number(e.target.value))}
+                                                        className="input_text"
+                                                    />
+                                                </td>
+
+                                                {/* Total const_price Calculation (for update) */}
+                                                <td>
+                                                    <input
+                                                        min={0}
+                                                        type="number"
+                                                        placeholder="0.0"
+                                                        value={((productDetails[product.productId]?.const_price || product.total ) *
+                                                            (productDetails[product.productId]?.qty || 1) -
+                                                            (productDetails[product.productId]?.discount || 0) +
+                                                            (productDetails[product.productId]?.tax || 0)) || 0
+                                                        
+                                                        }
+                                                        readOnly
+                                                        className="bg-gray-100 input_text"
+                                                    />
+                                                </td>
+
+                                                {/* Remove Product Button */}
+                                                <td className="p-2">
+                                                    <div className="flex justify-center">
+                                                        <button
+                                                            className="p-2 text-white bg-red-500 hover:text-white hover:bg-red-400"
+                                                            onClick={() => handleRemoveProduct(product.productId)}
+                                                        >
+                                                            <IoMdClose />
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
 
 
-                                <div className="space-y-2">
-                                    <label htmlFor="">គណនី</label>
-                                    <select required value={selectBank || (viewPurchase?.[0]?.bankId || "")} onChange={handleSelectBank} className="input_text">
-                                        <option value="">--ជ្រើសរើស--</option>
-                                        <option value="0">បង់ផ្ទាល់</option>
-                                        {bank.map((item: any, index) => {
-                                            return (
-                                                <option key={index} value={item.bankId}>{item.bankName}</option>
-                                            )
-                                        })}
+                                </table>
+                            </div>
 
-                                    </select>
-                                </div>
+                            <div className="mt-3">
+                                <h3 className="text-lg font-semibold">បន្ថែមការទូទាត់</h3>
+                                <hr className="my-2" />
+                                <div className="grid grid-cols-3 gap-3">
+                                    <div className="space-y-2">
+                                        <label htmlFor="">ចំនួនការទូទាត់សរុប($)</label>
+                                        <input
+                                            type="number"
+                                            placeholder="0.0"
+                                            min={0}
+                                            value={totalAmount}
+                                            readOnly
+                                            className="bg-gray-100 input_text"
+                                        />
+                                    </div>
 
-                                <div className="space-y-2">
-                                    <label htmlFor="">ចំនួននៅសល់($)</label>
-                                    <input
-                                        type="number"
-                                        placeholder="0.0"
-                                        value={remainingAmount || (viewPurchase?.[0]?.balance)}
-                                        readOnly
-                                        className="bg-gray-100 input_text"
-                                    />
+                                    <div className="space-y-2">
+                                        <label htmlFor="">ចំនួនទឹកប្រាក់បញ្ចុះតម្លៃ</label>
+                                        <input
+                                            type="number"
+                                            placeholder="0.0"
+                                            value={discount || viewPurchase?.[0]?.discount || 0}
+                                            onChange={(e) => setDiscount(Number(e.target.value))}
+                                            className="input_text"
+                                        />
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <label htmlFor="">ទូទាត់សាច់ប្រាក់($): *</label>
+                                        <input
+                                            type="number"
+                                            placeholder="0.0"
+                                            value={payment || viewPurchase?.[0]?.payment_amount || 0}
+                                            onChange={(e) => setPayment(Number(e.target.value))}
+                                            className="input_text"
+                                        />
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <label htmlFor="">គណនី</label>
+                                        <select
+                                            
+                                            required
+                                            value={selectBank || viewPurchase?.[0]?.bankId || ""}
+                                            onChange={(e) => setSelectBank(e.target.value)}
+                                            className="input_text"
+                                        >
+                                            <option value="">--ជ្រើសរើស--</option>
+                                            <option value="0">បង់ផ្ទាល់</option>
+                                            {bank.map((item: any, index) => (
+                                                <option key={index} value={item.bankId}>
+                                                    {item.bankName}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <label htmlFor="">ចំនួននៅសល់($)</label>
+                                        <input
+                                            type="number"
+                                            placeholder="0.0"
+                                            value={
+                                                (totalAmount || viewPurchase?.[0]?.total_amount || 0) -
+                                                (discount || viewPurchase?.[0]?.discount || 0) -
+                                                (payment || viewPurchase?.[0]?.payment_amount || 0)
+                                            }
+                                            readOnly
+                                            className="bg-gray-100 input_text"
+                                        />
+                                    </div>
                                 </div>
                             </div>
                         </div>

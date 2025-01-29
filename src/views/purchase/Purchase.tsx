@@ -189,8 +189,8 @@ function Purchase() {
 
                                     <th className="px-4 py-2 w-[12.5%]">លេខយោង</th>
                                     <th className="px-4 py-2 w-[10%]">អ្នកផ្គត់ផ្គង់</th>
-                                    <th className="px-4 py-2 w-[10%]">ចំនួនសរុប</th>
-                                    <th className="px-4 py-2 w-[10%]">ចំនួនទូទាត់</th>
+                                    {/* <th className="px-4 py-2 w-[10%]">ចំនួនសរុប</th>
+                                    <th className="px-4 py-2 w-[10%]">ចំនួនទូទាត់</th> */}
                                     <th className="px-4 py-2 w-[12.5%]">ស្ថានភាព</th>
                                     <th className="px-4 py-2 w-[12.5%]">នៅសស់</th>
                                     <th className="px-4 py-2 w-[12.5%]">គណនី</th>
@@ -207,8 +207,8 @@ function Purchase() {
 
                                             <td className="px-4 py-2 w-[12.5%]">000{item.purchaseNo}</td>
                                             <td className="px-4 py-2 w-[12.5%]">{item.supplierId_for_purchase?.full_Name}</td>
-                                            <td className="px-4 py-2 w-[12.5%]">${item.total_amount}</td>
-                                            <td className="px-4 py-2 w-[12.5%]">${item.payment_amount}</td>
+                                            {/* <td className="px-4 py-2 w-[12.5%]">${item.total_amount}</td>
+                                            <td className="px-4 py-2 w-[12.5%]">${item.payment_amount}</td> */}
                                             <td className="px-4 py-2 w-[12.5%]">
 
                                                 {Math.abs(parseFloat(item.balance)) < 0.0001 ? (

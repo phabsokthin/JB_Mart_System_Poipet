@@ -245,153 +245,8 @@ export const createPurchases = async (req, res) => {
 
 
 
-
-
-
-
-
-
-// export const updatePurchase = async (req, res) => {
-//     const { purchases, bankId } = req.body;
-
-//     if (!Array.isArray(purchases) || purchases.length === 0) {
-//         return res.status(400).json({
-//             success: false,
-//             message: 'Invalid purchases data. Provide a non-empty array.',
-//         });
-//     }
-
-//     try {
-//         const transaction = await db.sequelize.transaction();
-
-//         try {
-//             let totalBankAdjustment = 0;
-
-//             // Fetch the bank record
-//             const bank = await Bank.findByPk(bankId, { transaction });
-//             if (!bank) {
-//                 throw new Error('Bank not found');
-//             }
-
-//             // Check if the bank's status is inactive (0)
-//             if (bank.status === 0) {
-//                 throw new Error('Cannot update purchases because the bank is inactive.');
-//             }
-
-//             for (const purchaseData of purchases) {
-//                 const {
-//                     purchaseNo,
-//                     supplierId,
-//                     productId,
-//                     cost_price,
-//                     qty, // New quantity
-//                     include_tax,
-//                     discount,
-//                     payment_amount,
-//                     sell_price,
-//                 } = purchaseData;
-
-//                 if (qty == null || cost_price == null || productId == null) {
-//                     throw new Error(`Invalid input data for Purchase No: ${purchaseNo}`);
-//                 }
-
-//                 console.log(`Processing Purchase No: ${purchaseNo}`);
-
-//                 const purchase = await Purchase.findOne({ where: { purchaseNo }, transaction });
-//                 if (!purchase) {
-//                     throw new Error(`Purchase with ID ${purchaseNo} not found`);
-//                 }
-
-//                 const product = await Product.findByPk(productId, { transaction });
-//                 if (!product) {
-//                     throw new Error(`Product with ID ${productId} not found`);
-//                 }
-
-//                 // Calculate the stock difference
-//                 const stockDifference = qty - purchase.qty;
-//                 console.log(`Stock Difference: ${stockDifference}`);
-
-//                 // Ensure that the stock does not go below 0
-//                 if (stockDifference < 0 && product.qty + stockDifference < 0) {
-//                     throw new Error(
-//                         `Insufficient stock for Product ID: ${productId}. Cannot reduce stock below 0.`
-//                     );
-//                 }
-
-//                 // Update the product stock
-//                 if (stockDifference !== 0) {
-//                     console.log(`Updating stock for Product ID: ${productId} with Stock Difference: ${stockDifference}`);
-//                     product.qty += stockDifference;
-//                     await product.save({ transaction });
-//                 }
-
-//                 // Calculate totals and balance
-//                 const total = cost_price * qty + (include_tax || 0);
-//                 const total_amounts = total - (discount || 0);
-//                 const balance = total_amounts - payment_amount;
-
-//                 // Calculate payment adjustment
-//                 const previousPaymentAmount = purchase.payment_amount;
-//                 const paymentAdjustment = payment_amount - previousPaymentAmount;
-
-//                 // Adjust bank balance based on payment adjustment
-//                 totalBankAdjustment += paymentAdjustment;
-
-//                 // Update the purchase record
-//                 await purchase.update(
-//                     {
-//                         supplierId,
-//                         productId,
-//                         cost_price,
-//                         qty,
-//                         include_tax,
-//                         total,
-//                         discount,
-//                         total_amounts,
-//                         payment_amount,
-//                         balance,
-//                         bankId,
-//                         date_purchase: new Date(),
-//                         userId: req.user?.id || null,
-//                     },
-//                     { transaction }
-//                 );
-
-//                 console.log(`Purchase updated successfully for Purchase No: ${purchaseNo}`);
-//             }
-
-//             // Adjust the bank balance
-//             const newBalance = bank.balance - totalBankAdjustment;
-//             if (newBalance < 0) {
-//                 throw new Error('Insufficient bank balance after adjustments');
-//             }
-
-//             await bank.update({ balance: newBalance }, { transaction });
-
-//             // Commit the transaction
-//             await transaction.commit();
-
-//             res.status(200).json({
-//                 success: true,
-//                 message: 'Purchases updated successfully, and bank balance adjusted',
-//             });
-//         } catch (error) {
-//             // Rollback the transaction in case of error
-//             await transaction.rollback();
-//             console.error(`Transaction rolled back due to error: ${error.message}`);
-//             throw error;
-//         }
-//     } catch (error) {
-//         res.status(500).json({
-//             success: false,
-//             message: error.message || 'Something went wrong',
-//         });
-//     }
-// };
-
-
 export const updatePurchase = async (req, res) => {
-    const { purchases, bankId } = req.body;
+    const { purchases, bankId,total_amount, balance, payment_amount, discount } = req.body;
 
     if (!Array.isArray(purchases) || purchases.length === 0) {
         return res.status(400).json({
@@ -430,6 +285,7 @@ export const updatePurchase = async (req, res) => {
                     sell_price, // New sell price (now we'll update it in the Product table as well)
                 } = purchaseData;
 
+                
                 if (qty == null || cost_price == null || productId == null || sell_price == null) {
                     throw new Error(`Invalid input data for Purchase No: ${purchaseNo}`);
                 }
@@ -505,6 +361,7 @@ export const updatePurchase = async (req, res) => {
                         discount,
                         total_amounts,
                         payment_amount,
+                        sell_price,
                         balance,
                         bankId,
                         date_purchase: new Date(),
@@ -512,6 +369,8 @@ export const updatePurchase = async (req, res) => {
                     },
                     { transaction }
                 );
+
+
 
                 console.log(`Purchase updated successfully for Purchase No: ${purchaseNo}`);
             }
@@ -544,90 +403,6 @@ export const updatePurchase = async (req, res) => {
         });
     }
 };
-
-
-
-
-
-// export const deletePurchase = async (req, res) => {
-//     const { purchaseNo, bankId } = req.body;
-
-//     if (!purchaseNo || !bankId) {
-//         return res.status(400).json({
-//             success: false,
-//             message: 'Invalid request. Provide purchaseNo and bankId.',
-//         });
-//     }
-
-//     try {
-//         const transaction = await db.sequelize.transaction();
-
-//         try {
-//             // Fetch the purchase record
-//             const purchase = await Purchase.findOne({ where: { purchaseNo }, transaction });
-//             if (!purchase) {
-//                 throw new Error('Purchase not found.');
-//             }
-
-//             // Fetch the related product
-//             const product = await Product.findByPk(purchase.productId, { transaction });
-//             if (!product) {
-//                 throw new Error('Product not found.');
-//             }
-
-//             // Fetch the bank record
-//             const bank = await Bank.findByPk(bankId, { transaction });
-//             if (!bank) {
-//                 throw new Error('Bank not found.');
-//             }
-
-//             // Check if the bank's status is inactive (0)
-//             if (bank.status === 0) {
-//                 throw new Error('Cannot delete purchase because the bank is inactive.');
-//             }
-
-//             // Adjust the stock by decreasing the purchased quantity
-//             console.log(`Decreasing stock for Product ID: ${product.id} by ${purchase.qty}`);
-//             product.qty -= purchase.qty;
-//             if (product.qty < 0) {
-//                 throw new Error('Insufficient stock for the product after deletion.');
-//             }
-//             await product.save({ transaction });
-
-//             // Adjust the bank balance
-//             console.log(`Adjusting bank balance for Bank ID: ${bank.id}`);
-//             const newBalance = bank.balance + purchase.payment_amount;
-
-//             if (newBalance < 0) {
-//                 throw new Error('Insufficient bank balance after adjustments.');
-//             }
-
-//             await bank.update({ balance: newBalance }, { transaction });
-
-//             // Delete the purchase record
-//             console.log(`Deleting purchase with Purchase No: ${purchaseNo}`);
-//             await purchase.destroy({ transaction });
-
-//             // Commit the transaction
-//             await transaction.commit();
-
-//             res.status(200).json({
-//                 success: true,
-//                 message: 'Purchase deleted successfully, and related adjustments made.',
-//             });
-//         } catch (error) {
-//             // Rollback the transaction in case of error
-//             await transaction.rollback();
-//             console.error(`Transaction rolled back due to error: ${error.message}`);
-//             throw error;
-//         }
-//     } catch (error) {
-//         res.status(500).json({
-//             success: false,
-//             message: error.message || 'Something went wrong.',
-//         });
-//     }
-// };
 
 
 

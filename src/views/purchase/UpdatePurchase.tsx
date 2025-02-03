@@ -84,6 +84,7 @@ function UpdatePurchase() {
     const [errMsg2, setErrMsg2] = useState(false);
     const [viewPurchase, setViewPurchase] = useState<PurchaseItem[]>([]);
 
+    const [updatedViewPurchase, setUpdatedViewPurchase] = useState<PurchaseItem[]>([]);
 
 
     interface DecodedToken {
@@ -141,52 +142,53 @@ function UpdatePurchase() {
     }, [selectedProducts]);
 
 
+    const handleViewPurchaseFieldChange = (purchaseId: number, field: string, value: any) => {
+        setViewPurchase((prevPurchases) =>
+            prevPurchases.map((purchase) =>
+                purchase.purchaseId === purchaseId ? { ...purchase, [field]: value } : purchase
+            )
+        );
+    };
+
+
+    useEffect(() => {
+        if (viewPurchase.length > 0) {
+            // Initialize updatedViewPurchase with the fetched viewPurchase data
+            setUpdatedViewPurchase(viewPurchase);
+        }
+    }, [viewPurchase]);
+
     useEffect(() => {
         const calculateTotalAmount = () => {
-            console.log('selectedProducts:', selectedProducts);
-            console.log('productDetails:', productDetails);
-            console.log('viewPurchase:', viewPurchase);
-    
             // Calculate the total for selected products
-            const selectedProductsTotal = selectedProducts.reduce((sum, product) => {
-                const productDetail = productDetails[product.productId] || {};
-                const const_price = productDetail.const_price || product.const_price || 1;
-                const qty = productDetail.qty || 1;
-                const discount = productDetail.discount || 0;
-                const tax = productDetail.tax || 0;
-    
-                return sum + (const_price * qty - discount + tax);
+            const selectedProductsTotal = selectedProducts.reduce((acc, product) => {
+                const cost = productDetails[product.productId]?.const_price || product.const_price || 0;
+                const qty = productDetails[product.productId]?.qty || product.qty || 1;
+                const tax = productDetails[product.productId]?.tax || 0;
+                const discount = productDetails[product.productId]?.discount || 0;
+                return acc + cost * qty + tax - discount;
             }, 0);
-    
-            // Calculate the total for viewPurchase
-            const viewPurchaseTotal = viewPurchase?.reduce((sum, purchase:any) => {
-                const totalFromDB = purchase[0]?.total_amount || 0; // Use total_amount from the database if available
-                const qty = purchase[0]?.qty || 1;  // Ensure qty is always considered
-                const discount = purchase[0]?.discount || 0;
-    
-                // If total_amount is available and it already includes quantity, don't multiply by qty
-                if (totalFromDB) {
-                    return sum + totalFromDB; // Add total_amount directly, as it already includes quantity
-                }
-    
-                // Fallback calculation if total_amount is not available
-                const total = purchase?.total || 0;  // Use the base price if no total_amount
-                return sum + (total * qty - discount); // Multiply total price by qty and subtract discount
-            }, 0) || 0;
-    
-            // Combine the totals from selected products and viewPurchase
-            console.log('selectedProductsTotal:', selectedProductsTotal);
-            console.log('viewPurchaseTotal:', viewPurchaseTotal);
-            
+
+            // Calculate the total for updatedViewPurchase
+            const viewPurchaseTotal = updatedViewPurchase.reduce((sum, purchase) => {
+                const cost = purchase.cost_price || 0;
+                const qty = purchase.qty || 1;
+                const tax = purchase.include_tax || 0;
+                const discount = purchase.discount || 0;
+                return sum + (cost * qty + tax - discount);
+            }, 0);
+
+            // Set the total amount
             setTotalAmount(selectedProductsTotal + viewPurchaseTotal);
         };
-    
-        calculateTotalAmount();
-    }, [selectedProducts, productDetails, viewPurchase]);
-    
-    
 
-    
+        calculateTotalAmount();
+    }, [selectedProducts, productDetails, updatedViewPurchase]);
+
+
+
+
+
 
     useEffect(() => {
         // calculateTotalAmount();
@@ -203,23 +205,39 @@ function UpdatePurchase() {
     } | null>(null);
 
     const handleAddProduct = (product: Product) => {
-        if (selectedProducts.find((p) => p.productId === product.productId)) {
+        // Check if the product already exists in selectedProducts
+        const isInSelectedProducts = selectedProducts.some(
+            (p) => p.productId === product.productId
+        );
+
+        // Check if the product already exists in viewPurchase
+        const isInViewPurchase = viewPurchase.some(
+            (purchase) => purchase.productId === product.productId
+        );
+
+        if (isInSelectedProducts || isInViewPurchase) {
             setErrMsg(`ផលិតផលនេះ ${product.pname} មានហើយ`);
-            err_message()
+            err_message();
         } else {
             setSelectedProducts([...selectedProducts, product]);
         }
+
         setProductSearchQuery("");
         setShowProductDropdown(false);
     };
 
     //remove
     const handleRemoveProduct = (productId: number) => {
-        setSelectedProducts(
-            selectedProducts.filter((product) => product.productId !== productId)
+        // Remove from selectedProducts
+        setSelectedProducts((prev) =>
+            prev.filter((product) => product.productId !== productId)
+        );
+
+        // Remove from viewPurchase
+        setViewPurchase((prev) =>
+            prev.filter((purchase) => purchase.productId !== productId)
         );
     };
-
     //search product
     const filteredProducts = productList.filter((product) =>
         product.pname.toLowerCase().includes(productSearchQuery.toLowerCase())
@@ -233,8 +251,6 @@ function UpdatePurchase() {
     };
 
     //filter supplier
-
-
     const handleProductconst_priceChange = (productId: number, const_price: number) => {
         setProductDetails((prev) => ({
             ...prev,
@@ -261,39 +277,6 @@ function UpdatePurchase() {
             [productId]: { ...prev[productId], tax },
         }));
     };
-
-
-    // const calculateTotalAmount = () => {
-    //     // Calculate the total from selectedProducts
-    //     const selectedProductsTotal = selectedProducts.reduce((sum, product) => {
-    //         const productDetail = productDetails[product.productId] || {};
-    //         const const_price = productDetail.const_price || product.const_price || 1;
-    //         const qty = productDetail.qty || 1;
-    //         const discount = productDetail.discount || 0;
-    //         const tax = productDetail.tax || 0;
-    
-    //         return sum + (const_price * qty - discount + tax);
-    //     }, 0);
-    
-    //     // Calculate the total from viewPurchase
-    //     const viewPurchaseTotal = viewPurchase?.reduce((sum, purchase) => {
-    //         // Safely access the properties of `purchase[0]` with default values
-    //         const total = purchase.total_amount || 0; // Default to 0 if `total` is not present
-    //         const qty = purchase.qty || 1; // Default to 1 for quantity
-    //         const discount = purchase.discount || 0; // Default to 0 for discount
-        
-    //         // Calculate total with default values
-    //         return sum + (total * qty - discount);
-    //     }, 0) || 0;
-        
-    //     // Combine the totals
-    //     const total = selectedProductsTotal + viewPurchaseTotal;
-    
-    //     // Set the total amount
-    //     setTotalAmount(total);
-    // };
-    
-
 
 
     const handlecalculatedRemainingAmount = () => {
@@ -356,7 +339,6 @@ function UpdatePurchase() {
 
 
 
-
     //fetch data supplier
     const handleSelectdata = (data: { supplierId: number; full_Name: string }) => {
         console.log("Selected supplier:", data);
@@ -379,8 +361,6 @@ function UpdatePurchase() {
         new Audio(sound_err).play();
     }
 
-
-
     //fetch bank
 
     const fetchBank = async () => {
@@ -399,74 +379,6 @@ function UpdatePurchase() {
     const handleSelectBank = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setSelectBank(e.target.value)
     }
-
-
-
-
-
-    const handlUpdatePurchase = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-
-        // Default date fallback
-        const dateToSubmit = selectedDate || new Date().toISOString().split("T")[0];
-        console.log("Submitting date:", dateToSubmit);
-
-        if (!selectedSupplier) {
-            setErrMsg("សូមជ្រើសរើសអ្នកផ្គត់ផ្គង់");
-            return;
-        }
-
-        // Validation
-        if (selectedProducts.length === 0) {
-            setErrMsg("សូមបញ្ចូលផលិតផល ឬ​ ស្កែនកូដផលិតផល");
-            return;
-        }
-
-        // Prepare the data object with only productId for the products array
-        const data = {
-            bankId: selectBank,
-            userId: userId,
-
-            purchases: selectedProducts.map((product) => ({
-                supplierId: selectedSupplier.supplierId,
-                productId: product.productId,
-                cost_price: productDetails[product.productId]?.const_price,
-                qty: productDetails[product.productId]?.qty || 0,
-                include_tax: productDetails[product.productId]?.tax || 0,
-                sell_price: productDetails[product.productId]?.sellPrice,
-                date_purchase: dateToSubmit,
-
-
-
-                // balance: remainingAmount
-            })),
-            total_amount: totalAmount,
-            balance: remainingAmount,
-            payment_amount: payment,
-            discount: discount,
-        };
-
-        try {
-            console.log(data)
-            const response = await axios.post(`${url}purchase/${id}`, data);
-            if (response.data.message) {
-                setSuccessMsg("បានកែប្រែការទិញដោយជោគជ័យ");
-                resetProductDetails();
-                setSelectedProducts([]);
-                resetForm()
-                sound_message();
-                // Reset the form and state
-            } else {
-                alert("Error: " + response.data.message);
-            }
-        } catch (error: any) {
-            // setErrMsg(error.response.data.message);
-            setErrMsg2(error.response.data.message);
-            console.error("Submission error:", error);
-        }
-
-
-    };
 
 
 
@@ -489,8 +401,6 @@ function UpdatePurchase() {
         new Audio(sound_success).play();
     }
 
-
-
     const fetchData = async () => {
         const response = await fetch(`${url}purchase/${id}`);
         if (response.ok) {
@@ -506,19 +416,112 @@ function UpdatePurchase() {
     }, [])
 
 
+
+
+  
+  
+ 
+  
+ 
+
+
+    //handle display viewPurhase 
     useEffect(() => {
-        console.log(viewPurchase)
-    })
-
-
-
-
-    useEffect(() => {
-        if (viewPurchase?.[0]?.total_amount && !totalAmount) {
-            setTotalAmount(viewPurchase[0].total_amount);
+        if (viewPurchase.length > 0 && viewPurchase[0]?.bankId !== undefined) {
+            setSelectBank(viewPurchase[0]?.bankId.toString());
         }
-    }, [viewPurchase, totalAmount]);
+    }, [viewPurchase]);
+
+
+
+
+  
+    const handleUpdatePurchase = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
     
+        // Default date fallback
+        const dateToSubmit = selectedDate || new Date().toISOString().split("T")[0];
+        console.log("Submitting date:", dateToSubmit);
+    
+        // Merge selectedProducts with existing viewPurchase, ensuring no duplicates
+        const uniqueProducts = [
+            ...viewPurchase, // Keep all products from viewPurchase
+            ...selectedProducts.filter(
+                (sp) => !viewPurchase.some((vp) => vp.productId === sp.productId) // Add only new products from selectedProducts
+            ),
+        ];
+
+        
+    
+        // Log uniqueProducts for debugging
+        console.log("uniqueProducts:", uniqueProducts);
+    
+        // Sort viewPurchase by purchaseNo to find gaps for purchaseNo
+        const sortedPurchaseNos = viewPurchase
+            .map((purchase) => purchase.purchaseNo)
+            .sort((a, b) => a - b);
+    
+        // Find the first gap in the sequence for purchaseNo
+        let nextPurchaseNo = sortedPurchaseNos[sortedPurchaseNos.length - 1] + 1;
+        for (let i = 0; i < sortedPurchaseNos.length - 1; i++) {
+            if (sortedPurchaseNos[i + 1] !== sortedPurchaseNos[i] + 1) {
+                nextPurchaseNo = sortedPurchaseNos[i] + 1;
+                break;
+            }
+        }
+    
+        // Prepare the data object
+        const data = {
+            bankId: selectBank ?? viewPurchase?.[0]?.bankId,
+            userId: userId,
+            purchases: uniqueProducts.map((product) => {
+                const existingProduct = viewPurchase.find(
+                    (p: PurchaseItem) => p.productId === product.productId
+                );
+    
+                const productData = productDetails[product.productId] || {};
+                const cost_price = productData.const_price || existingProduct?.cost_price || 0;
+                const qty = productData.qty || existingProduct?.qty || 0;
+                const include_tax = productData.tax || existingProduct?.include_tax || 0;
+                const sell_price = productData.sellPrice || existingProduct?.sell_price;
+    
+                // Assign purchaseNo: use existing purchaseNo if the product is in viewPurchase, otherwise assign a new one
+                const purchaseNo = existingProduct ? existingProduct.purchaseNo : nextPurchaseNo++;
+    
+                return {
+                    purchaseNo,
+                    supplierId: selectedSupplier?.supplierId || existingProduct?.supplierId || viewPurchase?.[0]?.supplierId,
+                    productId: product.productId,
+                    cost_price,
+                    qty,
+                    include_tax,
+                    sell_price,
+                    total: qty * cost_price,
+                    date_purchase: dateToSubmit,
+                };
+            }),
+            total_amount: totalAmount,
+            balance: remainingAmount,
+            payment_amount: payment ?? viewPurchase?.[0]?.payment_amount ?? 0, // Ensure it is not undefined
+            discount: discount,
+        };
+    
+        try {
+            console.log("Data to display:", data);
+            const response = await axios.put(`${url}purchase/`, data); // Ensure the endpoint is correct
+            if (response.data.success) {
+                setSuccessMsg("បានកែប្រែការទិញដោយជោគជ័យ");
+                resetProductDetails();
+                setSelectedProducts([]);
+                sound_message();
+            } else {
+                setErrMsg2(response.data.message || "កំហុសក្នុងការបង្ហាញទិន្នន័យ");
+            }
+        } catch (error: any) {
+            setErrMsg2(error.response?.data?.message || "កំហុសក្នុងការបង្ហាញទិន្នន័យ");
+            console.error("Display error:", error);
+        }
+    };
 
 
     return (
@@ -555,7 +558,7 @@ function UpdatePurchase() {
 
                     {successMsg && <MessageSuccess message={successMsg} onClear={() => setSuccessMsg(null)} />}
 
-                    <form onSubmit={handlUpdatePurchase}>
+                    <form onSubmit={handleUpdatePurchase}>
                         {/* input for userId */}
                         <input type="text" value={viewPurchase[0]?.userId ?? ''} hidden />
 
@@ -743,15 +746,15 @@ function UpdatePurchase() {
                                         {/* Render viewPurchase if available and selectedProducts exists */}
 
                                         {/* Store for Update */}
-                                        {viewPurchase.length > 0 && viewPurchase.map((product, index) => (
-                                            <tr key={product.purchaseId}>
+
+                                        {updatedViewPurchase.length > 0 && updatedViewPurchase.map((purchase, index) => (
+                                            <tr key={purchase.purchaseId}>
                                                 <td className="p-2">{index + 1}</td>
                                                 <td className="p-2">
-                                                    {product.productId_for_purchase?.pname}
+                                                    {purchase.productId_for_purchase?.pname}
                                                     <p className="text-xs text-gray-500">
-                                                        {/* Assuming viewPurchase contains qty info */}
                                                         <br />
-                                                        តម្លៃលក់ {product.cost_price}
+                                                        តម្លៃលក់ {purchase.cost_price}
                                                     </p>
                                                 </td>
 
@@ -761,8 +764,14 @@ function UpdatePurchase() {
                                                         min={0}
                                                         type="number"
                                                         placeholder="0.0"
-                                                        value={productDetails[product.productId]?.const_price || product.cost_price || ""}
-                                                        onChange={(e) => handleProductconst_priceChange(product.productId, Number(e.target.value))}
+                                                        value={purchase.cost_price || ""}
+                                                        onChange={(e) =>
+                                                            handleViewPurchaseFieldChange(
+                                                                purchase.purchaseId,
+                                                                "cost_price",
+                                                                Number(e.target.value)
+                                                            )
+                                                        }
                                                         className="bg-gray-0 input_text"
                                                     />
                                                 </td>
@@ -773,8 +782,14 @@ function UpdatePurchase() {
                                                         min={0}
                                                         type="number"
                                                         placeholder="0.0"
-                                                        value={productDetails[product.productId]?.qty || product.qty || ""}
-                                                        onChange={(e) => handleQtyChange(product.productId, Number(e.target.value))}
+                                                        value={purchase.qty || ""}
+                                                        onChange={(e) =>
+                                                            handleViewPurchaseFieldChange(
+                                                                purchase.purchaseId,
+                                                                "qty",
+                                                                Number(e.target.value)
+                                                            )
+                                                        }
                                                         className="input_text"
                                                     />
                                                 </td>
@@ -785,19 +800,32 @@ function UpdatePurchase() {
                                                         min={0}
                                                         type="number"
                                                         placeholder="0.0"
-                                                        value={productDetails[product.productId]?.tax || product.include_tax || ""}
-                                                        onChange={(e) => handleTaxChange(product.productId, Number(e.target.value))}
+                                                        value={purchase.include_tax || ""}
+                                                        onChange={(e) =>
+                                                            handleViewPurchaseFieldChange(
+                                                                purchase.purchaseId,
+                                                                "include_tax",
+                                                                Number(e.target.value)
+                                                            )
+                                                        }
                                                         className="input_text"
                                                     />
                                                 </td>
 
+                                                {/* Sell Price Input (for update) */}
                                                 <td>
                                                     <input
                                                         min={0}
                                                         type="number"
                                                         placeholder="0.0"
-                                                        value={productDetails[product.productId]?.sellPrice || product.sell_price || ""}
-                                                        onChange={(e) => handleSellPriceChange(product.productId, Number(e.target.value))}
+                                                        value={purchase.sell_price || ""}
+                                                        onChange={(e) =>
+                                                            handleViewPurchaseFieldChange(
+                                                                purchase.purchaseId,
+                                                                "sell_price",
+                                                                Number(e.target.value)
+                                                            )
+                                                        }
                                                         className="input_text"
                                                     />
                                                 </td>
@@ -808,11 +836,10 @@ function UpdatePurchase() {
                                                         min={0}
                                                         type="number"
                                                         placeholder="0.0"
-                                                        value={((productDetails[product.productId]?.const_price || product.total ) *
-                                                            (productDetails[product.productId]?.qty || 1) -
-                                                            (productDetails[product.productId]?.discount || 0) +
-                                                            (productDetails[product.productId]?.tax || 0)) || 0
-                                                        
+                                                        value={
+                                                            (purchase.cost_price || 0) * (purchase.qty || 1) -
+                                                            (purchase.discount || 0) +
+                                                            (purchase.include_tax || 0)
                                                         }
                                                         readOnly
                                                         className="bg-gray-100 input_text"
@@ -824,7 +851,7 @@ function UpdatePurchase() {
                                                     <div className="flex justify-center">
                                                         <button
                                                             className="p-2 text-white bg-red-500 hover:text-white hover:bg-red-400"
-                                                            onClick={() => handleRemoveProduct(product.productId)}
+                                                            onClick={() => handleRemoveProduct(purchase.productId)}
                                                         >
                                                             <IoMdClose />
                                                         </button>
@@ -833,8 +860,6 @@ function UpdatePurchase() {
                                             </tr>
                                         ))}
                                     </tbody>
-
-
                                 </table>
                             </div>
 
@@ -870,18 +895,18 @@ function UpdatePurchase() {
                                         <input
                                             type="number"
                                             placeholder="0.0"
-                                            value={payment || viewPurchase?.[0]?.payment_amount || 0}
+                                            value={payment !== undefined ? payment : viewPurchase?.[0]?.payment_amount ?? 0}
                                             onChange={(e) => setPayment(Number(e.target.value))}
                                             className="input_text"
                                         />
+
                                     </div>
 
                                     <div className="space-y-2">
                                         <label htmlFor="">គណនី</label>
                                         <select
-                                            
                                             required
-                                            value={selectBank || viewPurchase?.[0]?.bankId || ""}
+                                            value={selectBank !== undefined ? selectBank : viewPurchase[0]?.bankId ?? ""}
                                             onChange={(e) => setSelectBank(e.target.value)}
                                             className="input_text"
                                         >
@@ -893,6 +918,7 @@ function UpdatePurchase() {
                                                 </option>
                                             ))}
                                         </select>
+
                                     </div>
 
                                     <div className="space-y-2">
